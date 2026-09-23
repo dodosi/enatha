@@ -1,0 +1,41 @@
+{
+  "title": "Sample Household Survey",
+  "pages": [
+    {
+      "name": "page1",
+      "elements": [
+        {
+          "type": "text",
+          "name": "household_id",
+          "title": "Household ID",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "region",
+          "title": "Region",
+          "choices": [
+            "North",
+            "South",
+            "East",
+            "West"
+          ]
+        },
+        {
+          "type": "boolean",
+          "name": "has_electricity",
+          "title": "Does the household have electricity?"
+        },
+        {
+          "type": "comment",
+          "name": "notes",
+          "title": "Additional notes"
+        }
+      ]
+    }
+  ],
+  "showPreviewBeforeComplete": "showAllQuestions",
+  "previewText": "Review Answers",
+  "editText": "Edit",
+  "completeText": "Submit"
+}

@@ -1,0 +1,896 @@
+{
+  "title": "Antimicrobial Stewardship Data Collection Tool",
+  "description": "Data extraction and collection questionnaire for AI-supported antimicrobial stewardship in Rwandan primary healthcare.",
+  "showProgressBar": "top",
+  "progressBarType": "pages",
+  "completedHtml": "<h3>Thank you.</h3><p>The antimicrobial stewardship data collection form has been submitted.</p>",
+  "pages": [
+    {
+      "name": "data_source",
+      "title": "Data Source",
+      "elements": [
+        {
+          "type": "checkbox",
+          "name": "data_sources",
+          "title": "Source(s) of data",
+          "isRequired": true,
+          "choices": [
+            "Rwanda Health Data Center / e-Ubuzima",
+            "HMIS / DHIS2",
+            "OpenMRS / CEMR",
+            "Laboratory system",
+            "Pharmacy system",
+            "Referral system",
+            "Facility records",
+            "Other"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "data_source_notes",
+          "title": "Data source notes"
+        }
+      ]
+    },
+    {
+      "name": "patient_demographics",
+      "title": "A. Patient Demographics",
+      "description": "Patient demographics are essential for risk prediction models.",
+      "elements": [
+        {
+          "type": "text",
+          "name": "patient_study_id",
+          "title": "Unique patient ID (anonymized)",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "patient_medical_record_id",
+          "title": "Medical record ID, if available"
+        },
+        {
+          "type": "text",
+          "name": "telephone_number",
+          "title": "Telephone number",
+          "inputType": "tel"
+        },
+        {
+          "type": "text",
+          "name": "date_of_birth",
+          "title": "Date of birth",
+          "inputType": "date"
+        },
+        {
+          "type": "text",
+          "name": "age_years",
+          "title": "Age in years, if date of birth is not available",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 0,
+              "maxValue": 120
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "gender",
+          "title": "Gender",
+          "isRequired": true,
+          "choices": [
+            "Female",
+            "Male",
+            "Not identified",
+            "Other"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "pregnancy_status",
+          "title": "Pregnancy status",
+          "visibleIf": "{gender} = 'Female'",
+          "choices": [
+            "Yes",
+            "No",
+            "Unknown",
+            "Not applicable"
+          ]
+        },
+        {
+          "type": "html",
+          "name": "patient_residence_location_note",
+          "html": "<strong>Patient residence location</strong><br>Select the administrative location from Province down to Village. These dropdowns are loaded from the Rwanda location database."
+        },
+        {
+          "type": "dropdown",
+          "name": "province_id",
+          "title": "Province",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "district_id",
+          "title": "District",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "sector_id",
+          "title": "Sector",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "cell_id",
+          "title": "Cell",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "village_id",
+          "title": "Village",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "health_insurance_category",
+          "title": "Health insurance category",
+          "choices": [
+            "RSSB",
+            "Mutuel de Sante",
+            "Private insurance",
+            "No insurance",
+            "Other"
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "occupation",
+          "title": "Occupation",
+          "choices": [
+            "Student",
+            "Non-skilled worker",
+            "Professional and managerial",
+            "Housewife / houseman",
+            "Farmer",
+            "Livestock keeper",
+            "Butcher",
+            "Veterinarian",
+            "Other"
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "education_level",
+          "title": "Education level, if available",
+          "choices": [
+            "No formal education",
+            "Primary",
+            "Secondary",
+            "TVET",
+            "University",
+            "Unknown"
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "ubudehe_category",
+          "title": "Socioeconomic category / Ubudehe category, if available",
+          "choices": [
+            "Category 1",
+            "Category 2",
+            "Category 3",
+            "Category 4",
+            "Unknown"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clinical_encounter",
+      "title": "B. Clinical Encounter Data",
+      "description": "Clinical encounter data identify infection episodes, management pathways, antimicrobial prescribing practices, and treatment decisions.",
+      "elements": [
+        {
+          "type": "text",
+          "name": "visit_date",
+          "title": "Visit date",
+          "inputType": "date",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "facility_id",
+          "title": "Facility ID"
+        },
+        {
+          "type": "text",
+          "name": "facility_name",
+          "title": "Facility name",
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "facility_type",
+          "title": "Facility type",
+          "choices": [
+            "Public",
+            "Private"
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "facility_level",
+          "title": "Facility level",
+          "choices": [
+            "District Hospital",
+            "Health Center",
+            "Health Post",
+            "Private Clinic",
+            "Private Pharmacy",
+            "Other"
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "ward_department",
+          "title": "Ward / department at consultation or sample collection",
+          "choices": [
+            "Medical ward",
+            "Surgical ward",
+            "Pediatric ward",
+            "Intensive Care Unit ward",
+            "Emergency department",
+            "Outpatients Department (OPD)",
+            "Maternity / Obstetrics",
+            "Other"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "reasons_for_consultation",
+          "title": "Reason(s) for consultation",
+          "choices": [
+            "Suspected infectious disease",
+            "Follow-up of infection",
+            "Chronic disease",
+            "Maternal and child health",
+            "Medication-related concern",
+            "Laboratory service",
+            "Referral-related consultation",
+            "Preventive care",
+            "Emergency condition",
+            "Other"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "presenting_symptoms",
+          "title": "Presenting symptoms",
+          "choices": [
+            "Fever",
+            "Cough / respiratory symptoms",
+            "Urinary symptoms",
+            "Diarrhea / gastrointestinal infection",
+            "Skin and soft tissue infection",
+            "Wound infection",
+            "STI symptoms",
+            "Persistent infection after treatment",
+            "Suspected treatment failure",
+            "Request for antibiotics",
+            "Referral for severe infection",
+            "Laboratory / AST follow-up"
+          ]
+        },
+        {
+          "type": "matrixdynamic",
+          "name": "vital_signs",
+          "title": "Vital signs",
+          "rowCount": 1,
+          "addRowText": "Add measurement",
+          "columns": [
+            {
+              "name": "temperature_c",
+              "title": "Temperature (C)",
+              "cellType": "text",
+              "inputType": "number"
+            },
+            {
+              "name": "pulse_rate",
+              "title": "Pulse rate",
+              "cellType": "text",
+              "inputType": "number"
+            },
+            {
+              "name": "respiratory_rate",
+              "title": "Respiratory rate",
+              "cellType": "text",
+              "inputType": "number"
+            },
+            {
+              "name": "blood_pressure",
+              "title": "Blood pressure"
+            },
+            {
+              "name": "oxygen_saturation",
+              "title": "SpO2 (%)",
+              "cellType": "text",
+              "inputType": "number"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "clinical_diagnosis",
+          "title": "Clinical diagnosis",
+          "choices": [
+            "Bloodstream infection / Sepsis",
+            "Respiratory infection / Pneumonia / Bronchitis",
+            "Urinary tract infection",
+            "Skin / soft tissue infection",
+            "Surgical site infection",
+            "Gastrointestinal infection",
+            "Central nervous system infection",
+            "Bone / joint infection",
+            "Not specified",
+            "Other"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "comorbidities",
+          "title": "Comorbidities / medical history",
+          "choices": [
+            "HIV",
+            "Diabetes mellitus",
+            "Hypertension",
+            "Chronic kidney disease",
+            "Malnutrition",
+            "Cancer",
+            "None documented",
+            "Other"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "recent_surgery_90_days",
+          "title": "Recent surgery within 90 days",
+          "choices": [
+            "Yes",
+            "No",
+            "Unknown"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "antibiotic_use_prior_30_days",
+          "title": "Antibiotic use history within 30 days prior",
+          "choices": [
+            "Yes documented",
+            "No documented use",
+            "Not documented / Unknown"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "previous_antibiotics",
+          "title": "If yes, list previous antibiotics, doses, and durations",
+          "visibleIf": "{antibiotic_use_prior_30_days} = 'Yes documented'"
+        },
+        {
+          "type": "radiogroup",
+          "name": "previous_hospitalization_past_year",
+          "title": "Previous hospitalization in past year",
+          "choices": [
+            "Yes",
+            "No",
+            "Unknown"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "antimicrobial_prescription",
+      "title": "C. Antimicrobial Prescription Data",
+      "description": "Collect one record for each antimicrobial prescribed.",
+      "elements": [
+        {
+          "type": "paneldynamic",
+          "name": "antimicrobial_prescriptions",
+          "title": "Antimicrobial prescriptions",
+          "panelCount": 1,
+          "minPanelCount": 0,
+          "panelAddText": "Add antimicrobial",
+          "panelRemoveText": "Remove antimicrobial",
+          "templateElements": [
+            {
+              "type": "text",
+              "name": "drug_name",
+              "title": "Drug name / brand name"
+            },
+            {
+              "type": "text",
+              "name": "generic_name",
+              "title": "Generic name / INN"
+            },
+            {
+              "type": "text",
+              "name": "atc_code",
+              "title": "ATC code"
+            },
+            {
+              "type": "dropdown",
+              "name": "aware_category",
+              "title": "WHO AWaRe category",
+              "choices": [
+                "Access",
+                "Watch",
+                "Reserve",
+                "Not classified",
+                "Unknown"
+              ]
+            },
+            {
+              "type": "text",
+              "name": "dose",
+              "title": "Dose",
+              "placeholder": "Example: 500 mg"
+            },
+            {
+              "type": "dropdown",
+              "name": "route",
+              "title": "Route of administration",
+              "choices": [
+                "Oral",
+                "Intravenous",
+                "Intramuscular",
+                "Topical",
+                "Other"
+              ]
+            },
+            {
+              "type": "text",
+              "name": "frequency",
+              "title": "Frequency",
+              "placeholder": "Example: twice daily"
+            },
+            {
+              "type": "text",
+              "name": "duration_days",
+              "title": "Duration (days)",
+              "inputType": "number"
+            },
+            {
+              "type": "text",
+              "name": "indication",
+              "title": "Clinical indication"
+            },
+            {
+              "type": "dropdown",
+              "name": "prescriber_cadre",
+              "title": "Prescriber cadre",
+              "choices": [
+                "Physician",
+                "Medical specialist",
+                "Clinical officer",
+                "Nurse",
+                "Pharmacist",
+                "Other"
+              ]
+            },
+            {
+              "type": "text",
+              "name": "prescription_date",
+              "title": "Prescription date",
+              "inputType": "date"
+            },
+            {
+              "type": "text",
+              "name": "dispensing_date",
+              "title": "Dispensing date",
+              "inputType": "date"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "laboratory_data",
+      "title": "D. Laboratory Data",
+      "description": "Routine diagnostic investigations, microbiology, and antimicrobial susceptibility testing.",
+      "elements": [
+        {
+          "type": "paneldynamic",
+          "name": "routine_laboratory_results",
+          "title": "Routine laboratory results",
+          "minPanelCount": 0,
+          "panelAddText": "Add routine lab result",
+          "templateElements": [
+            {
+              "type": "dropdown",
+              "name": "test_name",
+              "title": "Test name",
+              "choices": [
+                "CBC",
+                "CRP",
+                "ESR",
+                "Urinalysis",
+                "Blood glucose",
+                "Creatinine",
+                "Liver function test",
+                "Other"
+              ]
+            },
+            {
+              "type": "text",
+              "name": "result_value",
+              "title": "Result value"
+            },
+            {
+              "type": "text",
+              "name": "unit",
+              "title": "Unit"
+            },
+            {
+              "type": "text",
+              "name": "test_date",
+              "title": "Test date",
+              "inputType": "date"
+            },
+            {
+              "type": "comment",
+              "name": "interpretation",
+              "title": "Interpretation / notes"
+            }
+          ]
+        },
+        {
+          "type": "paneldynamic",
+          "name": "microbiology_results",
+          "title": "Microbiology and AST results",
+          "minPanelCount": 0,
+          "panelAddText": "Add microbiology / AST result",
+          "templateElements": [
+            {
+              "type": "dropdown",
+              "name": "specimen_type",
+              "title": "Specimen type",
+              "choices": [
+                "Blood",
+                "Urine",
+                "Sputum",
+                "Wound swab",
+                "Stool",
+                "CSF",
+                "Other"
+              ]
+            },
+            {
+              "type": "text",
+              "name": "sample_collection_date",
+              "title": "Sample collection date",
+              "inputType": "date"
+            },
+            {
+              "type": "text",
+              "name": "organism_identified",
+              "title": "Organism identified"
+            },
+            {
+              "type": "matrixdynamic",
+              "name": "ast_results",
+              "title": "AST results",
+              "addRowText": "Add antibiotic tested",
+              "columns": [
+                {
+                  "name": "antibiotic_tested",
+                  "title": "Antibiotic tested"
+                },
+                {
+                  "name": "interpretation",
+                  "title": "Result",
+                  "cellType": "dropdown",
+                  "choices": [
+                    "Susceptible",
+                    "Intermediate",
+                    "Resistant",
+                    "Not tested"
+                  ]
+                },
+                {
+                  "name": "mic",
+                  "title": "MIC"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "referral_data",
+      "title": "E. Referral Data",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "patient_referred",
+          "title": "Was the patient referred?",
+          "choices": [
+            "Yes",
+            "No"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "referral_date",
+          "title": "Referral date",
+          "inputType": "date",
+          "visibleIf": "{patient_referred} = 'Yes'"
+        },
+        {
+          "type": "text",
+          "name": "referral_facility",
+          "title": "Referral facility",
+          "visibleIf": "{patient_referred} = 'Yes'"
+        },
+        {
+          "type": "checkbox",
+          "name": "referral_reasons",
+          "title": "Reason(s) for referral",
+          "visibleIf": "{patient_referred} = 'Yes'",
+          "choices": [
+            "Severe infection",
+            "Suspected antimicrobial resistance",
+            "Need for advanced diagnostics",
+            "Treatment failure",
+            "Need for hospitalization",
+            "Specialist review",
+            "Other"
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "referral_urgency",
+          "title": "Referral urgency",
+          "visibleIf": "{patient_referred} = 'Yes'",
+          "choices": [
+            "Immediate (<24 hours)",
+            "Urgent (1-3 days)",
+            "Routine (>3 days)"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "ai_referral_recommendation",
+          "title": "Did the AI-CDSS recommend referral?",
+          "choices": [
+            "Yes",
+            "No",
+            "Not applicable"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "referral_recommendation_concordance",
+          "title": "Agreement between AI recommendation and clinician decision",
+          "choices": [
+            "Agreement",
+            "Disagreement",
+            "Not applicable"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "transportation_available",
+          "title": "Transportation available to referral facility",
+          "choices": [
+            "Yes",
+            "No",
+            "Unknown"
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "referral_outcome",
+          "title": "Referral outcome",
+          "visibleIf": "{patient_referred} = 'Yes'",
+          "choices": [
+            "Improved",
+            "Hospitalized",
+            "ICU admission",
+            "Surgery performed",
+            "Death",
+            "Unknown"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "time_to_referral_value",
+          "title": "Time to referral"
+        },
+        {
+          "type": "dropdown",
+          "name": "time_to_referral_unit",
+          "title": "Time to referral unit",
+          "choices": [
+            "Hours",
+            "Days"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "outcome_data",
+      "title": "F. Outcomes Data",
+      "description": "Outcome measures evaluate effectiveness, safety, clinical utility, and public health impact.",
+      "elements": [
+        {
+          "type": "text",
+          "name": "follow_up_date",
+          "title": "Follow-up / outcome assessment date",
+          "inputType": "date"
+        },
+        {
+          "type": "dropdown",
+          "name": "recovery_status",
+          "title": "Recovery status",
+          "choices": [
+            "Fully recovered",
+            "Improved",
+            "No improvement",
+            "Worsened",
+            "Unknown"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "readmission",
+          "title": "Readmission for same or related infection",
+          "choices": [
+            "Yes",
+            "No"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "readmission_date",
+          "title": "Readmission date",
+          "inputType": "date",
+          "visibleIf": "{readmission} = 'Yes'"
+        },
+        {
+          "type": "comment",
+          "name": "readmission_cause",
+          "title": "Cause of readmission",
+          "visibleIf": "{readmission} = 'Yes'"
+        },
+        {
+          "type": "radiogroup",
+          "name": "hospitalization",
+          "title": "Hospitalization required",
+          "choices": [
+            "Yes",
+            "No"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "admission_date",
+          "title": "Admission date",
+          "inputType": "date",
+          "visibleIf": "{hospitalization} = 'Yes'"
+        },
+        {
+          "type": "text",
+          "name": "admission_diagnosis",
+          "title": "Admission diagnosis",
+          "visibleIf": "{hospitalization} = 'Yes'"
+        },
+        {
+          "type": "text",
+          "name": "length_of_stay_days",
+          "title": "Length of stay (days)",
+          "inputType": "number",
+          "visibleIf": "{hospitalization} = 'Yes'"
+        },
+        {
+          "type": "radiogroup",
+          "name": "icu_admission",
+          "title": "ICU admission required",
+          "choices": [
+            "Yes",
+            "No"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "icu_admission_date",
+          "title": "ICU admission date",
+          "inputType": "date",
+          "visibleIf": "{icu_admission} = 'Yes'"
+        },
+        {
+          "type": "text",
+          "name": "icu_stay_duration_days",
+          "title": "Duration of ICU stay (days)",
+          "inputType": "number",
+          "visibleIf": "{icu_admission} = 'Yes'"
+        },
+        {
+          "type": "radiogroup",
+          "name": "mortality_status",
+          "title": "Mortality status",
+          "choices": [
+            "Survived",
+            "Died"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "date_of_death",
+          "title": "Date of death",
+          "inputType": "date",
+          "visibleIf": "{mortality_status} = 'Died'"
+        },
+        {
+          "type": "text",
+          "name": "place_of_death",
+          "title": "Place of death",
+          "visibleIf": "{mortality_status} = 'Died'"
+        },
+        {
+          "type": "radiogroup",
+          "name": "infection_related_death",
+          "title": "Was death infection-related?",
+          "visibleIf": "{mortality_status} = 'Died'",
+          "choices": [
+            "Yes",
+            "No",
+            "Unknown"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "treatment_failure",
+          "title": "Treatment failure",
+          "choices": [
+            "Yes",
+            "No"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "treatment_failure_criteria",
+          "title": "Criteria for treatment failure",
+          "visibleIf": "{treatment_failure} = 'Yes'",
+          "choices": [
+            "Persistent symptoms",
+            "Clinical deterioration",
+            "Need for antimicrobial change",
+            "Hospitalization after outpatient treatment",
+            "Readmission due to same infection",
+            "Laboratory-confirmed persistent infection",
+            "Death related to infection"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "date_failure_identified",
+          "title": "Date treatment failure identified",
+          "inputType": "date",
+          "visibleIf": "{treatment_failure} = 'Yes'"
+        },
+        {
+          "type": "comment",
+          "name": "outcome_notes",
+          "title": "Outcome notes"
+        }
+      ]
+    }
+  ],
+  "showPreviewBeforeComplete": "showAllQuestions",
+  "previewText": "Review Answers",
+  "editText": "Edit",
+  "completeText": "Submit"
+}

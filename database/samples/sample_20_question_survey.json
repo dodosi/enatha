@@ -1,0 +1,253 @@
+{
+  "title": "Sample Household Data Collection Survey",
+  "description": "A 20-question sample SurveyJS questionnaire for testing uploads, rendering, autosave, submissions, and CSV exports.",
+  "showProgressBar": "top",
+  "progressBarType": "questions",
+  "completedHtml": "<h3>Thank you.</h3><p>Your survey response has been recorded.</p>",
+  "pages": [
+    {
+      "name": "household_identification",
+      "title": "Household Identification",
+      "elements": [
+        {
+          "type": "text",
+          "name": "household_id",
+          "title": "1. Household ID",
+          "isRequired": true,
+          "placeholder": "Example: HH-001"
+        },
+        {
+          "type": "text",
+          "name": "respondent_name",
+          "title": "2. Respondent full name",
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "respondent_gender",
+          "title": "3. Respondent gender",
+          "isRequired": true,
+          "choices": [
+            "Female",
+            "Male",
+            "Prefer not to say"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "respondent_age",
+          "title": "4. Respondent age",
+          "inputType": "number",
+          "isRequired": true,
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 15,
+              "maxValue": 120,
+              "text": "Age must be between 15 and 120."
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "district",
+          "title": "5. District",
+          "isRequired": true,
+          "choices": [
+            "District A",
+            "District B",
+            "District C",
+            "District D",
+            "Other"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "household_profile",
+      "title": "Household Profile",
+      "elements": [
+        {
+          "type": "text",
+          "name": "household_size",
+          "title": "6. How many people live in this household?",
+          "inputType": "number",
+          "isRequired": true,
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 1,
+              "maxValue": 50
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "head_of_household_gender",
+          "title": "7. Gender of household head",
+          "choices": [
+            "Female",
+            "Male",
+            "Other"
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "main_livelihood",
+          "title": "8. Main household livelihood source",
+          "isRequired": true,
+          "choices": [
+            "Farming",
+            "Business/trade",
+            "Formal employment",
+            "Casual labor",
+            "Remittances",
+            "Other"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "household_assets",
+          "title": "9. Which assets does the household own?",
+          "choices": [
+            "Radio",
+            "Television",
+            "Mobile phone",
+            "Bicycle",
+            "Motorcycle",
+            "Car",
+            "Solar panel"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "housing_type",
+          "title": "10. Type of housing",
+          "choices": [
+            "Owned",
+            "Rented",
+            "Provided by family",
+            "Temporary shelter",
+            "Other"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "services_and_conditions",
+      "title": "Services and Living Conditions",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "water_source",
+          "title": "11. Main source of drinking water",
+          "isRequired": true,
+          "choices": [
+            "Piped water",
+            "Protected well",
+            "Unprotected well",
+            "Borehole",
+            "River/stream",
+            "Rainwater",
+            "Other"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "toilet_facility",
+          "title": "12. Main toilet facility",
+          "choices": [
+            "Flush toilet",
+            "Ventilated improved pit latrine",
+            "Pit latrine",
+            "Shared facility",
+            "No facility",
+            "Other"
+          ]
+        },
+        {
+          "type": "boolean",
+          "name": "has_electricity",
+          "title": "13. Does the household have electricity?"
+        },
+        {
+          "type": "radiogroup",
+          "name": "food_security",
+          "title": "14. In the last 7 days, did the household have enough food?",
+          "isRequired": true,
+          "choices": [
+            "Always",
+            "Most days",
+            "Some days",
+            "Rarely",
+            "Never"
+          ]
+        },
+        {
+          "type": "rating",
+          "name": "health_access_rating",
+          "title": "15. Rate access to health services in this area",
+          "rateMin": 1,
+          "rateMax": 5,
+          "minRateDescription": "Very poor",
+          "maxRateDescription": "Very good"
+        }
+      ]
+    },
+    {
+      "name": "program_feedback",
+      "title": "Program Feedback",
+      "elements": [
+        {
+          "type": "boolean",
+          "name": "received_support",
+          "title": "16. Has the household received any support in the last 12 months?"
+        },
+        {
+          "type": "checkbox",
+          "name": "support_types",
+          "title": "17. What type of support was received?",
+          "visibleIf": "{received_support} = true",
+          "choices": [
+            "Cash assistance",
+            "Food assistance",
+            "Agricultural inputs",
+            "Training",
+            "Health services",
+            "Education support",
+            "Other"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "support_satisfaction",
+          "title": "18. How satisfied was the household with the support?",
+          "visibleIf": "{received_support} = true",
+          "choices": [
+            "Very satisfied",
+            "Satisfied",
+            "Neutral",
+            "Dissatisfied",
+            "Very dissatisfied"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "priority_needs",
+          "title": "19. What are the household's top priority needs?",
+          "isRequired": true,
+          "placeholder": "Write the main needs mentioned by the respondent."
+        },
+        {
+          "type": "signaturepad",
+          "name": "respondent_signature",
+          "title": "20. Respondent signature or confirmation mark"
+        }
+      ]
+    }
+  ],
+  "showPreviewBeforeComplete": "showAllQuestions",
+  "previewText": "Review Answers",
+  "editText": "Edit",
+  "completeText": "Submit"
+}

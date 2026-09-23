@@ -1,0 +1,281 @@
+/* Enatha Survey Platform - TAIRI/ACEIoT inspired mobile-first theme */
+
+:root {
+    --enatha-navy: #062b49;
+    --enatha-blue: #0b5fa5;
+    --enatha-cyan: #00a6c8;
+    --enatha-gold: #f5b400;
+    --enatha-green: #2ca25f;
+    --enatha-ink: #172033;
+    --enatha-muted: #64748b;
+    --enatha-soft: #f3f8fc;
+    --enatha-border: #dbe7f0;
+    --bs-primary: var(--enatha-blue);
+    --bs-primary-rgb: 11, 95, 165;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: var(--enatha-ink);
+    background:
+        radial-gradient(circle at top left, rgba(0, 166, 200, 0.12), transparent 32rem),
+        linear-gradient(180deg, #f7fbff 0%, #eef5fb 100%);
+    font-size: 0.96rem;
+}
+
+main.container {
+    flex: 1;
+    width: min(100%, 1180px);
+}
+
+.app-navbar {
+    background:
+        linear-gradient(135deg, rgba(6, 43, 73, 0.98), rgba(11, 95, 165, 0.97)),
+        var(--enatha-navy) !important;
+    min-height: 4rem;
+    z-index: 1030;
+}
+
+.app-navbar .navbar-brand,
+.app-navbar .nav-link,
+.app-navbar .navbar-text {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.app-navbar .navbar-brand:hover,
+.app-navbar .nav-link:hover,
+.app-navbar .nav-link:focus {
+    color: #fff !important;
+}
+
+.navbar-brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-right: 0.55rem;
+    border-radius: 0.7rem;
+    color: var(--enatha-navy);
+    background: linear-gradient(135deg, #fff, var(--enatha-gold));
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.navbar .nav-link {
+    border-radius: 999px;
+    padding-left: 0.85rem !important;
+    padding-right: 0.85rem !important;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.app-shell {
+    padding-top: 1.35rem;
+    padding-bottom: 1.35rem;
+}
+
+.card-survey {
+    border: 1px solid rgba(219, 231, 240, 0.9);
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 1rem 2.5rem rgba(6, 43, 73, 0.08);
+    overflow: hidden;
+}
+
+.card-header {
+    border-bottom-color: var(--enatha-border);
+}
+
+.btn {
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--enatha-blue);
+    --bs-btn-border-color: var(--enatha-blue);
+    --bs-btn-hover-bg: var(--enatha-navy);
+    --bs-btn-hover-border-color: var(--enatha-navy);
+    --bs-btn-active-bg: var(--enatha-navy);
+    --bs-btn-active-border-color: var(--enatha-navy);
+    box-shadow: 0 0.65rem 1.35rem rgba(11, 95, 165, 0.18);
+}
+
+.btn-success {
+    --bs-btn-bg: var(--enatha-green);
+    --bs-btn-border-color: var(--enatha-green);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--enatha-blue);
+    --bs-btn-border-color: var(--enatha-blue);
+    --bs-btn-hover-bg: var(--enatha-blue);
+    --bs-btn-hover-border-color: var(--enatha-blue);
+}
+
+.badge.bg-secondary {
+    background-color: #e7f0f8 !important;
+    color: var(--enatha-navy);
+}
+
+.form-control,
+.form-select {
+    border-color: var(--enatha-border);
+    border-radius: 0.85rem;
+    min-height: 2.7rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--enatha-cyan);
+    box-shadow: 0 0 0 0.2rem rgba(0, 166, 200, 0.18);
+}
+
+.survey-container {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    min-height: 200px;
+}
+
+#surveyElement {
+    max-width: 100%;
+}
+
+#surveyElement .sd-root-modern {
+    --primary: var(--enatha-blue);
+    --primary-light: rgba(0, 166, 200, 0.12);
+}
+
+.autosave-status {
+    font-size: 0.8rem;
+    color: var(--enatha-muted);
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid var(--enatha-border);
+    border-radius: 999px;
+    padding: 0.25rem 0.65rem;
+}
+
+.login-card {
+    max-width: 440px;
+    margin: 4vh auto;
+    border: 0;
+    border-radius: 1.4rem;
+    overflow: hidden;
+    box-shadow: 0 1.5rem 4rem rgba(6, 43, 73, 0.16);
+}
+
+.login-hero {
+    color: #fff;
+    background:
+        linear-gradient(135deg, rgba(6, 43, 73, 0.98), rgba(11, 95, 165, 0.92)),
+        var(--enatha-navy);
+    padding: 1.65rem;
+}
+
+.login-hero .brand-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #fff, var(--enatha-gold));
+    color: var(--enatha-navy);
+    font-weight: 800;
+    margin-bottom: 0.85rem;
+}
+
+.login-card .card-body {
+    padding: 1.65rem;
+}
+
+.table-responsive {
+    font-size: 0.9rem;
+}
+
+.table {
+    vertical-align: middle;
+}
+
+.table thead th {
+    color: var(--enatha-navy);
+    background: #f7fbff;
+    border-bottom-color: var(--enatha-border);
+}
+
+.app-footer {
+    color: var(--enatha-muted);
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(10px);
+}
+
+@media (max-width: 576px) {
+    body {
+        font-size: 0.93rem;
+    }
+
+    .app-shell {
+        padding-top: 0.85rem;
+        padding-bottom: 0.85rem;
+    }
+
+    .survey-container {
+        padding: 0.75rem;
+        border-radius: 0.85rem;
+    }
+
+    main.container {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    .card-survey,
+    .login-card {
+        border-radius: 0.95rem;
+    }
+
+    .login-card {
+        margin: 0.5rem auto 1rem;
+    }
+
+    .login-hero,
+    .login-card .card-body {
+        padding: 1.2rem;
+    }
+
+    .navbar-brand {
+        font-size: 0.98rem;
+    }
+
+    .navbar-brand-mark {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .navbar .nav-link {
+        border-radius: 0.65rem;
+        padding: 0.65rem 0.75rem !important;
+    }
+
+    .btn,
+    .form-control,
+    .form-select {
+        width: 100%;
+    }
+
+    .d-flex.flex-wrap.gap-2 > .btn,
+    .d-flex.justify-content-between .btn {
+        width: auto;
+    }
+
+    .table-responsive {
+        font-size: 0.82rem;
+    }
+}

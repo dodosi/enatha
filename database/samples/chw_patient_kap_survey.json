@@ -1,0 +1,1081 @@
+{
+  "title": "CHW and Patient KAP Survey on Antimicrobial Resistance",
+  "description": "Stream A2 - Community KAP & Drivers. IRB Ref. No. 279/CMHSIRB/2026. Form version CHW-PATIENT-KAP-v1.1 (reviewer revisions applied).",
+  "showProgressBar": "top",
+  "progressBarType": "pages",
+  "showPreviewBeforeComplete": "showAllQuestions",
+  "previewText": "Review Answers",
+  "editText": "Edit",
+  "completeText": "Submit",
+  "completedHtml": "<h3>Thank you.</h3><p>Your responses will contribute to research aimed at improving rational antimicrobial use and antimicrobial stewardship in Rwanda.</p>",
+  "pages": [
+    {
+      "name": "consent_routing",
+      "title": "Consent and Respondent Category",
+      "elements": [
+        {
+          "type": "html",
+          "name": "consent_info",
+          "html": "<p>We will collect your name and telephone number to enable the research team to contact you if clarification or study-related follow-up is required. This identifying information will be kept confidential and will only be accessible to authorized members of the research team. Your name and telephone number will be stored separately from the research dataset and linked to your responses using a unique Study Participant ID.</p>"
+        },
+        {
+          "type": "text",
+          "name": "participant_name",
+          "title": "Participant full name (restricted contact field)",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "participant_telephone",
+          "title": "Telephone number (restricted contact field)",
+          "inputType": "tel",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "facility_code",
+          "title": "Study health facility (select from approved list)",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "GAS-KIB-DH",
+              "text": "GAS-KIB-DH — Kibagabaga DH (Gasabo, Public DH)"
+            },
+            {
+              "value": "GAS-KAG-HC",
+              "text": "GAS-KAG-HC — Kagugu HC (Gasabo, Public HC)"
+            },
+            {
+              "value": "GAS-KIN-HC",
+              "text": "GAS-KIN-HC — Kinyinya HC (Gasabo, Public HC)"
+            },
+            {
+              "value": "GAS-URW-HP",
+              "text": "GAS-URW-HP — Urwego Health Post (Gasabo, Public HP)"
+            },
+            {
+              "value": "GAS-KAG-MC",
+              "text": "GAS-KAG-MC — Kagugu Medical Clinic (Gasabo, Public HP)"
+            },
+            {
+              "value": "GAS-PLA-PC",
+              "text": "GAS-PLA-PC — Plateau Clinic / Polyclinique du Plateau (Gasabo, Private Clinic)"
+            },
+            {
+              "value": "GAS-LCS-PC",
+              "text": "GAS-LCS-PC — La Croix du Sud (Gasabo, Private Clinic)"
+            },
+            {
+              "value": "GAS-BCP-PH",
+              "text": "GAS-BCP-PH — Bella Care Pharmacy (Gasabo, Private Pharmacy)"
+            },
+            {
+              "value": "GAS-NGA-PH",
+              "text": "GAS-NGA-PH — Ngabo Pharmacy (Gasabo, Private Pharmacy)"
+            },
+            {
+              "value": "BUG-NYA-DH",
+              "text": "BUG-NYA-DH — Nyamata DH (Bugesera, Public DH)"
+            },
+            {
+              "value": "BUG-NYA-HC",
+              "text": "BUG-NYA-HC — Nyamata HC (Bugesera, Public HC)"
+            },
+            {
+              "value": "BUG-MAY-HC",
+              "text": "BUG-MAY-HC — Mayange HC (Bugesera, Public HC)"
+            },
+            {
+              "value": "BUG-NY2-HP",
+              "text": "BUG-NY2-HP — Nyamata Second Generation HP (Bugesera, Public HP)"
+            },
+            {
+              "value": "BUG-KIB-HP",
+              "text": "BUG-KIB-HP — Kibenga HP (Bugesera, Public HP)"
+            },
+            {
+              "value": "BUG-BDC-PC",
+              "text": "BUG-BDC-PC — Benefactor David Clinic (Bugesera, Private Clinic)"
+            },
+            {
+              "value": "BUG-STE-PC",
+              "text": "BUG-STE-PC — Stella Clinic (Bugesera, Private Clinic)"
+            },
+            {
+              "value": "BUG-ESP-PH",
+              "text": "BUG-ESP-PH — Emma Sanitas Pharmacy LTD (Bugesera, Private Pharmacy)"
+            },
+            {
+              "value": "BUG-TGP-PH",
+              "text": "BUG-TGP-PH — The Guardian Pharmacy (Bugesera, Private Pharmacy)"
+            },
+            {
+              "value": "GAK-NEM-DH",
+              "text": "GAK-NEM-DH — Nemba DH (Gakenke, Public DH)"
+            },
+            {
+              "value": "GAK-CYA-HC",
+              "text": "GAK-CYA-HC — Cyabingo HC (Gakenke, Public HC)"
+            },
+            {
+              "value": "GAK-NEM-HC",
+              "text": "GAK-NEM-HC — Nemba HC (Gakenke, Public HC)"
+            },
+            {
+              "value": "GAK-GAH-HP",
+              "text": "GAK-GAH-HP — Gahinga HP (Gakenke, Public HP)"
+            },
+            {
+              "value": "GAK-GIS-HP",
+              "text": "GAK-GIS-HP — Gisozi HP (Gakenke, Public HP)"
+            },
+            {
+              "value": "GAK-PLM-PC",
+              "text": "GAK-PLM-PC — Polyclinic La Medicale (Gakenke, Private Clinic)"
+            },
+            {
+              "value": "GAK-CMP-PC",
+              "text": "GAK-CMP-PC — Clinique Medicale Peace (Gakenke, Private Clinic)"
+            },
+            {
+              "value": "GAK-MUS-PH",
+              "text": "GAK-MUS-PH — Pharmacy Musasa Ltd (Gakenke, Private Pharmacy)"
+            },
+            {
+              "value": "GAK-SUC-PH",
+              "text": "GAK-SUC-PH — Success Pharmacy Ltd (Gakenke, Private Pharmacy)"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "consent_status",
+          "title": "Do you consent to participate in this study?",
+          "isRequired": true,
+          "choices": [
+            "Yes",
+            "No"
+          ]
+        },
+        {
+          "type": "html",
+          "name": "consent_stop",
+          "visibleIf": "{consent_status} = 'No'",
+          "html": "<div class=\"alert alert-warning\">Consent declined. Do not continue enrolment.</div>"
+        },
+        {
+          "type": "radiogroup",
+          "name": "participant_category",
+          "title": "Select which category you belong to in your community.",
+          "isRequired": true,
+          "visibleIf": "{consent_status} = 'Yes'",
+          "choices": [
+            "Community Health Worker",
+            "Patient"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "demographics",
+      "title": "Demographics and Residence",
+      "visibleIf": "{consent_status} = 'Yes'",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "sex",
+          "title": "What is your sex?",
+          "isRequired": true,
+          "choices": [
+            "Female",
+            "Male"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "date_of_birth",
+          "title": "What is your date of birth?",
+          "inputType": "date",
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "age_finished_education",
+          "title": "How old in years were you when you finished your education?",
+          "choices": [
+            "<15",
+            "16-19",
+            "20+",
+            "Still studying"
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "socio_professional_category",
+          "title": "What is your socio-professional category?",
+          "choices": [
+            "Self-employed",
+            "Managers",
+            "Other white office worker",
+            "Manual workers",
+            "House persons",
+            "Unemployed",
+            "Retired",
+            "Students",
+            "Other"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "difficulty_paying_bills",
+          "title": "How often do you have difficulties paying bills?",
+          "isRequired": true,
+          "choices": [
+            "Most of the time",
+            "From time to time",
+            "Almost never/Never"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "residence_setting",
+          "title": "How would you describe the area where you currently live?",
+          "choices": [
+            "Rural",
+            "Urban",
+            "Peri-urban",
+            "Other"
+          ]
+        },
+        {
+          "type": "html",
+          "name": "residence_location_note",
+          "html": "<strong>Residence location</strong> (cascading Rwanda administrative locations)"
+        },
+        {
+          "type": "dropdown",
+          "name": "province_id",
+          "title": "Province",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "district_id",
+          "title": "District",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "sector_id",
+          "title": "Sector",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "cell_id",
+          "title": "Cell",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "village_id",
+          "title": "Village",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "travel_time_first_care",
+          "title": "Approximate travel time to first healthcare facility",
+          "inputType": "number"
+        },
+        {
+          "type": "dropdown",
+          "name": "travel_time_unit",
+          "title": "Travel time unit",
+          "choices": [
+            "Minutes",
+            "Hours"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "health_insurance_status",
+          "title": "Do you currently have health insurance?",
+          "choices": [
+            "Yes",
+            "No",
+            "Don't know/Not sure"
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "health_insurance_scheme",
+          "title": "Insurance scheme",
+          "visibleIf": "{health_insurance_status} = 'Yes'",
+          "isRequired": true,
+          "choices": [
+            "Mutuelle de Sante (CBHI)",
+            "RSSB",
+            "MMI",
+            "Private insurance",
+            "Other"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "health_insurance_scheme_other",
+          "title": "Specify other insurance scheme",
+          "visibleIf": "{health_insurance_scheme} = 'Other'",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "knowledge_attitudes",
+      "title": "Knowledge and Attitudes",
+      "visibleIf": "{consent_status} = 'Yes'",
+      "elements": [
+        {
+          "type": "matrix",
+          "name": "antibiotic_knowledge_tf",
+          "title": "For each statement, indicate whether you think it is true or false.",
+          "isRequired": true,
+          "rows": [
+            {
+              "value": "antibiotics_kill_viruses",
+              "text": "Antibiotics kill viruses"
+            },
+            {
+              "value": "antibiotics_effective_colds",
+              "text": "Antibiotics are effective against colds"
+            },
+            {
+              "value": "unnecessary_use_ineffective",
+              "text": "Unnecessary use makes antibiotics become ineffective"
+            },
+            {
+              "value": "side_effects_diarrhoea",
+              "text": "Taking antibiotics often has side-effects such as diarrhoea"
+            }
+          ],
+          "columns": [
+            "True",
+            "False"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "when_stop_antibiotics",
+          "title": "When do you think you should stop taking antibiotics once you have begun a course of treatment?",
+          "choices": [
+            "When you feel better",
+            "When you have taken all antibiotics as directed by your doctor",
+            "Do not know",
+            "Other"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "when_stop_antibiotics_other",
+          "title": "Specify other answer",
+          "visibleIf": "{when_stop_antibiotics} = 'Other'"
+        },
+        {
+          "type": "radiogroup",
+          "name": "received_info_unnecessary_use",
+          "title": "In the last 12 months, do you remember getting any information about not taking antibiotics unnecessarily, for example for a cold?",
+          "choices": [
+            "Yes",
+            "No",
+            "I do not know"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "topics_more_information",
+          "title": "On which topics, if any, would you like to receive more information?",
+          "choices": [
+            "Resistance to antibiotics",
+            "How to use antibiotics",
+            "Medical conditions for which antibiotics are used",
+            "Prescription of antibiotics",
+            "Links between human, animal and environmental health",
+            "I don't want more information",
+            "Don't know",
+            "Other"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "topics_more_information_other",
+          "title": "Specify other topic",
+          "visibleIf": "{topics_more_information} contains 'Other'"
+        },
+        {
+          "type": "checkbox",
+          "name": "trusted_information_sources",
+          "title": "Which sources would you use to get trustworthy information on antibiotics?",
+          "isRequired": true,
+          "choices": [
+            "Doctor",
+            "Nurse",
+            "Pharmacist",
+            "Hospital",
+            "Another health care facility",
+            "Family/friends",
+            "Official health-related website",
+            "Another health-related website",
+            "Online social networks",
+            "TV",
+            "Radio",
+            "Not interested",
+            "Don't know",
+            "Other"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "trusted_information_sources_other",
+          "title": "Specify other source",
+          "visibleIf": "{trusted_information_sources} contains 'Other'"
+        },
+        {
+          "type": "radiogroup",
+          "name": "level_to_tackle_amr",
+          "title": "At what level do you believe it is most effective to tackle resistance to antibiotics?",
+          "isRequired": true,
+          "choices": [
+            "Individual/family",
+            "Regional",
+            "National",
+            "Global",
+            "Action at all levels",
+            "Don't know"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "sick_animals_antibiotics",
+          "title": "To what extent do you agree or disagree that sick farm animals should be treated with antibiotics if this is the most appropriate treatment?",
+          "choices": [
+            "Strongly agree",
+            "Agree",
+            "Neutral",
+            "Disagree",
+            "Strongly disagree"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "one_health_excess_use",
+          "title": "Do you know that consuming products such as meat or milk from animals treated with excessive antibiotics, or fruits/vegetables treated with excessive pesticides, can contribute to antimicrobial resistance?",
+          "isRequired": true,
+          "choices": [
+            "Yes",
+            "No",
+            "Maybe",
+            "Don't know"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "information_changed_views",
+          "title": "Did the information that you received change your views on using antibiotics?",
+          "visibleIf": "{received_info_unnecessary_use} = 'Yes'",
+          "isRequired": true,
+          "choices": [
+            "Yes",
+            "No",
+            "Don't know"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "source_unnecessary_use_info",
+          "title": "Where did you get information about not taking antibiotics unnecessarily?",
+          "visibleIf": "{received_info_unnecessary_use} = 'Yes'",
+          "isRequired": true,
+          "choices": [
+            "Doctor",
+            "Pharmacist",
+            "Other health professional/nurse",
+            "Family/friend",
+            "TV advertisement",
+            "Internet/social networks",
+            "Leaflet/poster",
+            "Newspaper",
+            "TV news/programmes",
+            "Radio",
+            "Don't know",
+            "Other"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "source_unnecessary_use_info_other",
+          "title": "Specify other information source",
+          "visibleIf": "{source_unnecessary_use_info} contains 'Other'"
+        }
+      ]
+    },
+    {
+      "name": "antibiotic_use",
+      "title": "Antibiotic Use Pathway",
+      "visibleIf": "{consent_status} = 'Yes'",
+      "elements": [
+        {
+          "type": "checkbox",
+          "name": "cold_flu_antibiotic_source",
+          "title": "If you suffered from a cold or flu, did you take any antibiotics?",
+          "isRequired": true,
+          "choices": [
+            "No, I did not take antibiotics",
+            "Yes, from a medical prescription",
+            "Yes, administered by a medical practitioner",
+            "Yes, leftover from a previous course",
+            "Yes, without prescription from a pharmacy",
+            "Don't remember",
+            "Don't know"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "antibiotics_last_12m",
+          "title": "Have you taken any antibiotics orally such as tablets, powder or syrup in the last 12 months?",
+          "isRequired": true,
+          "choices": [
+            "Yes",
+            "No",
+            "Don't know"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "last_antibiotic_source",
+          "title": "How did you obtain the last course of antibiotics that you used?",
+          "visibleIf": "{antibiotics_last_12m} = 'Yes'",
+          "choices": [
+            "Medical prescription",
+            "Administered by medical practitioner",
+            "Left over from previous course",
+            "Without prescription from pharmacy",
+            "Without prescription from elsewhere",
+            "Don't remember",
+            "Don't know"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "last_antibiotic_reason",
+          "title": "What was the reason for last taking the antibiotics that you used?",
+          "visibleIf": "{antibiotics_last_12m} = 'Yes'",
+          "choices": [
+            "Pneumonia",
+            "Bronchitis",
+            "Rhinopharyngitis",
+            "Flu",
+            "Colds",
+            "Sore throat",
+            "Cough",
+            "Fever",
+            "Headache",
+            "Diarrhoea",
+            "UTI",
+            "Skin/wound infection",
+            "COVID-19",
+            "Other",
+            "Don't know"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "last_antibiotic_reason_other",
+          "title": "Specify other reason",
+          "visibleIf": "{last_antibiotic_reason} contains 'Other'"
+        },
+        {
+          "type": "radiogroup",
+          "name": "diagnostic_test_before_antibiotic",
+          "title": "Did you have a test (e.g., blood/urine test or throat swab) to find out what was causing your illness before or when you started antibiotics?",
+          "visibleIf": "{antibiotics_last_12m} = 'Yes'",
+          "choices": [
+            "Yes",
+            "No",
+            "Don't remember",
+            "Don't know"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "antibiotic_expectation_request",
+          "title": "Have you ever asked for or expected an antibiotic when a healthcare provider did not recommend one?",
+          "visibleIf": "{participant_category} = 'Patient'",
+          "choices": [
+            "Yes",
+            "No",
+            "Don't remember/Not sure"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "last_course_completed",
+          "title": "Thinking about the most recent antibiotic course prescribed for you, did you take it for the full duration as instructed?",
+          "visibleIf": "{participant_category} = 'Patient'",
+          "choices": [
+            "Yes",
+            "No",
+            "Don't remember",
+            "Not applicable/no previous prescribed course"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "noncompletion_reason",
+          "title": "What was the main reason you did not complete the antibiotic course?",
+          "visibleIf": "{participant_category} = 'Patient' and {last_course_completed} = 'No'",
+          "choices": [
+            "Felt better",
+            "Side effects",
+            "Forgot/missed doses",
+            "Could not obtain/afford full course",
+            "Advice from another person",
+            "Other"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "noncompletion_reason_other",
+          "title": "Specify other reason",
+          "visibleIf": "{noncompletion_reason} contains 'Other'"
+        },
+        {
+          "type": "radiogroup",
+          "name": "previous_resistance_experience",
+          "title": "Have you ever been told by a healthcare provider that an infection you had was resistant to an antibiotic, or that an antibiotic was not working against the infection?",
+          "visibleIf": "{participant_category} = 'Patient'",
+          "choices": [
+            "Yes",
+            "No",
+            "Don't know/Don't remember"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "one_health",
+      "title": "One Health / Livestock Exposure",
+      "visibleIf": "{consent_status} = 'Yes'",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "livestock_exposure",
+          "title": "Do you or anyone in your household currently keep livestock, or do you regularly work with livestock?",
+          "choices": [
+            "Yes",
+            "No"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "livestock_types",
+          "title": "Which animals do you/your household keep or regularly work with?",
+          "visibleIf": "{livestock_exposure} = 'Yes'",
+          "choices": [
+            "Cattle",
+            "Goats",
+            "Sheep",
+            "Pigs",
+            "Poultry",
+            "Rabbits",
+            "Other"
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "animal_antimicrobial_use",
+          "title": "In the past 6 months, have antimicrobials/antibiotics been used for these animals?",
+          "visibleIf": "{livestock_exposure} = 'Yes'",
+          "choices": [
+            "Yes",
+            "No",
+            "Don't know"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "animal_antimicrobial_purpose",
+          "title": "For what purpose were the antimicrobials/antibiotics used?",
+          "visibleIf": "{animal_antimicrobial_use} = 'Yes'",
+          "choices": [
+            "Treatment of sick animals",
+            "Prevention of disease",
+            "Growth promotion",
+            "Other",
+            "Don't know"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "animal_antimicrobial_source_advice",
+          "title": "Who usually advises or provides the antimicrobial/antibiotic used for the animals?",
+          "visibleIf": "{animal_antimicrobial_use} = 'Yes'",
+          "choices": [
+            "Veterinary professional/animal-health worker",
+            "Pharmacy/agro-vet/drug shop",
+            "Farmer/household decision",
+            "Other",
+            "Don't know"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rwanda_context",
+      "title": "Rwanda Context Questions",
+      "visibleIf": "{consent_status} = 'Yes'",
+      "elements": [
+        {
+          "type": "matrix",
+          "name": "informal_antibiotic_access_by_source",
+          "title": "In your community, how often do people obtain antibiotics without a prescription from each of the following sources?",
+          "isRequired": true,
+          "rows": [
+            {
+              "value": "local_community_pharmacy",
+              "text": "Local/community pharmacy"
+            },
+            {
+              "value": "health_facility",
+              "text": "Health facility"
+            },
+            {
+              "value": "animal_care_facility",
+              "text": "Animal-care facility / veterinary source"
+            },
+            {
+              "value": "other_source",
+              "text": "Other source"
+            }
+          ],
+          "columns": [
+            "Never",
+            "Rarely",
+            "Sometimes",
+            "Often",
+            "Very often",
+            "Don't know"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "informal_antibiotic_other_source_specify",
+          "title": "If Other source, please specify",
+          "visibleIf": "{informal_antibiotic_access_by_source.other_source} notempty and {informal_antibiotic_access_by_source.other_source} <> 'Never' and {informal_antibiotic_access_by_source.other_source} <> \"Don't know\""
+        },
+        {
+          "type": "radiogroup",
+          "name": "traditional_remedies_belief",
+          "title": "Do you believe traditional medicines, such as Umuravumba or Igikakarubamba, can cure some infections without antibiotics?",
+          "isRequired": true,
+          "choices": [
+            "Yes",
+            "No",
+            "Not sure"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "traditional_remedies_belief_explain",
+          "title": "If Yes, please explain your answer",
+          "visibleIf": "{traditional_remedies_belief} = 'Yes'",
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "traditional_medicine_use_or_suggest",
+          "title": "Have you ever used or suggested traditional medicine as an alternative to using antibiotics?",
+          "isRequired": true,
+          "choices": [
+            "Yes, I have used it myself",
+            "Yes, I have suggested it to someone else",
+            "Yes, both",
+            "No",
+            "Not sure / Cannot remember"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "traditional_medicine_use_or_suggest_explain",
+          "title": "Please explain your answer, including the situation and reason",
+          "visibleIf": "{traditional_medicine_use_or_suggest} anyof ['Yes, I have used it myself', 'Yes, I have suggested it to someone else', 'Yes, both']",
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "cost_informal_purchase",
+          "title": "To what extent do you think the cost of visiting a clinic or health facility, even with Mutuelle de Sante, influences people in your community to obtain antibiotics without a prescription or from informal sources?",
+          "isRequired": true,
+          "choices": [
+            "Not at all",
+            "A little",
+            "Somewhat",
+            "A lot",
+            "Not sure"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "cost_informal_purchase_explain",
+          "title": "Please explain your answer (optional)"
+        },
+        {
+          "type": "radiogroup",
+          "name": "antibiotics_strong_medicine",
+          "title": "To what extent do you think antibiotics are viewed as \"strong medicine\" (Ubuvuzi bukomeye) in your community?",
+          "isRequired": true,
+          "choices": [
+            "Not at all",
+            "A little",
+            "Somewhat",
+            "A lot",
+            "Not sure"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "antibiotics_strong_medicine_explain",
+          "title": "Please explain your answer (optional)"
+        },
+        {
+          "type": "radiogroup",
+          "name": "local_amr_terms",
+          "title": "Are there any local words, terms, or phrases used in your community to describe when antibiotics or other antimicrobial medicines no longer work effectively?",
+          "isRequired": true,
+          "choices": [
+            "Yes",
+            "No",
+            "Not sure"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "local_amr_terms_explain",
+          "title": "If Yes, please provide the local word(s), term(s), or phrase(s) and explain what they mean",
+          "visibleIf": "{local_amr_terms} = 'Yes'",
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "leader_influence",
+          "title": "To what extent do religious or community leaders influence health-seeking behaviours in your community, including decisions about antibiotic use?",
+          "isRequired": true,
+          "choices": [
+            "Not at all",
+            "A little",
+            "Somewhat",
+            "A lot",
+            "Not sure"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "leader_influence_explain",
+          "title": "Please explain how religious or community leaders influence these decisions (optional)"
+        },
+        {
+          "type": "radiogroup",
+          "name": "insurance_diagnostics",
+          "title": "In your experience, to what extent does having Mutuelle de Sante influence people's decisions to seek care from a health facility rather than obtaining antibiotics without a prescription or from informal sources?",
+          "isRequired": true,
+          "choices": [
+            "Not at all",
+            "A little",
+            "Somewhat",
+            "A lot",
+            "Not sure"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "insurance_diagnostics_explain",
+          "title": "Please explain your answer (optional)"
+        }
+      ]
+    },
+    {
+      "name": "chw_experience",
+      "title": "CHW-Specific Experience",
+      "visibleIf": "{consent_status} = 'Yes' and {participant_category} = 'Community Health Worker'",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "chw_antibiotic_counselling",
+          "title": "In your role as a Community Health Worker (CHW), do you provide patients or households with advice about the appropriate use of antibiotics?",
+          "isRequired": true,
+          "choices": [
+            "Yes",
+            "No"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "chw_antibiotic_counselling_describe",
+          "title": "If Yes, what advice do you usually provide? (optional)",
+          "visibleIf": "{chw_antibiotic_counselling} = 'Yes'"
+        },
+        {
+          "type": "checkbox",
+          "name": "chw_referral_infection",
+          "title": "When you suspect that a community member has an infection that requires further assessment or treatment, where do you usually refer them?",
+          "isRequired": true,
+          "choices": [
+            "Health post",
+            "Health centre",
+            "District hospital",
+            "Pharmacy",
+            "Other health facility or service"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "chw_referral_infection_other",
+          "title": "If Other, please specify",
+          "visibleIf": "{chw_referral_infection} contains 'Other health facility or service'",
+          "isRequired": true
+        },
+        {
+          "type": "checkbox",
+          "name": "chw_nonprescription_situations",
+          "title": "In your experience, in which situations do people in your community obtain or use antibiotics without a prescription?",
+          "isRequired": true,
+          "choices": [
+            "When they have used the same antibiotic for similar symptoms before",
+            "When they have leftover antibiotics at home",
+            "When antibiotics are recommended by family members or friends",
+            "When they want to avoid the cost of visiting a health facility",
+            "When the health facility is far away or difficult to access",
+            "When waiting time at the health facility is too long",
+            "When they obtain antibiotics directly from a pharmacy or other medicine seller",
+            "When they believe their illness is not serious enough to visit a health facility",
+            "Other",
+            "I have not observed this / Don't know"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "chw_nonprescription_situations_other",
+          "title": "If Other, please specify",
+          "visibleIf": "{chw_nonprescription_situations} contains 'Other'",
+          "isRequired": true
+        },
+        {
+          "type": "comment",
+          "name": "chw_nonprescription_experience",
+          "title": "Please provide any additional explanation about the situations you have observed (optional)"
+        },
+        {
+          "type": "radiogroup",
+          "name": "chw_adherence_support",
+          "title": "How often do you provide advice or follow-up to help patients take their prescribed antibiotics correctly?",
+          "isRequired": true,
+          "choices": [
+            "Never",
+            "Rarely",
+            "Sometimes",
+            "Often",
+            "Always"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "chw_adherence_support_describe",
+          "title": "Please briefly describe the type of advice or follow-up you usually provide (optional)",
+          "visibleIf": "{chw_adherence_support} anyof ['Rarely', 'Sometimes', 'Often', 'Always']"
+        },
+        {
+          "type": "radiogroup",
+          "name": "chw_amr_education",
+          "title": "Have you received any training or educational materials on appropriate antibiotic use or antimicrobial resistance (AMR) to support your work as a Community Health Worker (CHW)?",
+          "isRequired": true,
+          "choices": [
+            "Yes",
+            "No",
+            "Not sure / Cannot remember"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "chw_amr_education_source",
+          "title": "If Yes, what type of training or educational materials did you receive? (optional)",
+          "visibleIf": "{chw_amr_education} = 'Yes'"
+        },
+        {
+          "type": "checkbox",
+          "name": "chw_community_barriers",
+          "title": "What are the main challenges you face when trying to promote appropriate antibiotic use in your community?",
+          "isRequired": true,
+          "choices": [
+            "Limited community knowledge about appropriate antibiotic use",
+            "People expect or request antibiotics when they are not needed",
+            "Antibiotics are easily obtained without a prescription",
+            "Use of leftover or shared antibiotics",
+            "Preference for self-medication",
+            "Traditional or cultural beliefs and practices",
+            "Cost of seeking care at a health facility",
+            "Distance or difficulty accessing health facilities",
+            "Limited training or information on antibiotics and AMR for CHWs",
+            "Lack of educational materials to use with community members",
+            "Limited time or opportunity to provide education or follow-up",
+            "Community members do not always follow the advice provided",
+            "Other",
+            "I do not face any particular challenges"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "chw_community_barriers_other",
+          "title": "If Other, please specify",
+          "visibleIf": "{chw_community_barriers} contains 'Other'",
+          "isRequired": true
+        },
+        {
+          "type": "comment",
+          "name": "chw_community_barriers_explain",
+          "title": "Please explain any important challenges or experiences you would like to add (optional)"
+        },
+        {
+          "type": "checkbox",
+          "name": "chw_amr_support_needed",
+          "title": "What training, tools, information, or other support would help you address inappropriate antibiotic use and antimicrobial resistance (AMR) in your community?",
+          "isRequired": true,
+          "choices": [
+            "Training on appropriate antibiotic use",
+            "Training on antimicrobial resistance (AMR)",
+            "Guidance on when patients should be referred to a health facility",
+            "Educational materials for community members (e.g., posters, leaflets)",
+            "Simple information or guidance materials for CHWs",
+            "Regular updates or refresher training on antibiotics and AMR",
+            "Support from healthcare professionals or health facilities",
+            "Community awareness and education activities",
+            "Better communication or coordination between CHWs and health facilities",
+            "Digital tools or mobile-based information resources",
+            "Other",
+            "No additional support needed"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "chw_amr_support_needed_other",
+          "title": "If Other, please specify",
+          "visibleIf": "{chw_amr_support_needed} contains 'Other'",
+          "isRequired": true
+        },
+        {
+          "type": "comment",
+          "name": "chw_amr_support_needed_explain",
+          "title": "Please describe any additional support you think would be useful (optional)"
+        }
+      ]
+    }
+  ]
+}

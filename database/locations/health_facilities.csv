@@ -1,0 +1,28 @@
+facility_code,name,facility_type,facility_level,district_name,sector_name,cell_name,village_name
+GAS-KIB-DH,Kibagabaga DH,Public,District Hospital,Gasabo,Kimironko,Kibagabaga,Rugero
+GAS-KAG-HC,Kagugu HC,Public,Health Center,Gasabo,Kinyinya,Kagugu,
+GAS-KIN-HC,Kinyinya HC,Public,Health Center,Gasabo,Kinyinya,Murama,Taba
+GAS-URW-HP,Urwego Health Post,Public,Post de Sante,Gasabo,,,
+GAS-KAG-MC,Kagugu Medical Clinic,Public,Post de Sante,Gasabo,Kinyinya,Kagugu,
+GAS-PLA-PC,Plateau Clinic / Polyclinique du Plateau,Private,Private Clinic,Gasabo,Remera,,
+GAS-LCS-PC,La Croix du Sud,Private,Private Clinic,Gasabo,Remera,,
+GAS-BCP-PH,Bella Care Pharmacy,Private,Private Pharmacy,Gasabo,Gisozi,Musezero,
+GAS-NGA-PH,Ngabo Pharmacy,Private,Private Pharmacy,Gasabo,Remera,Rukiri II,
+BUG-NYA-DH,Nyamata DH,Public,District Hospital,Bugesera,Nyamata,Kayumba,
+BUG-NYA-HC,Nyamata HC,Public,Health Center,Bugesera,Nyamata,Nyamata y'Umujyi,
+BUG-MAY-HC,Mayange HC,Public,Health Center,Bugesera,Mayange,Gakamba,
+BUG-NY2-HP,Nyamata Second Generation HP,Public,Post de Sante,Bugesera,,,
+BUG-KIB-HP,Kibenga HP,Public,Post de Sante,Bugesera,Mayange,Kibenga,
+BUG-BDC-PC,Benefactor David Clinic,Private,Private Clinic,Bugesera,Nyamata,Nyamata y'Umujyi,
+BUG-STE-PC,Stella Clinic,Private,Private Clinic,Bugesera,Nyamata,,
+BUG-ESP-PH,Emma Sanitas Pharmacy LTD,Private,Private Pharmacy,Bugesera,Nyamata,Nyamata/Town,
+BUG-TGP-PH,The Guardian Pharmacy,Private,Private Pharmacy,Bugesera,Nyamata,Nyamata/Town,
+GAK-NEM-DH,Nemba DH,Public,District Hospital,Gakenke,Nemba,Mucaca,
+GAK-CYA-HC,Cyabingo HC,Public,Health Center,Gakenke,Cyabingo,Muramba,Gahama
+GAK-NEM-HC,Nemba HC,Public,Health Center,Gakenke,Nemba,Mucaca,Cyahafi
+GAK-GAH-HP,Gahinga HP,Public,Post de Sante,Gakenke,Nemba,Gahinga,Bukurura
+GAK-GIS-HP,Gisozi HP,Public,Post de Sante,Gakenke,Nemba,Gisozi,Muganwa
+GAK-PLM-PC,Polyclinic La Medicale,Private,Private Clinic,Gakenke,,,
+GAK-CMP-PC,Clinique Medicale Peace,Private,Private Clinic,Gakenke,,,
+GAK-MUS-PH,Pharmacy Musasa Ltd,Private,Private Pharmacy,Gakenke,Ruli,Ruli Centre,
+GAK-SUC-PH,Success Pharmacy Ltd,Private,Private Pharmacy,Gakenke,,,

@@ -1,0 +1,78 @@
+{
+  "title": "Sample Survey With Rwanda Cascading Locations",
+  "description": "Demonstrates database-backed Province > District > Sector > Cell > Village dropdowns.",
+  "showProgressBar": "top",
+  "pages": [
+    {
+      "name": "location",
+      "title": "Administrative Location",
+      "elements": [
+        {
+          "type": "dropdown",
+          "name": "province_id",
+          "title": "Province",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "district_id",
+          "title": "District",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "sector_id",
+          "title": "Sector",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "cell_id",
+          "title": "Cell",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "village_id",
+          "title": "Village",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "household",
+      "title": "Household Details",
+      "elements": [
+        {
+          "type": "text",
+          "name": "household_id",
+          "title": "Household ID",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "respondent_name",
+          "title": "Respondent name",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "household_size",
+          "title": "Household size",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 1,
+              "maxValue": 50
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "showPreviewBeforeComplete": "showAllQuestions",
+  "previewText": "Review Answers",
+  "editText": "Edit",
+  "completeText": "Submit"
+}
