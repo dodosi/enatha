@@ -1,6 +1,6 @@
 {
   "title": "CHW and Patient KAP Survey on Antimicrobial Resistance",
-  "description": "Stream A2 - Community KAP & Drivers. IRB Ref. No. 279/CMHSIRB/2026. Form version CHW-PATIENT-KAP-v1.1 (reviewer revisions applied).",
+  "description": "Stream A2 - Community KAP & Drivers. IRB Ref. No. 279/CMHSIRB/2026. Form version CHW-PATIENT-KAP-v1.2 (TODAY 22/09/2026: location cascade + Q46-Q49 confirmed).",
   "showProgressBar": "top",
   "progressBarType": "pages",
   "showPreviewBeforeComplete": "showAllQuestions",
@@ -262,25 +262,29 @@
           "type": "dropdown",
           "name": "district_id",
           "title": "District",
-          "isRequired": true
+          "isRequired": true,
+          "enableIf": "{province_id} notempty"
         },
         {
           "type": "dropdown",
           "name": "sector_id",
           "title": "Sector",
-          "isRequired": true
+          "isRequired": true,
+          "enableIf": "{district_id} notempty"
         },
         {
           "type": "dropdown",
           "name": "cell_id",
           "title": "Cell",
-          "isRequired": true
+          "isRequired": true,
+          "enableIf": "{sector_id} notempty"
         },
         {
           "type": "dropdown",
           "name": "village_id",
           "title": "Village",
-          "isRequired": true
+          "isRequired": true,
+          "enableIf": "{cell_id} notempty"
         },
         {
           "type": "text",
@@ -989,8 +993,8 @@
         {
           "type": "comment",
           "name": "chw_adherence_support_describe",
-          "title": "Please briefly describe the type of advice or follow-up you usually provide (optional)",
-          "visibleIf": "{chw_adherence_support} anyof ['Rarely', 'Sometimes', 'Often', 'Always']"
+          "title": "Please briefly describe the type of advice or follow-up you usually provide.",
+          "visibleIf": "{chw_adherence_support} notempty"
         },
         {
           "type": "radiogroup",
@@ -1006,7 +1010,7 @@
         {
           "type": "comment",
           "name": "chw_amr_education_source",
-          "title": "If Yes, what type of training or educational materials did you receive? (optional)",
+          "title": "If Yes, what type of training or educational materials did you receive?",
           "visibleIf": "{chw_amr_education} = 'Yes'"
         },
         {
@@ -1027,7 +1031,7 @@
             "Lack of educational materials to use with community members",
             "Limited time or opportunity to provide education or follow-up",
             "Community members do not always follow the advice provided",
-            "Other",
+            "Other — please specify",
             "I do not face any particular challenges"
           ]
         },
@@ -1035,13 +1039,13 @@
           "type": "text",
           "name": "chw_community_barriers_other",
           "title": "If Other, please specify",
-          "visibleIf": "{chw_community_barriers} contains 'Other'",
+          "visibleIf": "{chw_community_barriers} contains 'Other — please specify'",
           "isRequired": true
         },
         {
           "type": "comment",
           "name": "chw_community_barriers_explain",
-          "title": "Please explain any important challenges or experiences you would like to add (optional)"
+          "title": "Please explain any important challenges or experiences you would like to add."
         },
         {
           "type": "checkbox",
@@ -1059,7 +1063,7 @@
             "Community awareness and education activities",
             "Better communication or coordination between CHWs and health facilities",
             "Digital tools or mobile-based information resources",
-            "Other",
+            "Other — please specify",
             "No additional support needed"
           ]
         },
@@ -1067,13 +1071,13 @@
           "type": "text",
           "name": "chw_amr_support_needed_other",
           "title": "If Other, please specify",
-          "visibleIf": "{chw_amr_support_needed} contains 'Other'",
+          "visibleIf": "{chw_amr_support_needed} contains 'Other — please specify'",
           "isRequired": true
         },
         {
           "type": "comment",
           "name": "chw_amr_support_needed_explain",
-          "title": "Please describe any additional support you think would be useful (optional)"
+          "title": "Please describe any additional support you think would be useful."
         }
       ]
     }
