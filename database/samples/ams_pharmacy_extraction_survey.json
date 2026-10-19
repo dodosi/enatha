@@ -1,0 +1,3222 @@
+{
+  "title": "Pharmacy Retrospective Data Extraction Tool for AI-Supported Antimicrobial Stewardship in Rwandan Primary Healthcare",
+  "description": "Patient-level extraction of antimicrobial dispensing records from participating pharmacies (2020–2026). Form version AMS-PHARMACY-EXTRACTION-v1.0, derived from AMS-MR-EXTRACTION-v3.0. Record only what is documented in the pharmacy's routine records; do not infer missing clinical information.",
+  "showProgressBar": "top",
+  "progressBarType": "pages",
+  "completedHtml": "<h3>Thank you.</h3><p>The pharmacy data extraction form has been submitted.</p>",
+  "pages": [
+    {
+      "name": "data_source",
+      "title": "A. Data Source and Record Identification",
+      "description": "Pharmacy data-source category. All variables must reflect what is documented in the pharmacy's routine records.",
+      "elements": [
+        {
+          "type": "checkbox",
+          "name": "data_sources",
+          "title": "What is the source of the information?",
+          "isRequired": true,
+          "choices": [
+            "Pharmacy electronic system",
+            "Pharmacy paper register",
+            "Prescription or dispensing record",
+            "Linked healthcare facility record",
+            "Other"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "data_sources_other",
+          "title": "Other source — please specify",
+          "isRequired": true,
+          "visibleIf": "{data_sources} contains 'Other'"
+        },
+        {
+          "type": "dropdown",
+          "name": "pharmacy_facility_code",
+          "title": "Pharmacy name (select from approved facility list)",
+          "isRequired": true,
+          "searchEnabled": true,
+          "choices": [
+            {
+              "value": "GAS-BCP-PH",
+              "text": "GAS-BCP-PH — Bella Care Pharmacy (Gasabo, Private Private Pharmacy)"
+            },
+            {
+              "value": "GAS-NGA-PH",
+              "text": "GAS-NGA-PH — Ngabo Pharmacy (Gasabo, Private Private Pharmacy)"
+            },
+            {
+              "value": "BUG-ESP-PH",
+              "text": "BUG-ESP-PH — Emma Sanitas Pharmacy LTD (Bugesera, Private Private Pharmacy)"
+            },
+            {
+              "value": "BUG-TGP-PH",
+              "text": "BUG-TGP-PH — The Guardian Pharmacy (Bugesera, Private Private Pharmacy)"
+            },
+            {
+              "value": "GAK-MUS-PH",
+              "text": "GAK-MUS-PH — Pharmacy Musasa Ltd (Gakenke, Private Private Pharmacy)"
+            },
+            {
+              "value": "GAK-SUC-PH",
+              "text": "GAK-SUC-PH — Success Pharmacy Ltd (Gakenke, Private Private Pharmacy)"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "dispensing_date",
+          "title": "Date of dispensing or pharmacy visit",
+          "inputType": "date",
+          "isRequired": true,
+          "min": "2020-01-01",
+          "maxValueExpression": "today()"
+        },
+        {
+          "type": "text",
+          "name": "study_record_id",
+          "title": "Unique anonymized study record ID",
+          "description": "Enter the study record ID assigned by the study system.",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "pharmacy_source_record_reference",
+          "title": "Pharmacy source-record reference, where available",
+          "description": "Register page/line, invoice or electronic transaction number."
+        },
+        {
+          "type": "text",
+          "name": "patient_medical_record_id",
+          "title": "Patient medical-record number, where available",
+          "description": "Restricted identifier: stored separately from the anonymized research dataset and used only for approved record linkage."
+        }
+      ]
+    },
+    {
+      "name": "patient_demographics",
+      "title": "B. Patient Demographics",
+      "description": "Extract only what is documented. Select \"Not documented\" when a variable is absent from the pharmacy record.",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "age_documentation",
+          "title": "How is the patient's age documented?",
+          "isRequired": true,
+          "choices": [
+            "Date of birth documented",
+            "Age in years only",
+            "Not documented"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "date_of_birth",
+          "title": "Date of birth",
+          "inputType": "date",
+          "isRequired": true,
+          "maxValueExpression": "today()",
+          "visibleIf": "{age_documentation} = 'Date of birth documented'"
+        },
+        {
+          "type": "text",
+          "name": "age_years",
+          "title": "Age in years",
+          "inputType": "number",
+          "isRequired": true,
+          "visibleIf": "{age_documentation} = 'Age in years only'",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 0,
+              "maxValue": 120
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "gender",
+          "title": "Sex / gender as recorded",
+          "isRequired": true,
+          "choices": [
+            "Female",
+            "Male",
+            "Other as recorded",
+            "Not documented"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "gender_other",
+          "title": "Sex / gender as written in the record",
+          "isRequired": true,
+          "visibleIf": "{gender} = 'Other as recorded'"
+        },
+        {
+          "type": "radiogroup",
+          "name": "residence_documented",
+          "title": "Is the patient's residence documented?",
+          "isRequired": true,
+          "choices": [
+            "Yes",
+            "Not documented"
+          ]
+        },
+        {
+          "type": "html",
+          "name": "patient_residence_location_note",
+          "visibleIf": "{residence_documented} = 'Yes'",
+          "html": "<strong>Patient residence location</strong><br>Select the documented levels from Province down to Village. Leave lower levels blank if they are not documented."
+        },
+        {
+          "type": "dropdown",
+          "name": "province_id",
+          "title": "Province",
+          "isRequired": true,
+          "visibleIf": "{residence_documented} = 'Yes'"
+        },
+        {
+          "type": "dropdown",
+          "name": "district_id",
+          "title": "District",
+          "visibleIf": "{residence_documented} = 'Yes'",
+          "enableIf": "{province_id} notempty"
+        },
+        {
+          "type": "dropdown",
+          "name": "sector_id",
+          "title": "Sector",
+          "visibleIf": "{residence_documented} = 'Yes'",
+          "enableIf": "{district_id} notempty"
+        },
+        {
+          "type": "dropdown",
+          "name": "cell_id",
+          "title": "Cell",
+          "visibleIf": "{residence_documented} = 'Yes'",
+          "enableIf": "{sector_id} notempty"
+        },
+        {
+          "type": "dropdown",
+          "name": "village_id",
+          "title": "Village",
+          "visibleIf": "{residence_documented} = 'Yes'",
+          "enableIf": "{cell_id} notempty"
+        },
+        {
+          "type": "dropdown",
+          "name": "health_insurance_category",
+          "title": "Health insurance category",
+          "isRequired": true,
+          "choices": [
+            "Mutuelle de Sante (CBHI)",
+            "RSSB",
+            "MMI",
+            "Private insurance",
+            "No insurance",
+            "Other",
+            "Not documented"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "health_insurance_other",
+          "title": "Other health insurance — please specify",
+          "isRequired": true,
+          "visibleIf": "{health_insurance_category} = 'Other'"
+        },
+        {
+          "type": "dropdown",
+          "name": "occupation",
+          "title": "Occupation",
+          "isRequired": true,
+          "choices": [
+            "Student",
+            "Non-skilled worker",
+            "Professional and managerial",
+            "Housewife / houseman",
+            "Farmer",
+            "Livestock keeper",
+            "Butcher",
+            "Veterinarian",
+            "Other",
+            "Not documented"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "occupation_other",
+          "title": "Other occupation — please specify",
+          "isRequired": true,
+          "visibleIf": "{occupation} = 'Other'"
+        },
+        {
+          "type": "dropdown",
+          "name": "education_level",
+          "title": "Education level",
+          "isRequired": true,
+          "choices": [
+            "No formal education",
+            "Primary",
+            "Secondary",
+            "TVET",
+            "University",
+            "Not documented"
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "ubudehe_category",
+          "title": "Socioeconomic / Ubudehe category",
+          "isRequired": true,
+          "choices": [
+            "Category 1",
+            "Category 2",
+            "Category 3",
+            "Category 4",
+            "Not documented"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "prescription_encounter",
+      "title": "C. Prescription and Pharmacy Encounter",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "prescription_documented",
+          "title": "C1. Is there documentation of a prescription presented or received for this dispensing encounter?",
+          "isRequired": true,
+          "choices": [
+            "Yes",
+            "No",
+            "Not documented / Unknown"
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "prescription_details",
+          "title": "Prescription details (record where available)",
+          "visibleIf": "{prescription_documented} = 'Yes'",
+          "elements": [
+            {
+              "type": "text",
+              "name": "prescription_date",
+              "title": "Prescription date",
+              "inputType": "date",
+              "maxValueExpression": "today()"
+            },
+            {
+              "type": "dropdown",
+              "name": "prescriber_category",
+              "title": "Prescribing healthcare professional category",
+              "choices": [
+                "Physician",
+                "Medical specialist",
+                "Clinical officer",
+                "Nurse",
+                "Midwife",
+                "Dentist",
+                "Pharmacist",
+                "Other",
+                "Not documented"
+              ]
+            },
+            {
+              "type": "text",
+              "name": "prescriber_category_other",
+              "title": "Other prescriber category — please specify",
+              "isRequired": true,
+              "visibleIf": "{prescriber_category} = 'Other'"
+            },
+            {
+              "type": "text",
+              "name": "prescribing_facility",
+              "title": "Prescribing healthcare facility"
+            },
+            {
+              "type": "text",
+              "name": "prescription_reference",
+              "title": "Prescription reference"
+            },
+            {
+              "type": "comment",
+              "name": "prescription_indication_text",
+              "title": "Clinical indication / diagnosis as written on the prescription"
+            }
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "encounter_reason_documented",
+          "title": "Documented reason for the pharmacy encounter, where available",
+          "description": "Record as written. Leave blank if no reason is documented.",
+          "visibleIf": "{prescription_documented} = 'No'"
+        },
+        {
+          "type": "radiogroup",
+          "name": "antimicrobial_dispensed",
+          "title": "C2. Was at least one antimicrobial dispensed?",
+          "isRequired": true,
+          "choices": [
+            "Yes",
+            "No",
+            "Not documented / Unknown"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dispensing_details",
+      "title": "D. Antimicrobial Dispensing Details",
+      "description": "Record each antimicrobial dispensed separately. Leave optional fields blank when they are not documented.",
+      "visibleIf": "{antimicrobial_dispensed} = 'Yes'",
+      "elements": [
+        {
+          "type": "paneldynamic",
+          "name": "antimicrobial_dispensing",
+          "title": "Antimicrobials dispensed during this encounter",
+          "isRequired": true,
+          "panelCount": 1,
+          "minPanelCount": 1,
+          "panelAddText": "Add antimicrobial",
+          "panelRemoveText": "Remove antimicrobial",
+          "templateTitle": "Antimicrobial #{panelIndex}",
+          "templateElements": [
+            {
+              "type": "expression",
+              "name": "antimicrobial_dispensing_id",
+              "title": "Antimicrobial_Dispensing_ID",
+              "expression": "{study_record_id} + '-AM' + ({panelIndex} + 1)"
+            },
+            {
+              "type": "text",
+              "name": "documented_name",
+              "title": "Antimicrobial name as documented",
+              "isRequired": true
+            },
+            {
+              "type": "dropdown",
+              "name": "standardized_name",
+              "title": "Standardized antimicrobial name (searchable dictionary)",
+              "searchEnabled": true,
+              "choices": [
+                {
+                  "value": "Amikacin",
+                  "text": "Amikacin (J01GB06, AWaRe: Access)"
+                },
+                {
+                  "value": "Amoxicillin",
+                  "text": "Amoxicillin (J01CA04, AWaRe: Access)"
+                },
+                {
+                  "value": "Amoxicillin/clavulanic Acid",
+                  "text": "Amoxicillin/clavulanic Acid (J01CR02, AWaRe: Access)"
+                },
+                {
+                  "value": "Ampicillin",
+                  "text": "Ampicillin (J01CA01, AWaRe: Access)"
+                },
+                {
+                  "value": "Ampicillin/sulbactam",
+                  "text": "Ampicillin/sulbactam (J01CR01, AWaRe: Access)"
+                },
+                {
+                  "value": "Arbekacin",
+                  "text": "Arbekacin (J01GB12, AWaRe: Watch)"
+                },
+                {
+                  "value": "Azithromycin",
+                  "text": "Azithromycin (J01FA10, AWaRe: Watch)"
+                },
+                {
+                  "value": "Azlocillin",
+                  "text": "Azlocillin (J01CA09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Aztreonam",
+                  "text": "Aztreonam (J01DF01, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Bacampicillin",
+                  "text": "Bacampicillin (J01CA06, AWaRe: Access)"
+                },
+                {
+                  "value": "Benzathine benzylpenicillin",
+                  "text": "Benzathine benzylpenicillin (J01CE08, AWaRe: Access)"
+                },
+                {
+                  "value": "Benzylpenicillin",
+                  "text": "Benzylpenicillin (J01CE01, AWaRe: Access)"
+                },
+                {
+                  "value": "Biapenem",
+                  "text": "Biapenem (J01DH05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Carbenicillin",
+                  "text": "Carbenicillin (J01CA03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefacetrile",
+                  "text": "Cefacetrile (J01DB10, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefaclor",
+                  "text": "Cefaclor (J01DC04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefadroxil",
+                  "text": "Cefadroxil (J01DB05, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefalexin",
+                  "text": "Cefalexin (J01DB01, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefalotin",
+                  "text": "Cefalotin (J01DB03, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefamandole",
+                  "text": "Cefamandole (J01DC03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefapirin",
+                  "text": "Cefapirin (J01DB08, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefatrizine",
+                  "text": "Cefatrizine (J01DB07, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefazedone",
+                  "text": "Cefazedone (J01DB06, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefazolin",
+                  "text": "Cefazolin (J01DB04, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefbuperazone",
+                  "text": "Cefbuperazone (J01DC13, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefcapene pivoxil",
+                  "text": "Cefcapene pivoxil (J01DD17, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefdinir",
+                  "text": "Cefdinir (J01DD15, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefditoren pivoxil",
+                  "text": "Cefditoren pivoxil (J01DD16, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefepime",
+                  "text": "Cefepime (J01DE01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefetamet pivoxil",
+                  "text": "Cefetamet pivoxil (J01DD10, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefixime",
+                  "text": "Cefixime (J01DD08, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefmenoxime",
+                  "text": "Cefmenoxime (J01DD05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefmetazole",
+                  "text": "Cefmetazole (J01DC09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefminox",
+                  "text": "Cefminox (J01DC12, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefodizime",
+                  "text": "Cefodizime (J01DD09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefonicid",
+                  "text": "Cefonicid (J01DC06, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefoperazone",
+                  "text": "Cefoperazone (J01DD12, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ceforanide",
+                  "text": "Ceforanide (J01DC11, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefoselis",
+                  "text": "Cefoselis (AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefotaxime",
+                  "text": "Cefotaxime (J01DD01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefotetan",
+                  "text": "Cefotetan (J01DC05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefotiam",
+                  "text": "Cefotiam (J01DC07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefotiam hexetil",
+                  "text": "Cefotiam hexetil (J01DC07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefoxitin",
+                  "text": "Cefoxitin (J01DC01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefozopran",
+                  "text": "Cefozopran (J01DE03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefpiramide",
+                  "text": "Cefpiramide (J01DD11, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefpirome",
+                  "text": "Cefpirome (J01DE02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil",
+                  "text": "Cefpodoxime proxetil (J01DD13, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefprozil",
+                  "text": "Cefprozil (J01DC10, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefradine",
+                  "text": "Cefradine (J01DB09, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefroxadine",
+                  "text": "Cefroxadine (J01DB11, AWaRe: Access)"
+                },
+                {
+                  "value": "Ceftaroline fosamil",
+                  "text": "Ceftaroline fosamil (J01DI02, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Ceftazidime",
+                  "text": "Ceftazidime (J01DD02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ceftazidime-avibactam",
+                  "text": "Ceftazidime-avibactam (J01DD52, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Cefteram pivoxil",
+                  "text": "Cefteram pivoxil (J01DD18, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ceftezole",
+                  "text": "Ceftezole (J01DB12, AWaRe: Access)"
+                },
+                {
+                  "value": "Ceftibuten",
+                  "text": "Ceftibuten (J01DD14, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ceftizoxime",
+                  "text": "Ceftizoxime (J01DD07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ceftobiprole medocaril",
+                  "text": "Ceftobiprole medocaril (J01DI01, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Ceftolozane-tazobactam",
+                  "text": "Ceftolozane-tazobactam (J01DI54, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Ceftriaxone",
+                  "text": "Ceftriaxone (J01DD04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefuroxime",
+                  "text": "Cefuroxime (J01DC02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Chloramphenicol",
+                  "text": "Chloramphenicol (J01BA01, AWaRe: Access)"
+                },
+                {
+                  "value": "Chlortetracycline",
+                  "text": "Chlortetracycline (J01AA03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ciprofloxacin",
+                  "text": "Ciprofloxacin (J01MA02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Clarithromycin",
+                  "text": "Clarithromycin (J01FA09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Clindamycin",
+                  "text": "Clindamycin (J01FF01, AWaRe: Access)"
+                },
+                {
+                  "value": "Clofoctol",
+                  "text": "Clofoctol (J01XX03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Clometocillin",
+                  "text": "Clometocillin (J01CE07, AWaRe: Access)"
+                },
+                {
+                  "value": "Cloxacillin",
+                  "text": "Cloxacillin (J01CF02, AWaRe: Access)"
+                },
+                {
+                  "value": "Colistin",
+                  "text": "Colistin (J01XB01, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Dalbavancin",
+                  "text": "Dalbavancin (J01XA04, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Dalfopristin-quinupristin",
+                  "text": "Dalfopristin-quinupristin (J01FG02, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Daptomycin",
+                  "text": "Daptomycin (J01XX09, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Delafloxacin",
+                  "text": "Delafloxacin (J01MA23, AWaRe: Watch)"
+                },
+                {
+                  "value": "Dibekacin",
+                  "text": "Dibekacin (J01GB09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Dicloxacillin",
+                  "text": "Dicloxacillin (J01CF01, AWaRe: Access)"
+                },
+                {
+                  "value": "Dirithromycin",
+                  "text": "Dirithromycin (J01FA13, AWaRe: Watch)"
+                },
+                {
+                  "value": "Doripenem",
+                  "text": "Doripenem (J01DH04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Doxycycline",
+                  "text": "Doxycycline (J01AA02, AWaRe: Access)"
+                },
+                {
+                  "value": "Enoxacin",
+                  "text": "Enoxacin (J01MA04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ertapenem",
+                  "text": "Ertapenem (J01DH03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Eravacycline",
+                  "text": "Eravacycline (J01AA13, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Erythromycin",
+                  "text": "Erythromycin (J01FA01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Faropenem",
+                  "text": "Faropenem (J01DI03, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Fleroxacin",
+                  "text": "Fleroxacin (J01MA08, AWaRe: Watch)"
+                },
+                {
+                  "value": "Flomoxef",
+                  "text": "Flomoxef (J01DC14, AWaRe: Watch)"
+                },
+                {
+                  "value": "Flucloxacillin",
+                  "text": "Flucloxacillin (J01CF05, AWaRe: Access)"
+                },
+                {
+                  "value": "Flumequine",
+                  "text": "Flumequine (J01MB07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Fosfomycin (IV)",
+                  "text": "Fosfomycin (IV) (J01XX01, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Fosfomycin (oral)",
+                  "text": "Fosfomycin (oral) (J01XX01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Fusidic Acid",
+                  "text": "Fusidic Acid (J01XC01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Garenoxacin",
+                  "text": "Garenoxacin (J01MA19, AWaRe: Watch)"
+                },
+                {
+                  "value": "Gatifloxacin",
+                  "text": "Gatifloxacin (J01MA16, AWaRe: Watch)"
+                },
+                {
+                  "value": "Gemifloxacin",
+                  "text": "Gemifloxacin (J01MA15, AWaRe: Watch)"
+                },
+                {
+                  "value": "Gentamicin",
+                  "text": "Gentamicin (J01GB03, AWaRe: Access)"
+                },
+                {
+                  "value": "Imipenem/cilastatin",
+                  "text": "Imipenem/cilastatin (J01DH51, AWaRe: Watch)"
+                },
+                {
+                  "value": "Isepamicin",
+                  "text": "Isepamicin (J01GB11, AWaRe: Watch)"
+                },
+                {
+                  "value": "Josamycin",
+                  "text": "Josamycin (J01FA07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Kanamycin",
+                  "text": "Kanamycin (J01GB04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Latamoxef",
+                  "text": "Latamoxef (J01DD06, AWaRe: Watch)"
+                },
+                {
+                  "value": "Levofloxacin",
+                  "text": "Levofloxacin (J01MA12, AWaRe: Watch)"
+                },
+                {
+                  "value": "Lincomycin",
+                  "text": "Lincomycin (J01FF02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Linezolid",
+                  "text": "Linezolid (J01XX08, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Lomefloxacin",
+                  "text": "Lomefloxacin (J01MA07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Lymecycline",
+                  "text": "Lymecycline (J01AA04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Mecillinam",
+                  "text": "Mecillinam (J01CA11, AWaRe: Access)"
+                },
+                {
+                  "value": "Meropenem",
+                  "text": "Meropenem (J01DH02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Meropenem-vaborbactam",
+                  "text": "Meropenem-vaborbactam (J01DH52, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Metacycline",
+                  "text": "Metacycline (J01AA05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Metronidazole (IV)",
+                  "text": "Metronidazole (IV) (J01XD01, AWaRe: Access)"
+                },
+                {
+                  "value": "Metronidazole (oral)",
+                  "text": "Metronidazole (oral) (P01AB01, AWaRe: Access)"
+                },
+                {
+                  "value": "Mezlocillin",
+                  "text": "Mezlocillin (J01CA10, AWaRe: Watch)"
+                },
+                {
+                  "value": "Micronomicin",
+                  "text": "Micronomicin (AWaRe: Watch)"
+                },
+                {
+                  "value": "Midecamycin",
+                  "text": "Midecamycin (J01FA03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Minocycline (IV)",
+                  "text": "Minocycline (IV) (J01AA08, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Minocycline (oral)",
+                  "text": "Minocycline (oral) (J01AA08, AWaRe: Watch)"
+                },
+                {
+                  "value": "Moxifloxacin",
+                  "text": "Moxifloxacin (J01MA14, AWaRe: Watch)"
+                },
+                {
+                  "value": "Nafcillin",
+                  "text": "Nafcillin (J01CF06, AWaRe: Access)"
+                },
+                {
+                  "value": "Neomycin",
+                  "text": "Neomycin (J01GB05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Netilmicin",
+                  "text": "Netilmicin (J01GB07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Nitrofurantoin",
+                  "text": "Nitrofurantoin (J01XE01, AWaRe: Access)"
+                },
+                {
+                  "value": "Norfloxacin",
+                  "text": "Norfloxacin (J01MA06, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ofloxacin",
+                  "text": "Ofloxacin (J01MA01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Oleandomycin",
+                  "text": "Oleandomycin (J01FA05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Omadacycline",
+                  "text": "Omadacycline (AWaRe: Reserve)"
+                },
+                {
+                  "value": "Oritavancin",
+                  "text": "Oritavancin (J01XA05, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Oxacillin",
+                  "text": "Oxacillin (J01CF04, AWaRe: Access)"
+                },
+                {
+                  "value": "Oxytetracycline",
+                  "text": "Oxytetracycline (J01AA06, AWaRe: Watch)"
+                },
+                {
+                  "value": "Panipenem",
+                  "text": "Panipenem (AWaRe: Watch)"
+                },
+                {
+                  "value": "Pazufloxacin",
+                  "text": "Pazufloxacin (J01MA18, AWaRe: Watch)"
+                },
+                {
+                  "value": "Pefloxacin",
+                  "text": "Pefloxacin (J01MA03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Penamecillin",
+                  "text": "Penamecillin (J01CE06, AWaRe: Access)"
+                },
+                {
+                  "value": "Pheneticillin",
+                  "text": "Pheneticillin (J01CE05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Phenoxymethylpenicillin",
+                  "text": "Phenoxymethylpenicillin (J01CE02, AWaRe: Access)"
+                },
+                {
+                  "value": "Piperacillin",
+                  "text": "Piperacillin (J01CA12, AWaRe: Watch)"
+                },
+                {
+                  "value": "Piperacillin/tazobactam",
+                  "text": "Piperacillin/tazobactam (J01CR05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Pivampicillin",
+                  "text": "Pivampicillin (J01CA02, AWaRe: Access)"
+                },
+                {
+                  "value": "Pivmecillinam",
+                  "text": "Pivmecillinam (J01CA08, AWaRe: Access)"
+                },
+                {
+                  "value": "Plazomicin",
+                  "text": "Plazomicin (AWaRe: Reserve)"
+                },
+                {
+                  "value": "Polymyxin B",
+                  "text": "Polymyxin B (J01XB02, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Pristinamycin",
+                  "text": "Pristinamycin (J01FG01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Procaine benzylpenicillin",
+                  "text": "Procaine benzylpenicillin (J01CE09, AWaRe: Access)"
+                },
+                {
+                  "value": "Prulifloxacin",
+                  "text": "Prulifloxacin (J01MA17, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ribostamycin",
+                  "text": "Ribostamycin (J01GB10, AWaRe: Watch)"
+                },
+                {
+                  "value": "Rifabutin",
+                  "text": "Rifabutin (J04AB04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Rifampicin",
+                  "text": "Rifampicin (J04AB02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Rifamycin",
+                  "text": "Rifamycin (J04AB03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Rifaximin",
+                  "text": "Rifaximin (A07AA11, AWaRe: Watch)"
+                },
+                {
+                  "value": "Roxithromycin",
+                  "text": "Roxithromycin (J01FA06, AWaRe: Watch)"
+                },
+                {
+                  "value": "Rufloxacin",
+                  "text": "Rufloxacin (J01MA10, AWaRe: Watch)"
+                },
+                {
+                  "value": "Sisomicin",
+                  "text": "Sisomicin (J01GB08, AWaRe: Watch)"
+                },
+                {
+                  "value": "Sitafloxacin",
+                  "text": "Sitafloxacin (J01MA21, AWaRe: Watch)"
+                },
+                {
+                  "value": "Sparfloxacin",
+                  "text": "Sparfloxacin (J01MA09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Spectinomycin",
+                  "text": "Spectinomycin (J01XX04, AWaRe: Access)"
+                },
+                {
+                  "value": "Spiramycin",
+                  "text": "Spiramycin (J01FA02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Spiramycin/metronidazole",
+                  "text": "Spiramycin/metronidazole (J01RA04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Streptomycin",
+                  "text": "Streptomycin (J01GA01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Sulbenicillin",
+                  "text": "Sulbenicillin (J01CA16, AWaRe: Watch)"
+                },
+                {
+                  "value": "Sulfadiazine/trimethoprim",
+                  "text": "Sulfadiazine/trimethoprim (J01EE02, AWaRe: Access)"
+                },
+                {
+                  "value": "Sulfamethizole/trimethoprim",
+                  "text": "Sulfamethizole/trimethoprim (J01EB02, AWaRe: Access)"
+                },
+                {
+                  "value": "Sulfamethoxazole/trimethoprim",
+                  "text": "Sulfamethoxazole/trimethoprim (J01EE01, AWaRe: Access)"
+                },
+                {
+                  "value": "Sulfametrole/trimethoprim",
+                  "text": "Sulfametrole/trimethoprim (J01EE03, AWaRe: Access)"
+                },
+                {
+                  "value": "Sulfamoxole/trimethoprim",
+                  "text": "Sulfamoxole/trimethoprim (J01EE04, AWaRe: Access)"
+                },
+                {
+                  "value": "Sultamicillin",
+                  "text": "Sultamicillin (J01CR04, AWaRe: Access)"
+                },
+                {
+                  "value": "Tebipenem",
+                  "text": "Tebipenem (J01DH06, AWaRe: Watch)"
+                },
+                {
+                  "value": "Tedizolid",
+                  "text": "Tedizolid (J01XX11, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Teicoplanin",
+                  "text": "Teicoplanin (J01XA02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Telavancin",
+                  "text": "Telavancin (J01XA03, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Telithromycin",
+                  "text": "Telithromycin (J01FA15, AWaRe: Watch)"
+                },
+                {
+                  "value": "Temocillin",
+                  "text": "Temocillin (J01CA17, AWaRe: Watch)"
+                },
+                {
+                  "value": "Tetracycline",
+                  "text": "Tetracycline (J01AA07, AWaRe: Access)"
+                },
+                {
+                  "value": "Thiamphenicol",
+                  "text": "Thiamphenicol (J01BA02, AWaRe: Access)"
+                },
+                {
+                  "value": "Ticarcillin",
+                  "text": "Ticarcillin (J01CA13, AWaRe: Watch)"
+                },
+                {
+                  "value": "Tigecycline",
+                  "text": "Tigecycline (J01AA12, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Tobramycin",
+                  "text": "Tobramycin (J01GB01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Tosufloxacin",
+                  "text": "Tosufloxacin (J01MA22, AWaRe: Watch)"
+                },
+                {
+                  "value": "Trimethoprim",
+                  "text": "Trimethoprim (J01EA01, AWaRe: Access)"
+                },
+                {
+                  "value": "Vancomycin (IV)",
+                  "text": "Vancomycin (IV) (J01XA01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Vancomycin (oral)",
+                  "text": "Vancomycin (oral) (A07AA09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Acetylspiramycin/metronidazole",
+                  "text": "Acetylspiramycin/metronidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amikacin/cefepime",
+                  "text": "Amikacin/cefepime (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/bacillus coagulans/cloxacillin",
+                  "text": "Amoxicillin/bacillus coagulans/cloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/bacillus coagulans/dicloxacillin",
+                  "text": "Amoxicillin/bacillus coagulans/dicloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/clavulanic acid/lactic ferments",
+                  "text": "Amoxicillin/clavulanic acid/lactic ferments (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/clavulanic acid/lactobacillus acidophilus",
+                  "text": "Amoxicillin/clavulanic acid/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/clavulanic acid/nimesulide",
+                  "text": "Amoxicillin/clavulanic acid/nimesulide (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/cloxacillin",
+                  "text": "Amoxicillin/cloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/cloxacillin/lactic acid",
+                  "text": "Amoxicillin/cloxacillin/lactic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/cloxacillin/lactobacillus acidophilus/serrapeptase",
+                  "text": "Amoxicillin/cloxacillin/lactobacillus acidophilus/serrapeptase (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/cloxacillin/lactobacillus lactis",
+                  "text": "Amoxicillin/cloxacillin/lactobacillus lactis (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/cloxacillin/serrapeptase",
+                  "text": "Amoxicillin/cloxacillin/serrapeptase (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/dicloxacillin",
+                  "text": "Amoxicillin/dicloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/dicloxacillin/saccharomyces boulardii",
+                  "text": "Amoxicillin/dicloxacillin/saccharomyces boulardii (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/flucloxacillin",
+                  "text": "Amoxicillin/flucloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/flucloxacillin/lactobacillus acidophilus",
+                  "text": "Amoxicillin/flucloxacillin/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/metronidazole",
+                  "text": "Amoxicillin/metronidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/pivsulbactam",
+                  "text": "Amoxicillin/pivsulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/sulbactam",
+                  "text": "Amoxicillin/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/bacillus coagulans/cloxacillin",
+                  "text": "Ampicillin/bacillus coagulans/cloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/cloxacillin",
+                  "text": "Ampicillin/cloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/cloxacillin/lactobacillus acidophilus",
+                  "text": "Ampicillin/cloxacillin/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/cloxacillin/saccharomyces boulardii",
+                  "text": "Ampicillin/cloxacillin/saccharomyces boulardii (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/dicloxacillin",
+                  "text": "Ampicillin/dicloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/dicloxacillin/lactobacillus acidophilus",
+                  "text": "Ampicillin/dicloxacillin/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/flucloxacillin",
+                  "text": "Ampicillin/flucloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/lidocaine/sulbactam",
+                  "text": "Ampicillin/lidocaine/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/oxacillin",
+                  "text": "Ampicillin/oxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/sultamicillin",
+                  "text": "Ampicillin/sultamicillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ascorbic acid/metamizole sodium/penicillin g /streptomycin",
+                  "text": "Ascorbic acid/metamizole sodium/penicillin g /streptomycin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Azithromycin/cefixime",
+                  "text": "Azithromycin/cefixime (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Azithromycin/cefixime/lactobacillus acidophilus",
+                  "text": "Azithromycin/cefixime/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Azithromycin/cefpodoxime proxetil",
+                  "text": "Azithromycin/cefpodoxime proxetil (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Azithromycin/fluconazole/secnidazole",
+                  "text": "Azithromycin/fluconazole/secnidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Azithromycin/levofloxacin",
+                  "text": "Azithromycin/levofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Azithromycin/ofloxacin",
+                  "text": "Azithromycin/ofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Benzyl penicillin/streptomycin",
+                  "text": "Benzyl penicillin/streptomycin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Bromelains/doxycycline/lactobacillus reuteri/lactobacillus rhamnosus/ornidazole",
+                  "text": "Bromelains/doxycycline/lactobacillus reuteri/lactobacillus rhamnosus/ornidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Bromhexine/sulfamethoxazole/trimethoprim",
+                  "text": "Bromhexine/sulfamethoxazole/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefaclor/clavulanic acid",
+                  "text": "Cefaclor/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefadroxil/clavulanic acid",
+                  "text": "Cefadroxil/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefadroxil/trimethoprim",
+                  "text": "Cefadroxil/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefalexin/trimethoprim",
+                  "text": "Cefalexin/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefdinir/clavulanic acid",
+                  "text": "Cefdinir/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefepime/sulbactam",
+                  "text": "Cefepime/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefepime/tazobactam",
+                  "text": "Cefepime/tazobactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/cefpodoxime proxetil",
+                  "text": "Cefixime/cefpodoxime proxetil (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/clavulanic acid",
+                  "text": "Cefixime/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/clavulanic acid/lactobacillus acidophilus",
+                  "text": "Cefixime/clavulanic acid/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/cloxacillin",
+                  "text": "Cefixime/cloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/cloxacillin/lactobacillus acidophilus",
+                  "text": "Cefixime/cloxacillin/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/dicloxacillin",
+                  "text": "Cefixime/dicloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/lactobacillus acidophilus/ofloxacin",
+                  "text": "Cefixime/lactobacillus acidophilus/ofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/levofloxacin",
+                  "text": "Cefixime/levofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/linezolid",
+                  "text": "Cefixime/linezolid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/moxifloxacin",
+                  "text": "Cefixime/moxifloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/ofloxacin",
+                  "text": "Cefixime/ofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/ornidazole",
+                  "text": "Cefixime/ornidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefoperazone/sulbactam",
+                  "text": "Cefoperazone/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefoperazone/tazobactam",
+                  "text": "Cefoperazone/tazobactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefotaxime/sulbactam",
+                  "text": "Cefotaxime/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/clavulanic acid",
+                  "text": "Cefpodoxime proxetil/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/cloxacillin/lactobacillus acidophilus",
+                  "text": "Cefpodoxime proxetil/cloxacillin/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/dicloxacillin",
+                  "text": "Cefpodoxime proxetil/dicloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/dicloxacillin/lactobacillus acidophilus",
+                  "text": "Cefpodoxime proxetil/dicloxacillin/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/levofloxacin",
+                  "text": "Cefpodoxime proxetil/levofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/ofloxacin",
+                  "text": "Cefpodoxime proxetil/ofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/sulbactam",
+                  "text": "Cefpodoxime proxetil/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftazidime/sulbactam",
+                  "text": "Ceftazidime/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftazidime/tazobactam",
+                  "text": "Ceftazidime/tazobactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftazidime/tobramicin",
+                  "text": "Ceftazidime/tobramicin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftibuten/clavulanic acid",
+                  "text": "Ceftibuten/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftriaxone/sulbactam",
+                  "text": "Ceftriaxone/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftriaxone/tazobactam",
+                  "text": "Ceftriaxone/tazobactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftriaxone/vancomycin",
+                  "text": "Ceftriaxone/vancomycin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefuroxime axetil/clavulanic acid",
+                  "text": "Cefuroxime axetil/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefuroxime axetil/linezolid",
+                  "text": "Cefuroxime axetil/linezolid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefuroxime axetil/sulbactam",
+                  "text": "Cefuroxime axetil/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefuroxime/clavulanic acid",
+                  "text": "Cefuroxime/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefuroxime/sulbactam",
+                  "text": "Cefuroxime/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Chloramphenicol/tetracycline",
+                  "text": "Chloramphenicol/tetracycline (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ciprofloxacin/metronidazole",
+                  "text": "Ciprofloxacin/metronidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ciprofloxacin/ornidazole",
+                  "text": "Ciprofloxacin/ornidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ciprofloxacin/tinidazole",
+                  "text": "Ciprofloxacin/tinidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Doxycycline/tinidazole",
+                  "text": "Doxycycline/tinidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Erythromycin/sulfamethoxazole/trimethoprim",
+                  "text": "Erythromycin/sulfamethoxazole/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Erythromycin/trimethoprim",
+                  "text": "Erythromycin/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Fosfomycin/trimethoprim",
+                  "text": "Fosfomycin/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Gatifloxacin/ornidazole",
+                  "text": "Gatifloxacin/ornidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Kanamycin/penicillin g",
+                  "text": "Kanamycin/penicillin g (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Levofloxacin/metronidazole",
+                  "text": "Levofloxacin/metronidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Levofloxacin/ornidazole",
+                  "text": "Levofloxacin/ornidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Meropenem/sodium/sulbactam",
+                  "text": "Meropenem/sodium/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Meropenem/sulbactam",
+                  "text": "Meropenem/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Metronidazole/norfloxacin",
+                  "text": "Metronidazole/norfloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Metronidazole/spiramycin",
+                  "text": "Metronidazole/spiramycin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Metronidazole/tetracycline",
+                  "text": "Metronidazole/tetracycline (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Mezlocillin/sulbactam",
+                  "text": "Mezlocillin/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ofloxacin/ornidazole",
+                  "text": "Ofloxacin/ornidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Oleandomycin/tetracycline",
+                  "text": "Oleandomycin/tetracycline (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Piperacillin/sulbactam",
+                  "text": "Piperacillin/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Rifampicin/trimethoprim",
+                  "text": "Rifampicin/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Sulfadiazine/sulfamethoxazole/trimethoprim",
+                  "text": "Sulfadiazine/sulfamethoxazole/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Antimicrobial not found in standardised list",
+                  "text": "Antimicrobial not found in standardised list"
+                }
+              ],
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "standardized_name_other",
+              "title": "Antimicrobial not in the list — please specify",
+              "isRequired": true,
+              "visibleIf": "{panel.standardized_name} = 'Antimicrobial not found in standardised list'"
+            },
+            {
+              "type": "text",
+              "name": "strength",
+              "title": "Strength",
+              "placeholder": "Example: 500 mg"
+            },
+            {
+              "type": "dropdown",
+              "name": "formulation",
+              "title": "Pharmaceutical formulation",
+              "choices": [
+                "Tablet",
+                "Capsule",
+                "Oral suspension / syrup",
+                "Powder for oral suspension",
+                "Injection",
+                "Topical cream / ointment",
+                "Eye / ear drops",
+                "Suppository / pessary",
+                "Other",
+                "Not documented"
+              ]
+            },
+            {
+              "type": "text",
+              "name": "formulation_other",
+              "title": "Other formulation — please specify",
+              "isRequired": true,
+              "visibleIf": "{panel.formulation} = 'Other'"
+            },
+            {
+              "type": "text",
+              "name": "dose",
+              "title": "Dose, if documented",
+              "placeholder": "Example: 1 tablet"
+            },
+            {
+              "type": "text",
+              "name": "frequency",
+              "title": "Frequency, if documented",
+              "placeholder": "Example: 3 times daily"
+            },
+            {
+              "type": "dropdown",
+              "name": "route",
+              "title": "Route of administration",
+              "choices": [
+                "Oral",
+                "Intravenous",
+                "Intramuscular",
+                "Topical",
+                "Other",
+                "Not documented"
+              ]
+            },
+            {
+              "type": "text",
+              "name": "route_other",
+              "title": "Other route — please specify",
+              "isRequired": true,
+              "visibleIf": "{panel.route} = 'Other'"
+            },
+            {
+              "type": "text",
+              "name": "quantity_dispensed",
+              "title": "Quantity dispensed",
+              "placeholder": "Example: 21 tablets"
+            },
+            {
+              "type": "text",
+              "name": "duration_days",
+              "title": "Prescribed duration in days, if documented",
+              "inputType": "number",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "minValue": 0,
+                  "maxValue": 365
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "name": "item_dispensing_date",
+              "title": "Dispensing date",
+              "inputType": "date",
+              "defaultValueExpression": "{dispensing_date}",
+              "min": "2020-01-01",
+              "maxValueExpression": "today()"
+            },
+            {
+              "type": "radiogroup",
+              "name": "prescription_status",
+              "title": "Prescription status for this antimicrobial",
+              "isRequired": true,
+              "choices": [
+                "Prescription documented",
+                "No prescription documented",
+                "Unknown"
+              ]
+            },
+            {
+              "type": "text",
+              "name": "indication_documented",
+              "title": "Indication or clinical condition as documented",
+              "description": "Leave blank if not documented. Do not infer."
+            },
+            {
+              "type": "dropdown",
+              "name": "indication_standardized",
+              "title": "Standardized clinical condition (ICD-11 dictionary)",
+              "searchEnabled": true,
+              "visibleIf": "{panel.indication_documented} notempty",
+              "choices": [
+                {
+                  "value": "COND_0001",
+                  "text": "Respiratory: Pneumonia, organism unspecified"
+                },
+                {
+                  "value": "COND_0002",
+                  "text": "Respiratory: Community-acquired pneumonia"
+                },
+                {
+                  "value": "COND_0003",
+                  "text": "Respiratory: Acute bronchitis"
+                },
+                {
+                  "value": "COND_0004",
+                  "text": "Urinary: Cystitis"
+                },
+                {
+                  "value": "COND_0005",
+                  "text": "Urinary: Acute pyelonephritis"
+                },
+                {
+                  "value": "COND_0006",
+                  "text": "Urinary: Urinary tract infection, site and agent not specified"
+                },
+                {
+                  "value": "COND_0007",
+                  "text": "Gastrointestinal: Infectious gastroenteritis or colitis without specification of infectious agent"
+                },
+                {
+                  "value": "COND_0008",
+                  "text": "Blood/Systemic: Sepsis without septic shock"
+                },
+                {
+                  "value": "COND_0009",
+                  "text": "Blood/Systemic: Sepsis with septic shock"
+                },
+                {
+                  "value": "COND_0010",
+                  "text": "General/Systemic: Bacterial infection of unspecified site"
+                },
+                {
+                  "value": "COND_0011",
+                  "text": "General/Systemic: Infection, unspecified"
+                },
+                {
+                  "value": "COND_0012",
+                  "text": "Skin/Soft tissue: Bacterial cellulitis, erysipelas or lymphangitis"
+                },
+                {
+                  "value": "COND_0013",
+                  "text": "Skin/Soft tissue: Necrotising fasciitis"
+                },
+                {
+                  "value": "COND_0014",
+                  "text": "Skin/Soft tissue: Impetigo"
+                },
+                {
+                  "value": "COND_0015",
+                  "text": "Skin/Soft tissue: Ecthyma"
+                },
+                {
+                  "value": "COND_0016",
+                  "text": "Skin/Soft tissue: Superficial bacterial folliculitis"
+                },
+                {
+                  "value": "COND_0017",
+                  "text": "Skin/Soft tissue: Deep bacterial folliculitis or pyogenic abscess of skin"
+                },
+                {
+                  "value": "COND_0018",
+                  "text": "Skin/Soft tissue: Acute bacterial paronychia"
+                },
+                {
+                  "value": "COND_0019",
+                  "text": "Skin/Soft tissue: Other specified pyogenic bacterial infection of skin and subcutaneous tissue"
+                },
+                {
+                  "value": "COND_0020",
+                  "text": "Dental/Oral: Periapical abscess"
+                },
+                {
+                  "value": "COND_0021",
+                  "text": "Bone/Joint: Osteomyelitis or osteitis, unspecified"
+                },
+                {
+                  "value": "COND_0022",
+                  "text": "Bone/Joint: Direct infections of joint"
+                },
+                {
+                  "value": "IND_OTHER",
+                  "text": "Other infection/clinical indication — specify"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "name": "indication_standardized_other",
+              "title": "Other clinical condition — please specify",
+              "isRequired": true,
+              "visibleIf": "{panel.indication_standardized} = 'IND_OTHER'"
+            },
+            {
+              "type": "dropdown",
+              "name": "payment_method",
+              "title": "Payment / insurance coverage",
+              "choices": [
+                "Fully covered by insurance",
+                "Partially covered by insurance",
+                "Out-of-pocket (no insurance)",
+                "Not documented"
+              ]
+            },
+            {
+              "type": "text",
+              "name": "amount_paid_rwf",
+              "title": "Amount paid by the patient (RWF), if routinely recorded",
+              "inputType": "number",
+              "visibleIf": "{panel.payment_method} anyof ['Partially covered by insurance', 'Out-of-pocket (no insurance)']",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "minValue": 0
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "dispensing_issues",
+              "title": "Documented partial dispensing, substitution or unavailability",
+              "choices": [
+                "Partial dispensing (less than the prescribed quantity)",
+                "Substitution with another product",
+                "Antimicrobial unavailable / out of stock"
+              ],
+              "showNoneItem": true,
+              "noneText": "None documented"
+            },
+            {
+              "type": "comment",
+              "name": "dispensing_issues_details",
+              "title": "Details as documented",
+              "visibleIf": "{panel.dispensing_issues} anyof [\"Partial dispensing (less than the prescribed quantity)\", \"Substitution with another product\", \"Antimicrobial unavailable / out of stock\"]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "other_medications",
+      "title": "E. Other Medications",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "other_medications_documented",
+          "title": "E1. Were other non-antimicrobial medications prescribed or dispensed during this encounter?",
+          "isRequired": true,
+          "choices": [
+            "Yes",
+            "No",
+            "Not documented / Unknown"
+          ]
+        },
+        {
+          "type": "html",
+          "name": "other_medications_note",
+          "visibleIf": "{other_medications_documented} = 'Yes'",
+          "html": "<small>Do not assume that every prescribed medication was dispensed. Record the documented status of each medication.</small>"
+        },
+        {
+          "type": "paneldynamic",
+          "name": "other_medications",
+          "title": "Other medications",
+          "visibleIf": "{other_medications_documented} = 'Yes'",
+          "isRequired": true,
+          "panelCount": 1,
+          "minPanelCount": 1,
+          "panelAddText": "Add medication",
+          "panelRemoveText": "Remove medication",
+          "templateTitle": "Medication #{panelIndex}",
+          "templateElements": [
+            {
+              "type": "text",
+              "name": "medication_name",
+              "title": "Medication name as documented",
+              "isRequired": true
+            },
+            {
+              "type": "dropdown",
+              "name": "medication_status",
+              "title": "Prescribed or dispensed status",
+              "isRequired": true,
+              "choices": [
+                "Prescribed and dispensed",
+                "Prescribed — not dispensed",
+                "Prescribed — dispensing status not documented",
+                "Dispensed without a documented prescription"
+              ]
+            },
+            {
+              "type": "text",
+              "name": "medication_quantity",
+              "title": "Quantity, where documented"
+            },
+            {
+              "type": "text",
+              "name": "medication_dose",
+              "title": "Dose, where documented"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "previous_use",
+      "title": "F. Previous Antimicrobial Use",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "previous_antimicrobial_use",
+          "title": "F1. Is there documentation that the patient used or obtained another antimicrobial within the 30 days preceding this pharmacy encounter?",
+          "isRequired": true,
+          "choices": [
+            "Yes",
+            "No",
+            "Not documented / Unknown"
+          ]
+        },
+        {
+          "type": "html",
+          "name": "previous_use_note",
+          "visibleIf": "{previous_antimicrobial_use} = 'Yes'",
+          "html": "<small>Do not count the antimicrobial dispensed during the current encounter as previous use.</small>"
+        },
+        {
+          "type": "paneldynamic",
+          "name": "previous_antimicrobials",
+          "title": "Previous antimicrobials (within 30 days before this encounter)",
+          "visibleIf": "{previous_antimicrobial_use} = 'Yes'",
+          "isRequired": true,
+          "panelCount": 1,
+          "minPanelCount": 1,
+          "panelAddText": "Add previous antimicrobial",
+          "panelRemoveText": "Remove",
+          "templateTitle": "Previous antimicrobial #{panelIndex}",
+          "templateElements": [
+            {
+              "type": "text",
+              "name": "documented_name",
+              "title": "Antimicrobial name as documented",
+              "isRequired": true
+            },
+            {
+              "type": "dropdown",
+              "name": "standardized_name",
+              "title": "Standardized antimicrobial name (searchable dictionary)",
+              "searchEnabled": true,
+              "choices": [
+                {
+                  "value": "Amikacin",
+                  "text": "Amikacin (J01GB06, AWaRe: Access)"
+                },
+                {
+                  "value": "Amoxicillin",
+                  "text": "Amoxicillin (J01CA04, AWaRe: Access)"
+                },
+                {
+                  "value": "Amoxicillin/clavulanic Acid",
+                  "text": "Amoxicillin/clavulanic Acid (J01CR02, AWaRe: Access)"
+                },
+                {
+                  "value": "Ampicillin",
+                  "text": "Ampicillin (J01CA01, AWaRe: Access)"
+                },
+                {
+                  "value": "Ampicillin/sulbactam",
+                  "text": "Ampicillin/sulbactam (J01CR01, AWaRe: Access)"
+                },
+                {
+                  "value": "Arbekacin",
+                  "text": "Arbekacin (J01GB12, AWaRe: Watch)"
+                },
+                {
+                  "value": "Azithromycin",
+                  "text": "Azithromycin (J01FA10, AWaRe: Watch)"
+                },
+                {
+                  "value": "Azlocillin",
+                  "text": "Azlocillin (J01CA09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Aztreonam",
+                  "text": "Aztreonam (J01DF01, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Bacampicillin",
+                  "text": "Bacampicillin (J01CA06, AWaRe: Access)"
+                },
+                {
+                  "value": "Benzathine benzylpenicillin",
+                  "text": "Benzathine benzylpenicillin (J01CE08, AWaRe: Access)"
+                },
+                {
+                  "value": "Benzylpenicillin",
+                  "text": "Benzylpenicillin (J01CE01, AWaRe: Access)"
+                },
+                {
+                  "value": "Biapenem",
+                  "text": "Biapenem (J01DH05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Carbenicillin",
+                  "text": "Carbenicillin (J01CA03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefacetrile",
+                  "text": "Cefacetrile (J01DB10, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefaclor",
+                  "text": "Cefaclor (J01DC04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefadroxil",
+                  "text": "Cefadroxil (J01DB05, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefalexin",
+                  "text": "Cefalexin (J01DB01, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefalotin",
+                  "text": "Cefalotin (J01DB03, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefamandole",
+                  "text": "Cefamandole (J01DC03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefapirin",
+                  "text": "Cefapirin (J01DB08, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefatrizine",
+                  "text": "Cefatrizine (J01DB07, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefazedone",
+                  "text": "Cefazedone (J01DB06, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefazolin",
+                  "text": "Cefazolin (J01DB04, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefbuperazone",
+                  "text": "Cefbuperazone (J01DC13, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefcapene pivoxil",
+                  "text": "Cefcapene pivoxil (J01DD17, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefdinir",
+                  "text": "Cefdinir (J01DD15, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefditoren pivoxil",
+                  "text": "Cefditoren pivoxil (J01DD16, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefepime",
+                  "text": "Cefepime (J01DE01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefetamet pivoxil",
+                  "text": "Cefetamet pivoxil (J01DD10, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefixime",
+                  "text": "Cefixime (J01DD08, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefmenoxime",
+                  "text": "Cefmenoxime (J01DD05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefmetazole",
+                  "text": "Cefmetazole (J01DC09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefminox",
+                  "text": "Cefminox (J01DC12, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefodizime",
+                  "text": "Cefodizime (J01DD09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefonicid",
+                  "text": "Cefonicid (J01DC06, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefoperazone",
+                  "text": "Cefoperazone (J01DD12, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ceforanide",
+                  "text": "Ceforanide (J01DC11, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefoselis",
+                  "text": "Cefoselis (AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefotaxime",
+                  "text": "Cefotaxime (J01DD01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefotetan",
+                  "text": "Cefotetan (J01DC05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefotiam",
+                  "text": "Cefotiam (J01DC07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefotiam hexetil",
+                  "text": "Cefotiam hexetil (J01DC07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefoxitin",
+                  "text": "Cefoxitin (J01DC01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefozopran",
+                  "text": "Cefozopran (J01DE03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefpiramide",
+                  "text": "Cefpiramide (J01DD11, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefpirome",
+                  "text": "Cefpirome (J01DE02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil",
+                  "text": "Cefpodoxime proxetil (J01DD13, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefprozil",
+                  "text": "Cefprozil (J01DC10, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefradine",
+                  "text": "Cefradine (J01DB09, AWaRe: Access)"
+                },
+                {
+                  "value": "Cefroxadine",
+                  "text": "Cefroxadine (J01DB11, AWaRe: Access)"
+                },
+                {
+                  "value": "Ceftaroline fosamil",
+                  "text": "Ceftaroline fosamil (J01DI02, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Ceftazidime",
+                  "text": "Ceftazidime (J01DD02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ceftazidime-avibactam",
+                  "text": "Ceftazidime-avibactam (J01DD52, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Cefteram pivoxil",
+                  "text": "Cefteram pivoxil (J01DD18, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ceftezole",
+                  "text": "Ceftezole (J01DB12, AWaRe: Access)"
+                },
+                {
+                  "value": "Ceftibuten",
+                  "text": "Ceftibuten (J01DD14, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ceftizoxime",
+                  "text": "Ceftizoxime (J01DD07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ceftobiprole medocaril",
+                  "text": "Ceftobiprole medocaril (J01DI01, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Ceftolozane-tazobactam",
+                  "text": "Ceftolozane-tazobactam (J01DI54, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Ceftriaxone",
+                  "text": "Ceftriaxone (J01DD04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Cefuroxime",
+                  "text": "Cefuroxime (J01DC02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Chloramphenicol",
+                  "text": "Chloramphenicol (J01BA01, AWaRe: Access)"
+                },
+                {
+                  "value": "Chlortetracycline",
+                  "text": "Chlortetracycline (J01AA03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ciprofloxacin",
+                  "text": "Ciprofloxacin (J01MA02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Clarithromycin",
+                  "text": "Clarithromycin (J01FA09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Clindamycin",
+                  "text": "Clindamycin (J01FF01, AWaRe: Access)"
+                },
+                {
+                  "value": "Clofoctol",
+                  "text": "Clofoctol (J01XX03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Clometocillin",
+                  "text": "Clometocillin (J01CE07, AWaRe: Access)"
+                },
+                {
+                  "value": "Cloxacillin",
+                  "text": "Cloxacillin (J01CF02, AWaRe: Access)"
+                },
+                {
+                  "value": "Colistin",
+                  "text": "Colistin (J01XB01, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Dalbavancin",
+                  "text": "Dalbavancin (J01XA04, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Dalfopristin-quinupristin",
+                  "text": "Dalfopristin-quinupristin (J01FG02, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Daptomycin",
+                  "text": "Daptomycin (J01XX09, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Delafloxacin",
+                  "text": "Delafloxacin (J01MA23, AWaRe: Watch)"
+                },
+                {
+                  "value": "Dibekacin",
+                  "text": "Dibekacin (J01GB09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Dicloxacillin",
+                  "text": "Dicloxacillin (J01CF01, AWaRe: Access)"
+                },
+                {
+                  "value": "Dirithromycin",
+                  "text": "Dirithromycin (J01FA13, AWaRe: Watch)"
+                },
+                {
+                  "value": "Doripenem",
+                  "text": "Doripenem (J01DH04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Doxycycline",
+                  "text": "Doxycycline (J01AA02, AWaRe: Access)"
+                },
+                {
+                  "value": "Enoxacin",
+                  "text": "Enoxacin (J01MA04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ertapenem",
+                  "text": "Ertapenem (J01DH03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Eravacycline",
+                  "text": "Eravacycline (J01AA13, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Erythromycin",
+                  "text": "Erythromycin (J01FA01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Faropenem",
+                  "text": "Faropenem (J01DI03, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Fleroxacin",
+                  "text": "Fleroxacin (J01MA08, AWaRe: Watch)"
+                },
+                {
+                  "value": "Flomoxef",
+                  "text": "Flomoxef (J01DC14, AWaRe: Watch)"
+                },
+                {
+                  "value": "Flucloxacillin",
+                  "text": "Flucloxacillin (J01CF05, AWaRe: Access)"
+                },
+                {
+                  "value": "Flumequine",
+                  "text": "Flumequine (J01MB07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Fosfomycin (IV)",
+                  "text": "Fosfomycin (IV) (J01XX01, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Fosfomycin (oral)",
+                  "text": "Fosfomycin (oral) (J01XX01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Fusidic Acid",
+                  "text": "Fusidic Acid (J01XC01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Garenoxacin",
+                  "text": "Garenoxacin (J01MA19, AWaRe: Watch)"
+                },
+                {
+                  "value": "Gatifloxacin",
+                  "text": "Gatifloxacin (J01MA16, AWaRe: Watch)"
+                },
+                {
+                  "value": "Gemifloxacin",
+                  "text": "Gemifloxacin (J01MA15, AWaRe: Watch)"
+                },
+                {
+                  "value": "Gentamicin",
+                  "text": "Gentamicin (J01GB03, AWaRe: Access)"
+                },
+                {
+                  "value": "Imipenem/cilastatin",
+                  "text": "Imipenem/cilastatin (J01DH51, AWaRe: Watch)"
+                },
+                {
+                  "value": "Isepamicin",
+                  "text": "Isepamicin (J01GB11, AWaRe: Watch)"
+                },
+                {
+                  "value": "Josamycin",
+                  "text": "Josamycin (J01FA07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Kanamycin",
+                  "text": "Kanamycin (J01GB04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Latamoxef",
+                  "text": "Latamoxef (J01DD06, AWaRe: Watch)"
+                },
+                {
+                  "value": "Levofloxacin",
+                  "text": "Levofloxacin (J01MA12, AWaRe: Watch)"
+                },
+                {
+                  "value": "Lincomycin",
+                  "text": "Lincomycin (J01FF02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Linezolid",
+                  "text": "Linezolid (J01XX08, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Lomefloxacin",
+                  "text": "Lomefloxacin (J01MA07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Lymecycline",
+                  "text": "Lymecycline (J01AA04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Mecillinam",
+                  "text": "Mecillinam (J01CA11, AWaRe: Access)"
+                },
+                {
+                  "value": "Meropenem",
+                  "text": "Meropenem (J01DH02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Meropenem-vaborbactam",
+                  "text": "Meropenem-vaborbactam (J01DH52, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Metacycline",
+                  "text": "Metacycline (J01AA05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Metronidazole (IV)",
+                  "text": "Metronidazole (IV) (J01XD01, AWaRe: Access)"
+                },
+                {
+                  "value": "Metronidazole (oral)",
+                  "text": "Metronidazole (oral) (P01AB01, AWaRe: Access)"
+                },
+                {
+                  "value": "Mezlocillin",
+                  "text": "Mezlocillin (J01CA10, AWaRe: Watch)"
+                },
+                {
+                  "value": "Micronomicin",
+                  "text": "Micronomicin (AWaRe: Watch)"
+                },
+                {
+                  "value": "Midecamycin",
+                  "text": "Midecamycin (J01FA03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Minocycline (IV)",
+                  "text": "Minocycline (IV) (J01AA08, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Minocycline (oral)",
+                  "text": "Minocycline (oral) (J01AA08, AWaRe: Watch)"
+                },
+                {
+                  "value": "Moxifloxacin",
+                  "text": "Moxifloxacin (J01MA14, AWaRe: Watch)"
+                },
+                {
+                  "value": "Nafcillin",
+                  "text": "Nafcillin (J01CF06, AWaRe: Access)"
+                },
+                {
+                  "value": "Neomycin",
+                  "text": "Neomycin (J01GB05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Netilmicin",
+                  "text": "Netilmicin (J01GB07, AWaRe: Watch)"
+                },
+                {
+                  "value": "Nitrofurantoin",
+                  "text": "Nitrofurantoin (J01XE01, AWaRe: Access)"
+                },
+                {
+                  "value": "Norfloxacin",
+                  "text": "Norfloxacin (J01MA06, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ofloxacin",
+                  "text": "Ofloxacin (J01MA01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Oleandomycin",
+                  "text": "Oleandomycin (J01FA05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Omadacycline",
+                  "text": "Omadacycline (AWaRe: Reserve)"
+                },
+                {
+                  "value": "Oritavancin",
+                  "text": "Oritavancin (J01XA05, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Oxacillin",
+                  "text": "Oxacillin (J01CF04, AWaRe: Access)"
+                },
+                {
+                  "value": "Oxytetracycline",
+                  "text": "Oxytetracycline (J01AA06, AWaRe: Watch)"
+                },
+                {
+                  "value": "Panipenem",
+                  "text": "Panipenem (AWaRe: Watch)"
+                },
+                {
+                  "value": "Pazufloxacin",
+                  "text": "Pazufloxacin (J01MA18, AWaRe: Watch)"
+                },
+                {
+                  "value": "Pefloxacin",
+                  "text": "Pefloxacin (J01MA03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Penamecillin",
+                  "text": "Penamecillin (J01CE06, AWaRe: Access)"
+                },
+                {
+                  "value": "Pheneticillin",
+                  "text": "Pheneticillin (J01CE05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Phenoxymethylpenicillin",
+                  "text": "Phenoxymethylpenicillin (J01CE02, AWaRe: Access)"
+                },
+                {
+                  "value": "Piperacillin",
+                  "text": "Piperacillin (J01CA12, AWaRe: Watch)"
+                },
+                {
+                  "value": "Piperacillin/tazobactam",
+                  "text": "Piperacillin/tazobactam (J01CR05, AWaRe: Watch)"
+                },
+                {
+                  "value": "Pivampicillin",
+                  "text": "Pivampicillin (J01CA02, AWaRe: Access)"
+                },
+                {
+                  "value": "Pivmecillinam",
+                  "text": "Pivmecillinam (J01CA08, AWaRe: Access)"
+                },
+                {
+                  "value": "Plazomicin",
+                  "text": "Plazomicin (AWaRe: Reserve)"
+                },
+                {
+                  "value": "Polymyxin B",
+                  "text": "Polymyxin B (J01XB02, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Pristinamycin",
+                  "text": "Pristinamycin (J01FG01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Procaine benzylpenicillin",
+                  "text": "Procaine benzylpenicillin (J01CE09, AWaRe: Access)"
+                },
+                {
+                  "value": "Prulifloxacin",
+                  "text": "Prulifloxacin (J01MA17, AWaRe: Watch)"
+                },
+                {
+                  "value": "Ribostamycin",
+                  "text": "Ribostamycin (J01GB10, AWaRe: Watch)"
+                },
+                {
+                  "value": "Rifabutin",
+                  "text": "Rifabutin (J04AB04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Rifampicin",
+                  "text": "Rifampicin (J04AB02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Rifamycin",
+                  "text": "Rifamycin (J04AB03, AWaRe: Watch)"
+                },
+                {
+                  "value": "Rifaximin",
+                  "text": "Rifaximin (A07AA11, AWaRe: Watch)"
+                },
+                {
+                  "value": "Roxithromycin",
+                  "text": "Roxithromycin (J01FA06, AWaRe: Watch)"
+                },
+                {
+                  "value": "Rufloxacin",
+                  "text": "Rufloxacin (J01MA10, AWaRe: Watch)"
+                },
+                {
+                  "value": "Sisomicin",
+                  "text": "Sisomicin (J01GB08, AWaRe: Watch)"
+                },
+                {
+                  "value": "Sitafloxacin",
+                  "text": "Sitafloxacin (J01MA21, AWaRe: Watch)"
+                },
+                {
+                  "value": "Sparfloxacin",
+                  "text": "Sparfloxacin (J01MA09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Spectinomycin",
+                  "text": "Spectinomycin (J01XX04, AWaRe: Access)"
+                },
+                {
+                  "value": "Spiramycin",
+                  "text": "Spiramycin (J01FA02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Spiramycin/metronidazole",
+                  "text": "Spiramycin/metronidazole (J01RA04, AWaRe: Watch)"
+                },
+                {
+                  "value": "Streptomycin",
+                  "text": "Streptomycin (J01GA01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Sulbenicillin",
+                  "text": "Sulbenicillin (J01CA16, AWaRe: Watch)"
+                },
+                {
+                  "value": "Sulfadiazine/trimethoprim",
+                  "text": "Sulfadiazine/trimethoprim (J01EE02, AWaRe: Access)"
+                },
+                {
+                  "value": "Sulfamethizole/trimethoprim",
+                  "text": "Sulfamethizole/trimethoprim (J01EB02, AWaRe: Access)"
+                },
+                {
+                  "value": "Sulfamethoxazole/trimethoprim",
+                  "text": "Sulfamethoxazole/trimethoprim (J01EE01, AWaRe: Access)"
+                },
+                {
+                  "value": "Sulfametrole/trimethoprim",
+                  "text": "Sulfametrole/trimethoprim (J01EE03, AWaRe: Access)"
+                },
+                {
+                  "value": "Sulfamoxole/trimethoprim",
+                  "text": "Sulfamoxole/trimethoprim (J01EE04, AWaRe: Access)"
+                },
+                {
+                  "value": "Sultamicillin",
+                  "text": "Sultamicillin (J01CR04, AWaRe: Access)"
+                },
+                {
+                  "value": "Tebipenem",
+                  "text": "Tebipenem (J01DH06, AWaRe: Watch)"
+                },
+                {
+                  "value": "Tedizolid",
+                  "text": "Tedizolid (J01XX11, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Teicoplanin",
+                  "text": "Teicoplanin (J01XA02, AWaRe: Watch)"
+                },
+                {
+                  "value": "Telavancin",
+                  "text": "Telavancin (J01XA03, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Telithromycin",
+                  "text": "Telithromycin (J01FA15, AWaRe: Watch)"
+                },
+                {
+                  "value": "Temocillin",
+                  "text": "Temocillin (J01CA17, AWaRe: Watch)"
+                },
+                {
+                  "value": "Tetracycline",
+                  "text": "Tetracycline (J01AA07, AWaRe: Access)"
+                },
+                {
+                  "value": "Thiamphenicol",
+                  "text": "Thiamphenicol (J01BA02, AWaRe: Access)"
+                },
+                {
+                  "value": "Ticarcillin",
+                  "text": "Ticarcillin (J01CA13, AWaRe: Watch)"
+                },
+                {
+                  "value": "Tigecycline",
+                  "text": "Tigecycline (J01AA12, AWaRe: Reserve)"
+                },
+                {
+                  "value": "Tobramycin",
+                  "text": "Tobramycin (J01GB01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Tosufloxacin",
+                  "text": "Tosufloxacin (J01MA22, AWaRe: Watch)"
+                },
+                {
+                  "value": "Trimethoprim",
+                  "text": "Trimethoprim (J01EA01, AWaRe: Access)"
+                },
+                {
+                  "value": "Vancomycin (IV)",
+                  "text": "Vancomycin (IV) (J01XA01, AWaRe: Watch)"
+                },
+                {
+                  "value": "Vancomycin (oral)",
+                  "text": "Vancomycin (oral) (A07AA09, AWaRe: Watch)"
+                },
+                {
+                  "value": "Acetylspiramycin/metronidazole",
+                  "text": "Acetylspiramycin/metronidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amikacin/cefepime",
+                  "text": "Amikacin/cefepime (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/bacillus coagulans/cloxacillin",
+                  "text": "Amoxicillin/bacillus coagulans/cloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/bacillus coagulans/dicloxacillin",
+                  "text": "Amoxicillin/bacillus coagulans/dicloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/clavulanic acid/lactic ferments",
+                  "text": "Amoxicillin/clavulanic acid/lactic ferments (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/clavulanic acid/lactobacillus acidophilus",
+                  "text": "Amoxicillin/clavulanic acid/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/clavulanic acid/nimesulide",
+                  "text": "Amoxicillin/clavulanic acid/nimesulide (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/cloxacillin",
+                  "text": "Amoxicillin/cloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/cloxacillin/lactic acid",
+                  "text": "Amoxicillin/cloxacillin/lactic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/cloxacillin/lactobacillus acidophilus/serrapeptase",
+                  "text": "Amoxicillin/cloxacillin/lactobacillus acidophilus/serrapeptase (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/cloxacillin/lactobacillus lactis",
+                  "text": "Amoxicillin/cloxacillin/lactobacillus lactis (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/cloxacillin/serrapeptase",
+                  "text": "Amoxicillin/cloxacillin/serrapeptase (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/dicloxacillin",
+                  "text": "Amoxicillin/dicloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/dicloxacillin/saccharomyces boulardii",
+                  "text": "Amoxicillin/dicloxacillin/saccharomyces boulardii (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/flucloxacillin",
+                  "text": "Amoxicillin/flucloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/flucloxacillin/lactobacillus acidophilus",
+                  "text": "Amoxicillin/flucloxacillin/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/metronidazole",
+                  "text": "Amoxicillin/metronidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/pivsulbactam",
+                  "text": "Amoxicillin/pivsulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Amoxicillin/sulbactam",
+                  "text": "Amoxicillin/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/bacillus coagulans/cloxacillin",
+                  "text": "Ampicillin/bacillus coagulans/cloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/cloxacillin",
+                  "text": "Ampicillin/cloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/cloxacillin/lactobacillus acidophilus",
+                  "text": "Ampicillin/cloxacillin/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/cloxacillin/saccharomyces boulardii",
+                  "text": "Ampicillin/cloxacillin/saccharomyces boulardii (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/dicloxacillin",
+                  "text": "Ampicillin/dicloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/dicloxacillin/lactobacillus acidophilus",
+                  "text": "Ampicillin/dicloxacillin/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/flucloxacillin",
+                  "text": "Ampicillin/flucloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/lidocaine/sulbactam",
+                  "text": "Ampicillin/lidocaine/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/oxacillin",
+                  "text": "Ampicillin/oxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ampicillin/sultamicillin",
+                  "text": "Ampicillin/sultamicillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ascorbic acid/metamizole sodium/penicillin g /streptomycin",
+                  "text": "Ascorbic acid/metamizole sodium/penicillin g /streptomycin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Azithromycin/cefixime",
+                  "text": "Azithromycin/cefixime (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Azithromycin/cefixime/lactobacillus acidophilus",
+                  "text": "Azithromycin/cefixime/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Azithromycin/cefpodoxime proxetil",
+                  "text": "Azithromycin/cefpodoxime proxetil (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Azithromycin/fluconazole/secnidazole",
+                  "text": "Azithromycin/fluconazole/secnidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Azithromycin/levofloxacin",
+                  "text": "Azithromycin/levofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Azithromycin/ofloxacin",
+                  "text": "Azithromycin/ofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Benzyl penicillin/streptomycin",
+                  "text": "Benzyl penicillin/streptomycin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Bromelains/doxycycline/lactobacillus reuteri/lactobacillus rhamnosus/ornidazole",
+                  "text": "Bromelains/doxycycline/lactobacillus reuteri/lactobacillus rhamnosus/ornidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Bromhexine/sulfamethoxazole/trimethoprim",
+                  "text": "Bromhexine/sulfamethoxazole/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefaclor/clavulanic acid",
+                  "text": "Cefaclor/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefadroxil/clavulanic acid",
+                  "text": "Cefadroxil/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefadroxil/trimethoprim",
+                  "text": "Cefadroxil/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefalexin/trimethoprim",
+                  "text": "Cefalexin/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefdinir/clavulanic acid",
+                  "text": "Cefdinir/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefepime/sulbactam",
+                  "text": "Cefepime/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefepime/tazobactam",
+                  "text": "Cefepime/tazobactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/cefpodoxime proxetil",
+                  "text": "Cefixime/cefpodoxime proxetil (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/clavulanic acid",
+                  "text": "Cefixime/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/clavulanic acid/lactobacillus acidophilus",
+                  "text": "Cefixime/clavulanic acid/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/cloxacillin",
+                  "text": "Cefixime/cloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/cloxacillin/lactobacillus acidophilus",
+                  "text": "Cefixime/cloxacillin/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/dicloxacillin",
+                  "text": "Cefixime/dicloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/lactobacillus acidophilus/ofloxacin",
+                  "text": "Cefixime/lactobacillus acidophilus/ofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/levofloxacin",
+                  "text": "Cefixime/levofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/linezolid",
+                  "text": "Cefixime/linezolid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/moxifloxacin",
+                  "text": "Cefixime/moxifloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/ofloxacin",
+                  "text": "Cefixime/ofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefixime/ornidazole",
+                  "text": "Cefixime/ornidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefoperazone/sulbactam",
+                  "text": "Cefoperazone/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefoperazone/tazobactam",
+                  "text": "Cefoperazone/tazobactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefotaxime/sulbactam",
+                  "text": "Cefotaxime/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/clavulanic acid",
+                  "text": "Cefpodoxime proxetil/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/cloxacillin/lactobacillus acidophilus",
+                  "text": "Cefpodoxime proxetil/cloxacillin/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/dicloxacillin",
+                  "text": "Cefpodoxime proxetil/dicloxacillin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/dicloxacillin/lactobacillus acidophilus",
+                  "text": "Cefpodoxime proxetil/dicloxacillin/lactobacillus acidophilus (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/levofloxacin",
+                  "text": "Cefpodoxime proxetil/levofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/ofloxacin",
+                  "text": "Cefpodoxime proxetil/ofloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefpodoxime proxetil/sulbactam",
+                  "text": "Cefpodoxime proxetil/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftazidime/sulbactam",
+                  "text": "Ceftazidime/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftazidime/tazobactam",
+                  "text": "Ceftazidime/tazobactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftazidime/tobramicin",
+                  "text": "Ceftazidime/tobramicin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftibuten/clavulanic acid",
+                  "text": "Ceftibuten/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftriaxone/sulbactam",
+                  "text": "Ceftriaxone/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftriaxone/tazobactam",
+                  "text": "Ceftriaxone/tazobactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ceftriaxone/vancomycin",
+                  "text": "Ceftriaxone/vancomycin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefuroxime axetil/clavulanic acid",
+                  "text": "Cefuroxime axetil/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefuroxime axetil/linezolid",
+                  "text": "Cefuroxime axetil/linezolid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefuroxime axetil/sulbactam",
+                  "text": "Cefuroxime axetil/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefuroxime/clavulanic acid",
+                  "text": "Cefuroxime/clavulanic acid (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Cefuroxime/sulbactam",
+                  "text": "Cefuroxime/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Chloramphenicol/tetracycline",
+                  "text": "Chloramphenicol/tetracycline (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ciprofloxacin/metronidazole",
+                  "text": "Ciprofloxacin/metronidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ciprofloxacin/ornidazole",
+                  "text": "Ciprofloxacin/ornidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ciprofloxacin/tinidazole",
+                  "text": "Ciprofloxacin/tinidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Doxycycline/tinidazole",
+                  "text": "Doxycycline/tinidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Erythromycin/sulfamethoxazole/trimethoprim",
+                  "text": "Erythromycin/sulfamethoxazole/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Erythromycin/trimethoprim",
+                  "text": "Erythromycin/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Fosfomycin/trimethoprim",
+                  "text": "Fosfomycin/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Gatifloxacin/ornidazole",
+                  "text": "Gatifloxacin/ornidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Kanamycin/penicillin g",
+                  "text": "Kanamycin/penicillin g (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Levofloxacin/metronidazole",
+                  "text": "Levofloxacin/metronidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Levofloxacin/ornidazole",
+                  "text": "Levofloxacin/ornidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Meropenem/sodium/sulbactam",
+                  "text": "Meropenem/sodium/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Meropenem/sulbactam",
+                  "text": "Meropenem/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Metronidazole/norfloxacin",
+                  "text": "Metronidazole/norfloxacin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Metronidazole/spiramycin",
+                  "text": "Metronidazole/spiramycin (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Metronidazole/tetracycline",
+                  "text": "Metronidazole/tetracycline (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Mezlocillin/sulbactam",
+                  "text": "Mezlocillin/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Ofloxacin/ornidazole",
+                  "text": "Ofloxacin/ornidazole (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Oleandomycin/tetracycline",
+                  "text": "Oleandomycin/tetracycline (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Piperacillin/sulbactam",
+                  "text": "Piperacillin/sulbactam (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Rifampicin/trimethoprim",
+                  "text": "Rifampicin/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Sulfadiazine/sulfamethoxazole/trimethoprim",
+                  "text": "Sulfadiazine/sulfamethoxazole/trimethoprim (AWaRe: Not recommended)"
+                },
+                {
+                  "value": "Antimicrobial not found in standardised list",
+                  "text": "Antimicrobial not found in standardised list"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "name": "standardized_name_other",
+              "title": "Antimicrobial not in the list — please specify",
+              "isRequired": true,
+              "visibleIf": "{panel.standardized_name} = 'Antimicrobial not found in standardised list'"
+            },
+            {
+              "type": "text",
+              "name": "approximate_date",
+              "title": "Approximate date of use or acquisition",
+              "inputType": "date",
+              "maxValueExpression": "{dispensing_date}"
+            },
+            {
+              "type": "dropdown",
+              "name": "source",
+              "title": "Source",
+              "choices": [
+                "This pharmacy (earlier dispensing record)",
+                "Another pharmacy",
+                "Health facility",
+                "Community health worker",
+                "Other",
+                "Not documented"
+              ]
+            },
+            {
+              "type": "text",
+              "name": "source_other",
+              "title": "Other source — please specify",
+              "isRequired": true,
+              "visibleIf": "{panel.source} = 'Other'"
+            },
+            {
+              "type": "radiogroup",
+              "name": "evidence_type",
+              "title": "Type of documentation",
+              "choices": [
+                "Dispensing record",
+                "Prescription record",
+                "Patient-reported (documented by pharmacy)",
+                "Not documented"
+              ]
+            },
+            {
+              "type": "text",
+              "name": "indication_documented",
+              "title": "Indication, where documented"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "data_quality",
+      "title": "G. Data Quality and Completion",
+      "elements": [
+        {
+          "type": "text",
+          "name": "data_collector_id",
+          "title": "Data collector ID",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "extraction_date",
+          "title": "Extraction date",
+          "inputType": "date",
+          "isRequired": true,
+          "defaultValueExpression": "today()",
+          "maxValueExpression": "today()"
+        },
+        {
+          "type": "expression",
+          "name": "source_record_reference_summary",
+          "title": "Source record reference (from Section A)",
+          "expression": "iif({pharmacy_source_record_reference} notempty, {pharmacy_source_record_reference}, 'Not recorded')"
+        },
+        {
+          "type": "radiogroup",
+          "name": "record_completeness",
+          "title": "Record completeness status",
+          "isRequired": true,
+          "choices": [
+            "Complete — all applicable variables documented",
+            "Partially complete — some variables not documented",
+            "Minimal — most variables not documented"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "missing_information_sections",
+          "title": "Which information was missing from the source record?",
+          "visibleIf": "{record_completeness} notempty and {record_completeness} != 'Complete — all applicable variables documented'",
+          "isRequired": true,
+          "choices": [
+            "Patient demographics",
+            "Prescription details",
+            "Antimicrobial dispensing details",
+            "Other medications",
+            "Previous antimicrobial use",
+            "Other"
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "missing_information_details",
+          "title": "Details of missing information",
+          "visibleIf": "{record_completeness} notempty and {record_completeness} != 'Complete — all applicable variables documented'"
+        },
+        {
+          "type": "radiogroup",
+          "name": "duplicate_check",
+          "title": "Duplicate-record check against previously extracted records",
+          "isRequired": true,
+          "choices": [
+            "Checked — no duplicate found",
+            "Checked — possible duplicate",
+            "Not checked"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "duplicate_study_record_id",
+          "title": "Study record ID of the possible duplicate",
+          "isRequired": true,
+          "visibleIf": "{duplicate_check} = 'Checked — possible duplicate'"
+        },
+        {
+          "type": "radiogroup",
+          "name": "validation_status",
+          "title": "Validation status",
+          "isRequired": true,
+          "defaultValue": "Not yet validated",
+          "choices": [
+            "Not yet validated",
+            "Validated",
+            "Queried — correction needed"
+          ]
+        },
+        {
+          "type": "text",
+          "name": "validated_by",
+          "title": "Validated by (ID)",
+          "isRequired": true,
+          "visibleIf": "{validation_status} = 'Validated'"
+        },
+        {
+          "type": "comment",
+          "name": "validation_query",
+          "title": "Describe the query or correction needed",
+          "isRequired": true,
+          "visibleIf": "{validation_status} = 'Queried — correction needed'"
+        }
+      ]
+    }
+  ],
+  "showPreviewBeforeComplete": "showAllQuestions",
+  "previewText": "Review Answers",
+  "editText": "Edit",
+  "completeText": "Submit"
+}

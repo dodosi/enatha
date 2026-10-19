@@ -1,3 +1,5 @@
+-- Select your app database in phpMyAdmin LEFT panel BEFORE running this file.
+-- Do not include USE enatha_survey (hosting DB name differs).
 -- Study health facilities master list (from reviewer Excel)
 -- Import after selecting your database.
 

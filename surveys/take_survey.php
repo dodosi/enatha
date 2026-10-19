@@ -66,6 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (target) obs.observe(target, { childList: true });
 });
 </script>
-<script src="<?= e(url('assets/js/survey-app.js')) ?>"></script>
+<script src="<?= e(url('assets/js/survey-app.js')) ?>?v=<?= (int) @filemtime(dirname(__DIR__) . '/assets/js/survey-app.js') ?>"></script>
 
 <?php require dirname(__DIR__) . '/includes/layout_footer.php'; ?>

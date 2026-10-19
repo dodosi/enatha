@@ -1,0 +1,4166 @@
+{
+  "title": "Assessment of Reproductive Health Disorders in Reproductive-Age Women (18–49)",
+  "description": "Instrument A — Participant Questionnaire. Self-reported features for early detection of reproductive and hormonal health conditions (PCOS, endometriosis, uterine fibroids, thyroid problems and infertility). Form version RH-PARTICIPANT-v1.0.",
+  "showProgressBar": "top",
+  "progressBarType": "pages",
+  "completedHtml": "<h3>Thank you.</h3><p>Your answers have been recorded under your study code. Information will be used only for research and reported in aggregate.</p>",
+  "pages": [
+    {
+      "name": "a0_admin",
+      "title": "A0. Administrative and consent",
+      "elements": [
+        {
+          "type": "html",
+          "name": "consent_info",
+          "html": "<p>You are invited to take part in a study on the early detection of reproductive and hormonal health conditions such as PCOS, endometriosis, uterine fibroids, thyroid problems and infertility. We will ask about your menstrual history, symptoms, past pregnancies, infections, family history, lifestyle and your views on digital health tools. Some questions are personal; you may skip any question or stop at any time without consequence. No name, phone number, national ID, e-mail or date of birth is recorded; your answers are stored under a study code. Your answers may be linked to a clinical assessment by a health worker only if you give separate consent for that. Information will be used only for research and reported in aggregate.</p>"
+        },
+        {
+          "type": "text",
+          "name": "participant_id",
+          "title": "Study participant code",
+          "description": "Format RH-DD-SSSS-NNNN (district, sector, serial). Never a name or phone.",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "interview_date",
+          "title": "Date of interview",
+          "inputType": "date",
+          "isRequired": true,
+          "defaultValueExpression": "today()",
+          "maxValueExpression": "today()"
+        },
+        {
+          "type": "dropdown",
+          "name": "interview_mode",
+          "title": "Mode of administration",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Self-administered online"
+            },
+            {
+              "value": 2,
+              "text": "Self-administered paper"
+            },
+            {
+              "value": 3,
+              "text": "Interviewer-assisted"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "interviewer_id",
+          "title": "Interviewer code",
+          "visibleIf": "{interview_mode} = 3",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "language",
+          "title": "Language of administration",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Kinyarwanda"
+            },
+            {
+              "value": 2,
+              "text": "English"
+            },
+            {
+              "value": 3,
+              "text": "French"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "consent_survey",
+          "title": "Do you consent to participate in this survey?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "html",
+          "name": "consent_declined_msg",
+          "visibleIf": "{consent_survey} = 0",
+          "html": "<p><strong>Thank you.</strong> Because you did not consent, the questionnaire will end here. No further answers will be collected.</p>"
+        },
+        {
+          "type": "radiogroup",
+          "name": "eligible",
+          "title": "Does the participant meet eligibility (female, aged 18–49, resident in a study district)?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true,
+          "visibleIf": "{consent_survey} = 1"
+        },
+        {
+          "type": "html",
+          "name": "ineligible_msg",
+          "visibleIf": "{consent_survey} = 1 and {eligible} = 0",
+          "html": "<p><strong>Not eligible.</strong> The questionnaire ends here.</p>"
+        },
+        {
+          "type": "radiogroup",
+          "name": "consent_clinical_link",
+          "title": "Do you consent to link your answers with a clinical assessment (Instrument B)?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true,
+          "visibleIf": "{consent_survey} = 1 and {eligible} = 1"
+        }
+      ]
+    },
+    {
+      "name": "a1_sociodemographic",
+      "title": "A1. Sociodemographic characteristics",
+      "visibleIf": "{consent_survey} = 1 and {eligible} = 1",
+      "elements": [
+        {
+          "type": "text",
+          "name": "age_years",
+          "title": "How old are you (completed years)?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 18,
+              "maxValue": 49
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "html",
+          "name": "residence_note",
+          "html": "<strong>Residence</strong><br>Select Province, then District, then Sector from the Rwanda administrative location lists."
+        },
+        {
+          "type": "dropdown",
+          "name": "province_id",
+          "title": "Province",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "district_id",
+          "title": "In which district do you live?",
+          "isRequired": true,
+          "enableIf": "{province_id} notempty"
+        },
+        {
+          "type": "dropdown",
+          "name": "sector_id",
+          "title": "In which sector do you live?",
+          "isRequired": true,
+          "enableIf": "{district_id} notempty"
+        },
+        {
+          "type": "dropdown",
+          "name": "residence_type",
+          "title": "How would you describe where you live?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Urban"
+            },
+            {
+              "value": 2,
+              "text": "Peri-urban"
+            },
+            {
+              "value": 3,
+              "text": "Rural"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "marital_status",
+          "title": "What is your current marital status?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Single, never married"
+            },
+            {
+              "value": 2,
+              "text": "Married"
+            },
+            {
+              "value": 3,
+              "text": "Living with partner (cohabiting)"
+            },
+            {
+              "value": 4,
+              "text": "Divorced / separated"
+            },
+            {
+              "value": 5,
+              "text": "Widowed"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "education",
+          "title": "What is the highest level of education you completed?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "No formal schooling"
+            },
+            {
+              "value": 1,
+              "text": "Primary"
+            },
+            {
+              "value": 2,
+              "text": "Lower secondary"
+            },
+            {
+              "value": 3,
+              "text": "Upper secondary"
+            },
+            {
+              "value": 4,
+              "text": "TVET / vocational"
+            },
+            {
+              "value": 5,
+              "text": "University or higher"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "occupation",
+          "title": "What is your main occupation?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Not employed / homemaker"
+            },
+            {
+              "value": 2,
+              "text": "Student"
+            },
+            {
+              "value": 3,
+              "text": "Farmer"
+            },
+            {
+              "value": 4,
+              "text": "Self-employed / business"
+            },
+            {
+              "value": 5,
+              "text": "Salaried, public sector"
+            },
+            {
+              "value": 6,
+              "text": "Salaried, private sector"
+            },
+            {
+              "value": 7,
+              "text": "Casual / daily labour"
+            },
+            {
+              "value": 8,
+              "text": "Other (specify)"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "occupation_other",
+          "title": "Other occupation — please specify",
+          "isRequired": true,
+          "visibleIf": "{occupation} = 8"
+        },
+        {
+          "type": "dropdown",
+          "name": "insurance",
+          "title": "Which health insurance do you currently have?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "CBHI (Mutuelle de Santé)"
+            },
+            {
+              "value": 2,
+              "text": "RSSB / RAMA"
+            },
+            {
+              "value": 3,
+              "text": "MMI"
+            },
+            {
+              "value": 4,
+              "text": "Private"
+            },
+            {
+              "value": 5,
+              "text": "None"
+            },
+            {
+              "value": 6,
+              "text": "Other (specify)"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "insurance_other",
+          "title": "Other insurance — please specify",
+          "isRequired": true,
+          "visibleIf": "{insurance} = 6"
+        },
+        {
+          "type": "dropdown",
+          "name": "ubudehe_category",
+          "title": "What is your household's Ubudehe category?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Category 1"
+            },
+            {
+              "value": 2,
+              "text": "Category 2"
+            },
+            {
+              "value": 3,
+              "text": "Category 3"
+            },
+            {
+              "value": 4,
+              "text": "Category 4"
+            },
+            {
+              "value": 99,
+              "text": "Don't know"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "height_cm_self",
+          "title": "What is your height (cm), if you know it?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 130,
+              "maxValue": 200
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "weight_kg_self",
+          "title": "What is your current weight (kg), if you know it?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 30,
+              "maxValue": 200
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "a2_menstrual",
+      "title": "A2. Menstrual history (past 12 months unless stated)",
+      "visibleIf": "{consent_survey} = 1 and {eligible} = 1",
+      "elements": [
+        {
+          "type": "text",
+          "name": "menarche_age",
+          "title": "At what age did you have your first menstrual period?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 8,
+              "maxValue": 20
+            }
+          ],
+          "description": "Enter 99 if you don't remember."
+        },
+        {
+          "type": "dropdown",
+          "name": "menstruating_now",
+          "title": "Have you had menstrual periods in the past 12 months?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 2,
+              "text": "No – currently pregnant"
+            },
+            {
+              "value": 3,
+              "text": "No – breastfeeding / within 6 months of delivery"
+            },
+            {
+              "value": 4,
+              "text": "No – contraceptive method stopped periods"
+            },
+            {
+              "value": 5,
+              "text": "No – no period for 3 months or more for another reason"
+            },
+            {
+              "value": 6,
+              "text": "No – hysterectomy or menopause"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "cycle_length_days",
+          "title": "Usually, how many days are there from the first day of one period to the first day of the next?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 14,
+              "maxValue": 120
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1",
+          "description": "Enter 99 if you don't know or it is too variable."
+        },
+        {
+          "type": "dropdown",
+          "name": "cycle_regularity",
+          "title": "How regular are your periods?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Regular – start within about the same week each month (varies ≤ 7 days)"
+            },
+            {
+              "value": 2,
+              "text": "Irregular – varies by more than 7 days"
+            },
+            {
+              "value": 3,
+              "text": "Unpredictable – cannot say when the next will come"
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1"
+        },
+        {
+          "type": "text",
+          "name": "periods_last_12m",
+          "title": "How many periods did you have in the past 12 months?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 0,
+              "maxValue": 13
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1",
+          "description": "Enter 99 if you don't know."
+        },
+        {
+          "type": "text",
+          "name": "longest_gap_days",
+          "title": "In the past 12 months, what was the longest number of days you went without a period (excluding pregnancy)?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 14,
+              "maxValue": 365
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1",
+          "description": "Enter 99 if you don't know."
+        },
+        {
+          "type": "radiogroup",
+          "name": "amenorrhoea_ever",
+          "title": "Have you ever gone 3 months or more without a period when you were not pregnant, not breastfeeding and not on a contraceptive that stops periods?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 2,
+              "text": "Not sure"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "amenorrhoea_months",
+          "title": "How long did the longest such episode last (months)?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 3,
+              "maxValue": 120
+            }
+          ],
+          "visibleIf": "{amenorrhoea_ever} = 1",
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "return_bleeding_heavy",
+          "title": "When periods returned after that episode, were they heavier or longer than usual?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 2,
+              "text": "Not sure"
+            }
+          ],
+          "visibleIf": "{amenorrhoea_ever} = 1"
+        },
+        {
+          "type": "text",
+          "name": "bleeding_days",
+          "title": "How many days does your menstrual bleeding usually last?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 1,
+              "maxValue": 15
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1"
+        },
+        {
+          "type": "dropdown",
+          "name": "flow_volume",
+          "title": "How would you describe your usual menstrual flow?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Light"
+            },
+            {
+              "value": 2,
+              "text": "Moderate"
+            },
+            {
+              "value": 3,
+              "text": "Heavy"
+            },
+            {
+              "value": 4,
+              "text": "Very heavy"
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1"
+        },
+        {
+          "type": "text",
+          "name": "pads_heaviest_day",
+          "title": "On your heaviest day, how many pads or cloths do you change?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 0,
+              "maxValue": 25
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1"
+        },
+        {
+          "type": "radiogroup",
+          "name": "clots",
+          "title": "Do you pass blood clots larger than a 100-franc coin?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1"
+        },
+        {
+          "type": "radiogroup",
+          "name": "flooding",
+          "title": "Does bleeding soak through your clothes or bedding?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1"
+        },
+        {
+          "type": "dropdown",
+          "name": "bleeding_limits_activity",
+          "title": "How often does your bleeding stop you from doing your normal activities (work, school, chores)?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "Never"
+            },
+            {
+              "value": 1,
+              "text": "Rarely"
+            },
+            {
+              "value": 2,
+              "text": "Sometimes"
+            },
+            {
+              "value": 3,
+              "text": "Often"
+            },
+            {
+              "value": 4,
+              "text": "Always"
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1"
+        },
+        {
+          "type": "radiogroup",
+          "name": "intermenstrual_bleeding",
+          "title": "In the past 12 months, have you had bleeding or spotting between periods?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1"
+        },
+        {
+          "type": "dropdown",
+          "name": "postcoital_bleeding",
+          "title": "In the past 12 months, have you had bleeding after sexual intercourse?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 3,
+              "text": "Not applicable"
+            },
+            {
+              "value": 9,
+              "text": "Prefer not to answer"
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1"
+        },
+        {
+          "type": "radiogroup",
+          "name": "dysmenorrhoea",
+          "title": "Do you have pain with your periods?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1"
+        },
+        {
+          "type": "text",
+          "name": "dysmenorrhoea_nrs",
+          "title": "On a scale of 0 (no pain) to 10 (worst pain imaginable), how bad is your period pain usually?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 0,
+              "maxValue": 10
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1 and {dysmenorrhoea} = 1"
+        },
+        {
+          "type": "dropdown",
+          "name": "dysmenorrhoea_meds",
+          "title": "Do you take painkillers for period pain?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "Never"
+            },
+            {
+              "value": 1,
+              "text": "Some periods"
+            },
+            {
+              "value": 2,
+              "text": "Every period"
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1 and {dysmenorrhoea} = 1"
+        },
+        {
+          "type": "radiogroup",
+          "name": "dysmenorrhoea_absence",
+          "title": "In the past 12 months, did period pain make you miss work, school or daily activities?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1 and {dysmenorrhoea} = 1"
+        },
+        {
+          "type": "radiogroup",
+          "name": "chronic_pelvic_pain",
+          "title": "Have you had pain in the lower abdomen or pelvis on days when you are NOT menstruating, for 6 months or longer?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "dyspareunia",
+          "title": "Do you have pain during or after sexual intercourse?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 3,
+              "text": "Not applicable / not sexually active"
+            },
+            {
+              "value": 9,
+              "text": "Prefer not to answer"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "dyschezia",
+          "title": "Do you have pain when passing stool during your periods?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1"
+        },
+        {
+          "type": "radiogroup",
+          "name": "dysuria_menses",
+          "title": "Do you have pain when passing urine during your periods?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1"
+        },
+        {
+          "type": "dropdown",
+          "name": "premenstrual_symptoms",
+          "title": "In the week before your period, how severe are symptoms such as mood changes, breast tenderness or bloating?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "None"
+            },
+            {
+              "value": 1,
+              "text": "Mild"
+            },
+            {
+              "value": 2,
+              "text": "Moderate"
+            },
+            {
+              "value": 3,
+              "text": "Severe"
+            }
+          ],
+          "visibleIf": "{menstruating_now} = 1"
+        },
+        {
+          "type": "dropdown",
+          "name": "cycle_tracking",
+          "title": "Do you keep track of your periods?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 1,
+              "text": "Calendar or notebook"
+            },
+            {
+              "value": 2,
+              "text": "Phone app"
+            },
+            {
+              "value": 3,
+              "text": "From memory only"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "a3_obstetric",
+      "title": "A3. Obstetric, fertility and contraceptive history",
+      "visibleIf": "{consent_survey} = 1 and {eligible} = 1",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "ever_pregnant",
+          "title": "Have you ever been pregnant?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "gravida",
+          "title": "How many times have you been pregnant in total?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 1,
+              "maxValue": 20
+            }
+          ],
+          "visibleIf": "{ever_pregnant} = 1",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "live_births",
+          "title": "How many live births have you had?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 0,
+              "maxValue": 20
+            }
+          ],
+          "visibleIf": "{ever_pregnant} = 1"
+        },
+        {
+          "type": "text",
+          "name": "miscarriages",
+          "title": "How many pregnancies ended in miscarriage (loss before 6 months)?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 0,
+              "maxValue": 20
+            }
+          ],
+          "visibleIf": "{ever_pregnant} = 1"
+        },
+        {
+          "type": "text",
+          "name": "stillbirths",
+          "title": "How many pregnancies ended in stillbirth?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 0,
+              "maxValue": 20
+            }
+          ],
+          "visibleIf": "{ever_pregnant} = 1"
+        },
+        {
+          "type": "radiogroup",
+          "name": "ectopic",
+          "title": "Have you ever had a pregnancy outside the womb (ectopic)?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 2,
+              "text": "Not sure"
+            }
+          ],
+          "visibleIf": "{ever_pregnant} = 1"
+        },
+        {
+          "type": "text",
+          "name": "months_since_last_birth",
+          "title": "How many months since your last delivery?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 0,
+              "maxValue": 600
+            }
+          ],
+          "visibleIf": "{ever_pregnant} = 1",
+          "description": "Enter 888 if more than 24 months ago."
+        },
+        {
+          "type": "radiogroup",
+          "name": "breastfeeding_now",
+          "title": "Are you currently breastfeeding?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "visibleIf": "{ever_pregnant} = 1"
+        },
+        {
+          "type": "radiogroup",
+          "name": "pregnant_now",
+          "title": "Are you currently pregnant?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 2,
+              "text": "Not sure"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "trying_to_conceive",
+          "title": "Are you currently trying to become pregnant?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 3,
+              "text": "Not applicable"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "infertility_12m",
+          "title": "Have you ever tried to become pregnant for 12 months or more, with regular unprotected intercourse, without success?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 3,
+              "text": "Never tried / not applicable"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "infertility_type",
+          "title": "Had you ever been pregnant before that?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "No – never pregnant (primary)"
+            },
+            {
+              "value": 2,
+              "text": "Yes – previously pregnant (secondary)"
+            }
+          ],
+          "visibleIf": "{infertility_12m} = 1",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "infertility_months",
+          "title": "For how many months in total have you tried without success?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 12,
+              "maxValue": 300
+            }
+          ],
+          "visibleIf": "{infertility_12m} = 1"
+        },
+        {
+          "type": "checkbox",
+          "name": "fertility_tests",
+          "title": "Which fertility investigations have you had? (tick all that apply)",
+          "choices": [
+            {
+              "value": 0,
+              "text": "None"
+            },
+            {
+              "value": 1,
+              "text": "Blood hormone tests"
+            },
+            {
+              "value": 2,
+              "text": "Pelvic ultrasound"
+            },
+            {
+              "value": 3,
+              "text": "Tubal test (HSG / dye test)"
+            },
+            {
+              "value": 4,
+              "text": "Partner semen analysis"
+            },
+            {
+              "value": 5,
+              "text": "Other (specify)"
+            },
+            {
+              "value": 9,
+              "text": "Don't know"
+            }
+          ],
+          "visibleIf": "{infertility_12m} = 1"
+        },
+        {
+          "type": "text",
+          "name": "fertility_tests_other",
+          "title": "Other fertility investigation — please specify",
+          "isRequired": true,
+          "visibleIf": "{fertility_tests} contains 5"
+        },
+        {
+          "type": "radiogroup",
+          "name": "tubal_block_told",
+          "title": "Have you ever been told by a health worker that your fallopian tubes are blocked?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 2,
+              "text": "Not sure"
+            }
+          ],
+          "visibleIf": "{infertility_12m} = 1"
+        },
+        {
+          "type": "dropdown",
+          "name": "contraception_now",
+          "title": "Which contraceptive method are you using at the moment?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "None"
+            },
+            {
+              "value": 1,
+              "text": "Combined pill"
+            },
+            {
+              "value": 2,
+              "text": "Progestogen-only pill"
+            },
+            {
+              "value": 3,
+              "text": "Injectable (Depo-Provera / Sayana Press)"
+            },
+            {
+              "value": 4,
+              "text": "Implant"
+            },
+            {
+              "value": 5,
+              "text": "Hormonal IUD"
+            },
+            {
+              "value": 6,
+              "text": "Copper IUD"
+            },
+            {
+              "value": 7,
+              "text": "Condoms only"
+            },
+            {
+              "value": 8,
+              "text": "Natural / calendar / withdrawal"
+            },
+            {
+              "value": 9,
+              "text": "Female or male sterilisation"
+            },
+            {
+              "value": 10,
+              "text": "Other (specify)"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "contraception_other",
+          "title": "Other contraceptive method — please specify",
+          "isRequired": true,
+          "visibleIf": "{contraception_now} = 10"
+        },
+        {
+          "type": "text",
+          "name": "contraception_months",
+          "title": "For how many months have you used this method continuously?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 0,
+              "maxValue": 600
+            }
+          ],
+          "visibleIf": "{contraception_now} notempty and {contraception_now} != 0"
+        },
+        {
+          "type": "radiogroup",
+          "name": "hormonal_contraception_12m",
+          "title": "In the past 12 months, have you used any hormonal method (pill, injectable, implant, hormonal IUD) at any time, even if you stopped?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "checkbox",
+          "name": "gyn_procedures",
+          "title": "Have you ever had any of the following? (tick all that apply)",
+          "choices": [
+            {
+              "value": 0,
+              "text": "None"
+            },
+            {
+              "value": 1,
+              "text": "Caesarean section"
+            },
+            {
+              "value": 2,
+              "text": "Surgery on the womb (e.g. fibroid removal)"
+            },
+            {
+              "value": 3,
+              "text": "Surgery on an ovary (e.g. cyst removal)"
+            },
+            {
+              "value": 4,
+              "text": "Surgery on the tubes"
+            },
+            {
+              "value": 5,
+              "text": "Removal of the womb (hysterectomy)"
+            },
+            {
+              "value": 6,
+              "text": "Procedure after miscarriage (curettage / MVA)"
+            },
+            {
+              "value": 7,
+              "text": "Other (specify)"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "gyn_procedures_other",
+          "title": "Other procedure — please specify",
+          "isRequired": true,
+          "visibleIf": "{gyn_procedures} contains 7"
+        },
+        {
+          "type": "dropdown",
+          "name": "miscarriage_procedure",
+          "title": "If you had a procedure after miscarriage, which one?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Curettage (D&C)"
+            },
+            {
+              "value": 2,
+              "text": "Manual vacuum aspiration (MVA)"
+            },
+            {
+              "value": 3,
+              "text": "Medication only"
+            },
+            {
+              "value": 9,
+              "text": "Not sure"
+            }
+          ],
+          "visibleIf": "{gyn_procedures} contains 6"
+        }
+      ]
+    },
+    {
+      "name": "a4_diagnoses",
+      "title": "A4. Previously diagnosed reproductive and endocrine conditions",
+      "visibleIf": "{consent_survey} = 1 and {eligible} = 1",
+      "elements": [
+        {
+          "type": "html",
+          "name": "a4_intro",
+          "html": "<p>Ask about each condition separately. Answer for every condition below.</p>"
+        },
+        {
+          "type": "panel",
+          "name": "panel_pcos",
+          "title": "Polycystic ovary syndrome (PCOS)",
+          "elements": [
+            {
+              "type": "radiogroup",
+              "name": "pcos_dx",
+              "title": "Has a doctor or nurse ever told you that you have polycystic ovary syndrome (PCOS)?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                },
+                {
+                  "value": 2,
+                  "text": "Not sure"
+                }
+              ],
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "pcos_dx_year",
+              "title": "In which year was this diagnosed?",
+              "inputType": "number",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "minValue": 1990,
+                  "maxValue": 2100
+                }
+              ],
+              "visibleIf": "{pcos_dx} = 1",
+              "description": "Enter 9999 if you don't know."
+            },
+            {
+              "type": "dropdown",
+              "name": "pcos_dx_method",
+              "title": "How was it diagnosed?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Ultrasound scan"
+                },
+                {
+                  "value": 2,
+                  "text": "Blood test"
+                },
+                {
+                  "value": 3,
+                  "text": "Examination only"
+                },
+                {
+                  "value": 4,
+                  "text": "Surgery / laparoscopy"
+                },
+                {
+                  "value": 5,
+                  "text": "Combination"
+                },
+                {
+                  "value": 9,
+                  "text": "Don't know"
+                }
+              ],
+              "visibleIf": "{pcos_dx} = 1"
+            },
+            {
+              "type": "radiogroup",
+              "name": "pcos_treated_now",
+              "title": "Are you currently receiving treatment for it?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                }
+              ],
+              "visibleIf": "{pcos_dx} = 1"
+            },
+            {
+              "type": "text",
+              "name": "pcos_treatment",
+              "title": "What treatment? (name of medicine or procedure)",
+              "visibleIf": "{pcos_dx} = 1 and {pcos_treated_now} = 1"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "panel_fibroid",
+          "title": "Uterine fibroids",
+          "elements": [
+            {
+              "type": "radiogroup",
+              "name": "fibroid_dx",
+              "title": "Has a doctor or nurse ever told you that you have uterine fibroids?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                },
+                {
+                  "value": 2,
+                  "text": "Not sure"
+                }
+              ],
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "fibroid_dx_year",
+              "title": "In which year was this diagnosed?",
+              "inputType": "number",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "minValue": 1990,
+                  "maxValue": 2100
+                }
+              ],
+              "visibleIf": "{fibroid_dx} = 1",
+              "description": "Enter 9999 if you don't know."
+            },
+            {
+              "type": "dropdown",
+              "name": "fibroid_dx_method",
+              "title": "How was it diagnosed?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Ultrasound scan"
+                },
+                {
+                  "value": 2,
+                  "text": "Blood test"
+                },
+                {
+                  "value": 3,
+                  "text": "Examination only"
+                },
+                {
+                  "value": 4,
+                  "text": "Surgery / laparoscopy"
+                },
+                {
+                  "value": 5,
+                  "text": "Combination"
+                },
+                {
+                  "value": 9,
+                  "text": "Don't know"
+                }
+              ],
+              "visibleIf": "{fibroid_dx} = 1"
+            },
+            {
+              "type": "radiogroup",
+              "name": "fibroid_treated_now",
+              "title": "Are you currently receiving treatment for it?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                }
+              ],
+              "visibleIf": "{fibroid_dx} = 1"
+            },
+            {
+              "type": "text",
+              "name": "fibroid_treatment",
+              "title": "What treatment? (name of medicine or procedure)",
+              "visibleIf": "{fibroid_dx} = 1 and {fibroid_treated_now} = 1"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "panel_endo",
+          "title": "Endometriosis",
+          "elements": [
+            {
+              "type": "radiogroup",
+              "name": "endo_dx",
+              "title": "Has a doctor or nurse ever told you that you have endometriosis?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                },
+                {
+                  "value": 2,
+                  "text": "Not sure"
+                }
+              ],
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "endo_dx_year",
+              "title": "In which year was this diagnosed?",
+              "inputType": "number",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "minValue": 1990,
+                  "maxValue": 2100
+                }
+              ],
+              "visibleIf": "{endo_dx} = 1",
+              "description": "Enter 9999 if you don't know."
+            },
+            {
+              "type": "dropdown",
+              "name": "endo_dx_method",
+              "title": "How was it diagnosed?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Ultrasound scan"
+                },
+                {
+                  "value": 2,
+                  "text": "Blood test"
+                },
+                {
+                  "value": 3,
+                  "text": "Examination only"
+                },
+                {
+                  "value": 4,
+                  "text": "Surgery / laparoscopy"
+                },
+                {
+                  "value": 5,
+                  "text": "Combination"
+                },
+                {
+                  "value": 9,
+                  "text": "Don't know"
+                }
+              ],
+              "visibleIf": "{endo_dx} = 1"
+            },
+            {
+              "type": "radiogroup",
+              "name": "endo_treated_now",
+              "title": "Are you currently receiving treatment for it?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                }
+              ],
+              "visibleIf": "{endo_dx} = 1"
+            },
+            {
+              "type": "text",
+              "name": "endo_treatment",
+              "title": "What treatment? (name of medicine or procedure)",
+              "visibleIf": "{endo_dx} = 1 and {endo_treated_now} = 1"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "panel_hypothy",
+          "title": "Underactive thyroid (hypothyroidism)",
+          "elements": [
+            {
+              "type": "radiogroup",
+              "name": "hypothy_dx",
+              "title": "Has a doctor or nurse ever told you that you have underactive thyroid (hypothyroidism)?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                },
+                {
+                  "value": 2,
+                  "text": "Not sure"
+                }
+              ],
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "hypothy_dx_year",
+              "title": "In which year was this diagnosed?",
+              "inputType": "number",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "minValue": 1990,
+                  "maxValue": 2100
+                }
+              ],
+              "visibleIf": "{hypothy_dx} = 1",
+              "description": "Enter 9999 if you don't know."
+            },
+            {
+              "type": "dropdown",
+              "name": "hypothy_dx_method",
+              "title": "How was it diagnosed?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Ultrasound scan"
+                },
+                {
+                  "value": 2,
+                  "text": "Blood test"
+                },
+                {
+                  "value": 3,
+                  "text": "Examination only"
+                },
+                {
+                  "value": 4,
+                  "text": "Surgery / laparoscopy"
+                },
+                {
+                  "value": 5,
+                  "text": "Combination"
+                },
+                {
+                  "value": 9,
+                  "text": "Don't know"
+                }
+              ],
+              "visibleIf": "{hypothy_dx} = 1"
+            },
+            {
+              "type": "radiogroup",
+              "name": "hypothy_treated_now",
+              "title": "Are you currently receiving treatment for it?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                }
+              ],
+              "visibleIf": "{hypothy_dx} = 1"
+            },
+            {
+              "type": "text",
+              "name": "hypothy_treatment",
+              "title": "What treatment? (name of medicine or procedure)",
+              "visibleIf": "{hypothy_dx} = 1 and {hypothy_treated_now} = 1"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "panel_hyperthy",
+          "title": "Overactive thyroid (hyperthyroidism)",
+          "elements": [
+            {
+              "type": "radiogroup",
+              "name": "hyperthy_dx",
+              "title": "Has a doctor or nurse ever told you that you have overactive thyroid (hyperthyroidism)?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                },
+                {
+                  "value": 2,
+                  "text": "Not sure"
+                }
+              ],
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "hyperthy_dx_year",
+              "title": "In which year was this diagnosed?",
+              "inputType": "number",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "minValue": 1990,
+                  "maxValue": 2100
+                }
+              ],
+              "visibleIf": "{hyperthy_dx} = 1",
+              "description": "Enter 9999 if you don't know."
+            },
+            {
+              "type": "dropdown",
+              "name": "hyperthy_dx_method",
+              "title": "How was it diagnosed?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Ultrasound scan"
+                },
+                {
+                  "value": 2,
+                  "text": "Blood test"
+                },
+                {
+                  "value": 3,
+                  "text": "Examination only"
+                },
+                {
+                  "value": 4,
+                  "text": "Surgery / laparoscopy"
+                },
+                {
+                  "value": 5,
+                  "text": "Combination"
+                },
+                {
+                  "value": 9,
+                  "text": "Don't know"
+                }
+              ],
+              "visibleIf": "{hyperthy_dx} = 1"
+            },
+            {
+              "type": "radiogroup",
+              "name": "hyperthy_treated_now",
+              "title": "Are you currently receiving treatment for it?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                }
+              ],
+              "visibleIf": "{hyperthy_dx} = 1"
+            },
+            {
+              "type": "text",
+              "name": "hyperthy_treatment",
+              "title": "What treatment? (name of medicine or procedure)",
+              "visibleIf": "{hyperthy_dx} = 1 and {hyperthy_treated_now} = 1"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "panel_goitre",
+          "title": "Enlarged thyroid / goitre",
+          "elements": [
+            {
+              "type": "radiogroup",
+              "name": "goitre_dx",
+              "title": "Has a doctor or nurse ever told you that you have enlarged thyroid / goitre?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                },
+                {
+                  "value": 2,
+                  "text": "Not sure"
+                }
+              ],
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "goitre_dx_year",
+              "title": "In which year was this diagnosed?",
+              "inputType": "number",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "minValue": 1990,
+                  "maxValue": 2100
+                }
+              ],
+              "visibleIf": "{goitre_dx} = 1",
+              "description": "Enter 9999 if you don't know."
+            },
+            {
+              "type": "dropdown",
+              "name": "goitre_dx_method",
+              "title": "How was it diagnosed?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Ultrasound scan"
+                },
+                {
+                  "value": 2,
+                  "text": "Blood test"
+                },
+                {
+                  "value": 3,
+                  "text": "Examination only"
+                },
+                {
+                  "value": 4,
+                  "text": "Surgery / laparoscopy"
+                },
+                {
+                  "value": 5,
+                  "text": "Combination"
+                },
+                {
+                  "value": 9,
+                  "text": "Don't know"
+                }
+              ],
+              "visibleIf": "{goitre_dx} = 1"
+            },
+            {
+              "type": "radiogroup",
+              "name": "goitre_treated_now",
+              "title": "Are you currently receiving treatment for it?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                }
+              ],
+              "visibleIf": "{goitre_dx} = 1"
+            },
+            {
+              "type": "text",
+              "name": "goitre_treatment",
+              "title": "What treatment? (name of medicine or procedure)",
+              "visibleIf": "{goitre_dx} = 1 and {goitre_treated_now} = 1"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "panel_ovcyst",
+          "title": "Ovarian cyst",
+          "elements": [
+            {
+              "type": "radiogroup",
+              "name": "ovcyst_dx",
+              "title": "Has a doctor or nurse ever told you that you have ovarian cyst?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                },
+                {
+                  "value": 2,
+                  "text": "Not sure"
+                }
+              ],
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "ovcyst_dx_year",
+              "title": "In which year was this diagnosed?",
+              "inputType": "number",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "minValue": 1990,
+                  "maxValue": 2100
+                }
+              ],
+              "visibleIf": "{ovcyst_dx} = 1",
+              "description": "Enter 9999 if you don't know."
+            },
+            {
+              "type": "dropdown",
+              "name": "ovcyst_dx_method",
+              "title": "How was it diagnosed?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Ultrasound scan"
+                },
+                {
+                  "value": 2,
+                  "text": "Blood test"
+                },
+                {
+                  "value": 3,
+                  "text": "Examination only"
+                },
+                {
+                  "value": 4,
+                  "text": "Surgery / laparoscopy"
+                },
+                {
+                  "value": 5,
+                  "text": "Combination"
+                },
+                {
+                  "value": 9,
+                  "text": "Don't know"
+                }
+              ],
+              "visibleIf": "{ovcyst_dx} = 1"
+            },
+            {
+              "type": "radiogroup",
+              "name": "ovcyst_treated_now",
+              "title": "Are you currently receiving treatment for it?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                }
+              ],
+              "visibleIf": "{ovcyst_dx} = 1"
+            },
+            {
+              "type": "text",
+              "name": "ovcyst_treatment",
+              "title": "What treatment? (name of medicine or procedure)",
+              "visibleIf": "{ovcyst_dx} = 1 and {ovcyst_treated_now} = 1"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "panel_hyperprl",
+          "title": "High prolactin",
+          "elements": [
+            {
+              "type": "radiogroup",
+              "name": "hyperprl_dx",
+              "title": "Has a doctor or nurse ever told you that you have high prolactin?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                },
+                {
+                  "value": 2,
+                  "text": "Not sure"
+                }
+              ],
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "hyperprl_dx_year",
+              "title": "In which year was this diagnosed?",
+              "inputType": "number",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "minValue": 1990,
+                  "maxValue": 2100
+                }
+              ],
+              "visibleIf": "{hyperprl_dx} = 1",
+              "description": "Enter 9999 if you don't know."
+            },
+            {
+              "type": "dropdown",
+              "name": "hyperprl_dx_method",
+              "title": "How was it diagnosed?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Ultrasound scan"
+                },
+                {
+                  "value": 2,
+                  "text": "Blood test"
+                },
+                {
+                  "value": 3,
+                  "text": "Examination only"
+                },
+                {
+                  "value": 4,
+                  "text": "Surgery / laparoscopy"
+                },
+                {
+                  "value": 5,
+                  "text": "Combination"
+                },
+                {
+                  "value": 9,
+                  "text": "Don't know"
+                }
+              ],
+              "visibleIf": "{hyperprl_dx} = 1"
+            },
+            {
+              "type": "radiogroup",
+              "name": "hyperprl_treated_now",
+              "title": "Are you currently receiving treatment for it?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                }
+              ],
+              "visibleIf": "{hyperprl_dx} = 1"
+            },
+            {
+              "type": "text",
+              "name": "hyperprl_treatment",
+              "title": "What treatment? (name of medicine or procedure)",
+              "visibleIf": "{hyperprl_dx} = 1 and {hyperprl_treated_now} = 1"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "panel_poi",
+          "title": "Early menopause / premature ovarian insufficiency",
+          "elements": [
+            {
+              "type": "radiogroup",
+              "name": "poi_dx",
+              "title": "Has a doctor or nurse ever told you that you have early menopause / premature ovarian insufficiency?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                },
+                {
+                  "value": 2,
+                  "text": "Not sure"
+                }
+              ],
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "poi_dx_year",
+              "title": "In which year was this diagnosed?",
+              "inputType": "number",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "minValue": 1990,
+                  "maxValue": 2100
+                }
+              ],
+              "visibleIf": "{poi_dx} = 1",
+              "description": "Enter 9999 if you don't know."
+            },
+            {
+              "type": "dropdown",
+              "name": "poi_dx_method",
+              "title": "How was it diagnosed?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Ultrasound scan"
+                },
+                {
+                  "value": 2,
+                  "text": "Blood test"
+                },
+                {
+                  "value": 3,
+                  "text": "Examination only"
+                },
+                {
+                  "value": 4,
+                  "text": "Surgery / laparoscopy"
+                },
+                {
+                  "value": 5,
+                  "text": "Combination"
+                },
+                {
+                  "value": 9,
+                  "text": "Don't know"
+                }
+              ],
+              "visibleIf": "{poi_dx} = 1"
+            },
+            {
+              "type": "radiogroup",
+              "name": "poi_treated_now",
+              "title": "Are you currently receiving treatment for it?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                }
+              ],
+              "visibleIf": "{poi_dx} = 1"
+            },
+            {
+              "type": "text",
+              "name": "poi_treatment",
+              "title": "What treatment? (name of medicine or procedure)",
+              "visibleIf": "{poi_dx} = 1 and {poi_treated_now} = 1"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "panel_adenomyosis",
+          "title": "Adenomyosis",
+          "elements": [
+            {
+              "type": "radiogroup",
+              "name": "adenomyosis_dx",
+              "title": "Has a doctor or nurse ever told you that you have adenomyosis?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                },
+                {
+                  "value": 2,
+                  "text": "Not sure"
+                }
+              ],
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "adenomyosis_dx_year",
+              "title": "In which year was this diagnosed?",
+              "inputType": "number",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "minValue": 1990,
+                  "maxValue": 2100
+                }
+              ],
+              "visibleIf": "{adenomyosis_dx} = 1",
+              "description": "Enter 9999 if you don't know."
+            },
+            {
+              "type": "dropdown",
+              "name": "adenomyosis_dx_method",
+              "title": "How was it diagnosed?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Ultrasound scan"
+                },
+                {
+                  "value": 2,
+                  "text": "Blood test"
+                },
+                {
+                  "value": 3,
+                  "text": "Examination only"
+                },
+                {
+                  "value": 4,
+                  "text": "Surgery / laparoscopy"
+                },
+                {
+                  "value": 5,
+                  "text": "Combination"
+                },
+                {
+                  "value": 9,
+                  "text": "Don't know"
+                }
+              ],
+              "visibleIf": "{adenomyosis_dx} = 1"
+            },
+            {
+              "type": "radiogroup",
+              "name": "adenomyosis_treated_now",
+              "title": "Are you currently receiving treatment for it?",
+              "choices": [
+                {
+                  "value": 1,
+                  "text": "Yes"
+                },
+                {
+                  "value": 0,
+                  "text": "No"
+                }
+              ],
+              "visibleIf": "{adenomyosis_dx} = 1"
+            },
+            {
+              "type": "text",
+              "name": "adenomyosis_treatment",
+              "title": "What treatment? (name of medicine or procedure)",
+              "visibleIf": "{adenomyosis_dx} = 1 and {adenomyosis_treated_now} = 1"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "thyroid_med_now",
+          "title": "Are you currently taking any medicine for the thyroid?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 1,
+              "text": "Levothyroxine"
+            },
+            {
+              "value": 2,
+              "text": "Carbimazole / methimazole / PTU"
+            },
+            {
+              "value": 3,
+              "text": "Other (specify)"
+            },
+            {
+              "value": 9,
+              "text": "Taking but don't know the name"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "thyroid_med_other",
+          "title": "Other thyroid medicine — please specify",
+          "isRequired": true,
+          "visibleIf": "{thyroid_med_now} = 3"
+        },
+        {
+          "type": "text",
+          "name": "thyroid_med_months",
+          "title": "For how many months have you taken it?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 0,
+              "maxValue": 600
+            }
+          ],
+          "visibleIf": "{thyroid_med_now} != 0"
+        }
+      ]
+    },
+    {
+      "name": "a5_symptoms",
+      "title": "A5. Symptom checklist (past 6 months)",
+      "visibleIf": "{consent_survey} = 1 and {eligible} = 1",
+      "elements": [
+        {
+          "type": "html",
+          "name": "a5_intro",
+          "html": "<p>In the <strong>past 6 months</strong>, have you experienced any of the following? Answer Yes or No for each item.</p>"
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_fatigue",
+          "title": "Feeling unusually tired or low in energy most days",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_weight_gain",
+          "title": "Unexplained weight gain",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_cold_intol",
+          "title": "Feeling cold when others are comfortable",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_constip",
+          "title": "Constipation",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_dry_skin",
+          "title": "Dry skin",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_hair_thinning",
+          "title": "Thinning of scalp hair",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_swelling",
+          "title": "Swelling of hands, feet or face",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_weight_loss",
+          "title": "Unexplained weight loss",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_heat_intol",
+          "title": "Feeling hot when others are comfortable / heat intolerance",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_palpitations",
+          "title": "Heart racing or palpitations",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_tremor",
+          "title": "Shaking of the hands",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_sweating",
+          "title": "Excessive sweating",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_anxiety_irrit",
+          "title": "Feeling anxious, irritable or restless",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_neck_swelling",
+          "title": "Swelling or fullness at the front of the neck",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_hirsutism",
+          "title": "Excess hair on the face, chest or abdomen",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_acne",
+          "title": "Acne that continues after adolescence or is hard to treat",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_alopecia_androgen",
+          "title": "Thinning of hair at the crown or temples",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_weight_gain_central",
+          "title": "Weight gain mainly around the abdomen",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_skin_tags",
+          "title": "Skin tags (small soft growths on the skin)",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_oligomenorrhoea",
+          "title": "Fewer than 8 periods in a year",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_infertility_sym",
+          "title": "Difficulty becoming pregnant",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_pelvic_pain_chronic",
+          "title": "Pelvic or lower abdominal pain lasting 6 months or more",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_dyspareunia_deep",
+          "title": "Deep pain during intercourse",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_dyschezia",
+          "title": "Pain when passing stool, especially during periods",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_dysuria_cyclic",
+          "title": "Pain when passing urine that is worse during periods",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_cyclical_gi",
+          "title": "Bloating, diarrhoea or constipation that worsens with periods",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_cyclical_fatigue",
+          "title": "Marked tiredness that worsens with periods",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_infertility_endo",
+          "title": "Difficulty becoming pregnant with pelvic pain",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_acanthosis",
+          "title": "Darkened skin on the neck or armpits",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_abdominal_mass",
+          "title": "A feeling of a lump or swelling in the lower abdomen",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_pelvic_pressure",
+          "title": "Pressure, heaviness or fullness in the pelvis",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_urinary_freq",
+          "title": "Needing to pass urine more often than before",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_urinary_retention",
+          "title": "Difficulty emptying the bladder completely",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_back_pain",
+          "title": "Lower back pain not explained by work or injury",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_anaemia",
+          "title": "Dizziness, breathlessness on exertion, or told you have low blood (anaemia)",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_galactorrhoea",
+          "title": "Milky discharge from the breasts when not breastfeeding",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_hot_flushes",
+          "title": "Hot flushes or night sweats",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_vaginal_dryness",
+          "title": "Vaginal dryness",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 9,
+              "text": "Prefer not to answer"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_low_libido",
+          "title": "Reduced sexual desire",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 9,
+              "text": "Prefer not to answer"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "sym_headache_visual",
+          "title": "Frequent headaches with visual disturbance",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "a6_infections",
+      "title": "A6. Infections and pelvic health",
+      "visibleIf": "{consent_survey} = 1 and {eligible} = 1",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "sti_ever",
+          "title": "Has a health worker ever diagnosed you with a sexually transmitted infection (e.g. gonorrhoea, chlamydia, syphilis, trichomonas)?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 2,
+              "text": "Not sure"
+            },
+            {
+              "value": 9,
+              "text": "Prefer not to answer"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "checkbox",
+          "name": "sti_type",
+          "title": "Which infection(s)? (tick all that apply)",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Gonorrhoea"
+            },
+            {
+              "value": 2,
+              "text": "Chlamydia"
+            },
+            {
+              "value": 3,
+              "text": "Syphilis"
+            },
+            {
+              "value": 4,
+              "text": "Trichomonas"
+            },
+            {
+              "value": 5,
+              "text": "Other (specify)"
+            },
+            {
+              "value": 9,
+              "text": "Don't know"
+            }
+          ],
+          "visibleIf": "{sti_ever} = 1",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "sti_type_other",
+          "title": "Other STI — please specify",
+          "isRequired": true,
+          "visibleIf": "{sti_type} contains 5"
+        },
+        {
+          "type": "radiogroup",
+          "name": "sti_treatment_complete",
+          "title": "Did you complete the full treatment?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 2,
+              "text": "Not sure"
+            }
+          ],
+          "visibleIf": "{sti_ever} = 1"
+        },
+        {
+          "type": "radiogroup",
+          "name": "discharge_12m",
+          "title": "In the past 12 months, have you had unusual vaginal discharge (change in colour, smell or amount)?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "pid_treated",
+          "title": "Have you ever been treated for a pelvic infection (infection of the womb or tubes)?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 2,
+              "text": "Not sure"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "pelvic_pain_fever",
+          "title": "Have you ever had lower abdominal pain lasting more than 7 days together with fever or discharge?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "sexually_active_12m",
+          "title": "Have you been sexually active in the past 12 months?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 9,
+              "text": "Prefer not to answer"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "partners_12m",
+          "title": "How many sexual partners have you had in the past 12 months?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 0,
+              "maxValue": 20
+            }
+          ],
+          "visibleIf": "{sexually_active_12m} = 1",
+          "description": "Enter 9 if you prefer not to answer."
+        },
+        {
+          "type": "dropdown",
+          "name": "condom_use",
+          "title": "How often did you or your partner use a condom in the past 12 months?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "Never"
+            },
+            {
+              "value": 1,
+              "text": "Sometimes"
+            },
+            {
+              "value": 2,
+              "text": "Always"
+            },
+            {
+              "value": 3,
+              "text": "Not applicable"
+            }
+          ],
+          "visibleIf": "{sexually_active_12m} = 1"
+        }
+      ]
+    },
+    {
+      "name": "a7_family",
+      "title": "A7. Family history",
+      "description": "First-degree relatives = mother, sisters, daughters. Second-degree = grandmothers, aunts.",
+      "visibleIf": "{consent_survey} = 1 and {eligible} = 1",
+      "elements": [
+        {
+          "type": "dropdown",
+          "name": "fh_pcos",
+          "title": "Has any blood relative been diagnosed with PCOS?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 1,
+              "text": "Yes – first-degree"
+            },
+            {
+              "value": 2,
+              "text": "Yes – second-degree only"
+            },
+            {
+              "value": 9,
+              "text": "Don't know"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "fh_fibroids",
+          "title": "Has any blood relative been diagnosed with uterine fibroids?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 1,
+              "text": "Yes – first-degree"
+            },
+            {
+              "value": 2,
+              "text": "Yes – second-degree only"
+            },
+            {
+              "value": 9,
+              "text": "Don't know"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "fh_endometriosis",
+          "title": "Has any blood relative been diagnosed with endometriosis?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 1,
+              "text": "Yes – first-degree"
+            },
+            {
+              "value": 2,
+              "text": "Yes – second-degree only"
+            },
+            {
+              "value": 9,
+              "text": "Don't know"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "fh_thyroid",
+          "title": "Has any blood relative been diagnosed with a thyroid disorder or goitre?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 1,
+              "text": "Yes – first-degree"
+            },
+            {
+              "value": 2,
+              "text": "Yes – second-degree only"
+            },
+            {
+              "value": 9,
+              "text": "Don't know"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "fh_infertility",
+          "title": "Has any blood relative had difficulty becoming pregnant?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 1,
+              "text": "Yes – first-degree"
+            },
+            {
+              "value": 2,
+              "text": "Yes – second-degree only"
+            },
+            {
+              "value": 9,
+              "text": "Don't know"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "fh_diabetes",
+          "title": "Has any blood relative been diagnosed with diabetes?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 1,
+              "text": "Yes – first-degree"
+            },
+            {
+              "value": 2,
+              "text": "Yes – second-degree only"
+            },
+            {
+              "value": 9,
+              "text": "Don't know"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "fh_early_menopause",
+          "title": "Did your mother or a sister reach menopause before age 40?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 1,
+              "text": "Yes – first-degree"
+            },
+            {
+              "value": 2,
+              "text": "Yes – second-degree only"
+            },
+            {
+              "value": 9,
+              "text": "Don't know"
+            }
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "a8_lifestyle",
+      "title": "A8. Medical history and lifestyle",
+      "visibleIf": "{consent_survey} = 1 and {eligible} = 1",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "dx_diabetes",
+          "title": "Have you ever been diagnosed with diabetes?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 2,
+              "text": "Not sure"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "dx_hypertension",
+          "title": "Have you ever been diagnosed with high blood pressure?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 2,
+              "text": "Not sure"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "dx_other_chronic",
+          "title": "Any other long-term illness? (tick all that apply)",
+          "choices": [
+            {
+              "value": 0,
+              "text": "None"
+            },
+            {
+              "value": 1,
+              "text": "Asthma"
+            },
+            {
+              "value": 2,
+              "text": "Epilepsy"
+            },
+            {
+              "value": 3,
+              "text": "Kidney disease"
+            },
+            {
+              "value": 4,
+              "text": "Sickle cell disease"
+            },
+            {
+              "value": 5,
+              "text": "Cancer"
+            },
+            {
+              "value": 6,
+              "text": "Mental health condition"
+            },
+            {
+              "value": 7,
+              "text": "Tuberculosis (ever)"
+            },
+            {
+              "value": 8,
+              "text": "Other (specify)"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "dx_other_chronic_other",
+          "title": "Other long-term illness — please specify",
+          "isRequired": true,
+          "visibleIf": "{dx_other_chronic} contains 8"
+        },
+        {
+          "type": "checkbox",
+          "name": "meds_current",
+          "title": "Which medicines do you take regularly? (tick all that apply)",
+          "choices": [
+            {
+              "value": 0,
+              "text": "None"
+            },
+            {
+              "value": 1,
+              "text": "Metformin"
+            },
+            {
+              "value": 2,
+              "text": "Steroids (e.g. prednisolone)"
+            },
+            {
+              "value": 3,
+              "text": "Anti-epileptic (e.g. sodium valproate)"
+            },
+            {
+              "value": 4,
+              "text": "Antipsychotic / antidepressant"
+            },
+            {
+              "value": 5,
+              "text": "Hormone treatment other than contraception"
+            },
+            {
+              "value": 6,
+              "text": "Traditional / herbal medicine"
+            },
+            {
+              "value": 7,
+              "text": "Other (specify)"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "meds_current_other",
+          "title": "Other medicine — please specify",
+          "isRequired": true,
+          "visibleIf": "{meds_current} contains 7"
+        },
+        {
+          "type": "dropdown",
+          "name": "iodised_salt",
+          "title": "How often does your household use iodised salt?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "Never"
+            },
+            {
+              "value": 1,
+              "text": "Rarely"
+            },
+            {
+              "value": 2,
+              "text": "Sometimes"
+            },
+            {
+              "value": 3,
+              "text": "Often"
+            },
+            {
+              "value": 4,
+              "text": "Always"
+            },
+            {
+              "value": 9,
+              "text": "Don't know"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "seafood_freq",
+          "title": "How often do you eat fish or other seafood?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "Never"
+            },
+            {
+              "value": 1,
+              "text": "Less than once a month"
+            },
+            {
+              "value": 2,
+              "text": "1–3 times a month"
+            },
+            {
+              "value": 3,
+              "text": "About once a week"
+            },
+            {
+              "value": 4,
+              "text": "Several times a week"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "smoking",
+          "title": "Do you smoke tobacco?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "Never"
+            },
+            {
+              "value": 1,
+              "text": "Former smoker"
+            },
+            {
+              "value": 2,
+              "text": "Current smoker"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "alcohol_freq",
+          "title": "How often do you drink alcohol (including urwagwa / ikigage)?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "Never"
+            },
+            {
+              "value": 1,
+              "text": "Monthly or less"
+            },
+            {
+              "value": 2,
+              "text": "2–4 times a month"
+            },
+            {
+              "value": 3,
+              "text": "2–3 times a week"
+            },
+            {
+              "value": 4,
+              "text": "4 or more times a week"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "physical_activity_days",
+          "title": "On how many days in a typical week do you do at least 30 minutes of physical activity that makes you breathe harder (walking fast, farming, sport)?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 0,
+              "maxValue": 7
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "sleep_hours",
+          "title": "How many hours do you usually sleep at night?",
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 2,
+              "maxValue": 14
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "stress_uncontrol",
+          "title": "In the past month, how often have you felt that you were unable to control the important things in your life?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "Never"
+            },
+            {
+              "value": 1,
+              "text": "Almost never"
+            },
+            {
+              "value": 2,
+              "text": "Sometimes"
+            },
+            {
+              "value": 3,
+              "text": "Fairly often"
+            },
+            {
+              "value": 4,
+              "text": "Very often"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "phq2_interest",
+          "title": "Over the past 2 weeks, how often have you had little interest or pleasure in doing things?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "Not at all"
+            },
+            {
+              "value": 1,
+              "text": "Several days"
+            },
+            {
+              "value": 2,
+              "text": "More than half the days"
+            },
+            {
+              "value": 3,
+              "text": "Nearly every day"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "phq2_down",
+          "title": "Over the past 2 weeks, how often have you felt down, depressed or hopeless?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "Not at all"
+            },
+            {
+              "value": 1,
+              "text": "Several days"
+            },
+            {
+              "value": 2,
+              "text": "More than half the days"
+            },
+            {
+              "value": 3,
+              "text": "Nearly every day"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "a9_digital",
+      "title": "A9. Care-seeking and digital / AI readiness",
+      "visibleIf": "{consent_survey} = 1 and {eligible} = 1",
+      "elements": [
+        {
+          "type": "dropdown",
+          "name": "care_sought_12m",
+          "title": "In the past 12 months, did you seek care for any menstrual, pelvic or hormonal symptom?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No, had symptoms but did not seek care"
+            },
+            {
+              "value": 2,
+              "text": "No symptoms"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "checkbox",
+          "name": "care_place",
+          "title": "Where did you go? (tick all that apply)",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Health post"
+            },
+            {
+              "value": 2,
+              "text": "Health centre"
+            },
+            {
+              "value": 3,
+              "text": "District hospital"
+            },
+            {
+              "value": 4,
+              "text": "Referral / provincial hospital"
+            },
+            {
+              "value": 5,
+              "text": "Private clinic"
+            },
+            {
+              "value": 6,
+              "text": "Pharmacy"
+            },
+            {
+              "value": 7,
+              "text": "Traditional healer"
+            },
+            {
+              "value": 8,
+              "text": "Community health worker"
+            }
+          ],
+          "visibleIf": "{care_sought_12m} = 1",
+          "isRequired": true
+        },
+        {
+          "type": "checkbox",
+          "name": "care_barrier",
+          "title": "What stopped you from seeking care? (tick all that apply)",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Cost"
+            },
+            {
+              "value": 2,
+              "text": "Distance / transport"
+            },
+            {
+              "value": 3,
+              "text": "Shame or stigma"
+            },
+            {
+              "value": 4,
+              "text": "Did not think it was serious"
+            },
+            {
+              "value": 5,
+              "text": "No time"
+            },
+            {
+              "value": 6,
+              "text": "Poor past experience"
+            },
+            {
+              "value": 7,
+              "text": "Did not know where to go"
+            },
+            {
+              "value": 8,
+              "text": "Other (specify)"
+            }
+          ],
+          "visibleIf": "{care_sought_12m} = 0",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "care_barrier_other",
+          "title": "Other barrier — please specify",
+          "isRequired": true,
+          "visibleIf": "{care_barrier} contains 8"
+        },
+        {
+          "type": "dropdown",
+          "name": "phone_type",
+          "title": "Do you own a mobile phone?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "No"
+            },
+            {
+              "value": 1,
+              "text": "Basic phone"
+            },
+            {
+              "value": 2,
+              "text": "Smartphone"
+            }
+          ],
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "internet_use",
+          "title": "How often do you use the internet?",
+          "choices": [
+            {
+              "value": 0,
+              "text": "Never"
+            },
+            {
+              "value": 1,
+              "text": "Less than weekly"
+            },
+            {
+              "value": 2,
+              "text": "Weekly"
+            },
+            {
+              "value": 3,
+              "text": "Daily"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "health_app_ever",
+          "title": "Have you ever used a phone app or SMS service for health (e.g. period tracker, pregnancy app)?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Yes"
+            },
+            {
+              "value": 0,
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "att_app_tracking",
+          "title": "I would be willing to record my periods and symptoms in a phone app for a health service.",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Strongly disagree"
+            },
+            {
+              "value": 2,
+              "text": "Disagree"
+            },
+            {
+              "value": 3,
+              "text": "Neutral"
+            },
+            {
+              "value": 4,
+              "text": "Agree"
+            },
+            {
+              "value": 5,
+              "text": "Strongly agree"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "att_wearable",
+          "title": "I would be willing to wear a device (e.g. smart watch or temperature sensor) that records health signals.",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Strongly disagree"
+            },
+            {
+              "value": 2,
+              "text": "Disagree"
+            },
+            {
+              "value": 3,
+              "text": "Neutral"
+            },
+            {
+              "value": 4,
+              "text": "Agree"
+            },
+            {
+              "value": 5,
+              "text": "Strongly agree"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "att_ai_trust",
+          "title": "I would trust a computer system (AI) that uses my answers to tell me I should see a health worker.",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Strongly disagree"
+            },
+            {
+              "value": 2,
+              "text": "Disagree"
+            },
+            {
+              "value": 3,
+              "text": "Neutral"
+            },
+            {
+              "value": 4,
+              "text": "Agree"
+            },
+            {
+              "value": 5,
+              "text": "Strongly agree"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "att_ai_vs_clinician",
+          "title": "I would prefer a health worker to review the AI result before I am contacted.",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Strongly disagree"
+            },
+            {
+              "value": 2,
+              "text": "Disagree"
+            },
+            {
+              "value": 3,
+              "text": "Neutral"
+            },
+            {
+              "value": 4,
+              "text": "Agree"
+            },
+            {
+              "value": 5,
+              "text": "Strongly agree"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "att_data_share",
+          "title": "I am comfortable with my anonymised health data being used to train such systems.",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Strongly disagree"
+            },
+            {
+              "value": 2,
+              "text": "Disagree"
+            },
+            {
+              "value": 3,
+              "text": "Neutral"
+            },
+            {
+              "value": 4,
+              "text": "Agree"
+            },
+            {
+              "value": 5,
+              "text": "Strongly agree"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "concern_main",
+          "title": "What is your main concern about AI health tools?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Privacy of my data"
+            },
+            {
+              "value": 2,
+              "text": "Accuracy / wrong results"
+            },
+            {
+              "value": 3,
+              "text": "Cost"
+            },
+            {
+              "value": 4,
+              "text": "Replacing health workers"
+            },
+            {
+              "value": 5,
+              "text": "Difficulty using technology"
+            },
+            {
+              "value": 6,
+              "text": "No concern"
+            },
+            {
+              "value": 7,
+              "text": "Other (specify)"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "concern_main_other",
+          "title": "Other concern — please specify",
+          "isRequired": true,
+          "visibleIf": "{concern_main} = 7"
+        },
+        {
+          "type": "dropdown",
+          "name": "preferred_channel",
+          "title": "How would you prefer to receive health advice or alerts?",
+          "choices": [
+            {
+              "value": 1,
+              "text": "SMS / USSD"
+            },
+            {
+              "value": 2,
+              "text": "Smartphone app"
+            },
+            {
+              "value": 3,
+              "text": "WhatsApp"
+            },
+            {
+              "value": 4,
+              "text": "Phone call"
+            },
+            {
+              "value": 5,
+              "text": "Visit from a community health worker"
+            },
+            {
+              "value": 6,
+              "text": "At the health facility only"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "preferred_language_digital",
+          "title": "Preferred language for digital health messages",
+          "choices": [
+            {
+              "value": 1,
+              "text": "Kinyarwanda"
+            },
+            {
+              "value": 2,
+              "text": "English"
+            },
+            {
+              "value": 3,
+              "text": "French"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "showPreviewBeforeComplete": "showAllQuestions",
+  "previewText": "Review Answers",
+  "editText": "Edit",
+  "completeText": "Submit"
+}

@@ -48,7 +48,15 @@
         var question = getQuestion(questionName);
         if (!question) return;
 
-        question.choices = choices || [];
+        // Keep IDs as numbers so parent_id cascading stays consistent
+        question.choices = (choices || []).map(function (choice) {
+            return {
+                value: typeof choice.value === 'string' && /^\d+$/.test(choice.value)
+                    ? parseInt(choice.value, 10)
+                    : choice.value,
+                text: choice.text
+            };
+        });
         question.placeholder = emptyText || 'Select an option';
     }
 
@@ -56,8 +64,16 @@
         var question = getQuestion(questionName);
         if (!question) return;
 
-        question.readOnly = !enabled;
+        // Prefer SurveyJS enableIf on the question; only clear readOnly when enabling
+        // so cascade never leaves district/sector stuck disabled after parent select.
+        if (enabled) {
+            question.readOnly = false;
+        } else if (!question.enableIf) {
+            question.readOnly = true;
+        }
     }
+
+    var clearingLocations = false;
 
     function clearDownstream(parentName) {
         var parentIndex = locationChain.findIndex(function (item) {
@@ -65,23 +81,29 @@
         });
         if (parentIndex === -1) return;
 
-        locationChain.slice(parentIndex + 1).forEach(function (item) {
-            if (getQuestion(item.name)) {
-                surveyModel.setValue(item.name, null);
-                setQuestionChoices(item.name, [], 'Select ' + item.label.toLowerCase());
-                setQuestionEnabled(item.name, false);
-            }
-        });
+        clearingLocations = true;
+        try {
+            locationChain.slice(parentIndex + 1).forEach(function (item) {
+                if (getQuestion(item.name)) {
+                    surveyModel.setValue(item.name, null);
+                    setQuestionChoices(item.name, [], 'Select ' + item.label.toLowerCase());
+                    setQuestionEnabled(item.name, false);
+                }
+            });
+        } finally {
+            clearingLocations = false;
+        }
     }
 
     function loadLocationChoices(item, parentId) {
         var url = apiUrl('api/locations.php?level=' + encodeURIComponent(item.level));
-        if (parentId) {
+        if (parentId !== null && parentId !== undefined && parentId !== '') {
             url += '&parent_id=' + encodeURIComponent(parentId);
         }
 
         return fetch(url, {
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            credentials: 'same-origin'
         })
             .then(function (r) { return r.json(); })
             .then(function (res) {
@@ -104,7 +126,7 @@
         }
 
         var parentValue = surveyModel.getValue(item.parent);
-        if (!parentValue) {
+        if (parentValue === null || parentValue === undefined || parentValue === '') {
             setQuestionChoices(item.name, [], 'Select ' + item.label.toLowerCase());
             setQuestionEnabled(item.name, false);
             return Promise.resolve();
@@ -122,8 +144,9 @@
             });
         });
 
-        return sequence.catch(function () {
+        return sequence.catch(function (err) {
             updateAutosaveStatus('Location list loading failed');
+            console.error(err);
         });
     }
 
@@ -137,6 +160,8 @@
         });
 
         surveyModel.onValueChanged.add(function (sender, options) {
+            if (clearingLocations) return;
+
             var changed = options.name;
             var changedItem = locationChain.find(function (item) {
                 return item.name === changed;
@@ -150,7 +175,10 @@
                 return item.parent === changed;
             });
             if (child) {
-                refreshLocationItem(child);
+                refreshLocationItem(child).catch(function (err) {
+                    updateAutosaveStatus('Failed to load ' + child.label.toLowerCase() + ' list');
+                    console.error(err);
+                });
             }
         });
 
@@ -213,7 +241,8 @@
                 'top_antimicrobial_1',
                 'top_antimicrobial_2',
                 'top_antimicrobial_3',
-                'first_line_antibiotics'
+                'first_line_antibiotics',
+                'doctor_pneumonia_first_choice'
             ],
             'api/antimicrobials.php'
         );
@@ -221,10 +250,14 @@
             [
                 'first_line_indication_1',
                 'first_line_indication_2',
-                'first_line_indication_3'
+                'first_line_indication_3',
+                'culture_request_conditions'
             ],
             'api/indications.php'
         );
+
+        // AMS MR extraction panels embed dictionary choices in JSON;
+        // facility_code is refreshed via loadFacilityChoices().
     }
 
     function saveDraft(data) {

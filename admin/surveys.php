@@ -96,6 +96,7 @@ $flash = getFlash();
                     <th>Status</th>
                     <th>Created</th>
                     <th>By</th>
+                    <th>Paper form</th>
                     <?php if (hasRole('admin')): ?><th>Actions</th><?php endif; ?>
                 </tr>
             </thead>
@@ -104,7 +105,7 @@ $flash = getFlash();
                 $versions = $versionsBySurvey[$survey['id']] ?? [];
                 if (empty($versions)):
                 ?>
-                <tr><td colspan="5" class="text-muted">No versions uploaded.</td></tr>
+                <tr><td colspan="6" class="text-muted">No versions uploaded.</td></tr>
                 <?php else: ?>
                 <?php foreach ($versions as $v): ?>
                 <tr>
@@ -118,6 +119,10 @@ $flash = getFlash();
                     </td>
                     <td><?= e($v['created_at']) ?></td>
                     <td><?= e($v['created_by_name'] ?? '-') ?></td>
+                    <td>
+                        <a href="<?= e(url('surveys/print_survey.php?version_id=' . (int) $v['id'])) ?>"
+                           class="btn btn-link btn-sm p-0" target="_blank" rel="noopener">Printable / PDF</a>
+                    </td>
                     <?php if (hasRole('admin')): ?>
                     <td>
                         <form method="post" class="d-inline">

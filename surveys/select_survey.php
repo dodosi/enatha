@@ -49,8 +49,12 @@ $flash = getFlash();
                 <?php if (!empty($survey['description'])): ?>
                 <p class="card-text small flex-grow-1"><?= e($survey['description']) ?></p>
                 <?php endif; ?>
-                <a href="<?= e(url('surveys/take_survey.php?survey_id=' . (int) $survey['id'])) ?>"
-                   class="btn btn-primary mt-auto">Start Survey</a>
+                <div class="d-flex gap-2 mt-auto">
+                    <a href="<?= e(url('surveys/take_survey.php?survey_id=' . (int) $survey['id'])) ?>"
+                       class="btn btn-primary flex-grow-1">Start Survey</a>
+                    <a href="<?= e(url('surveys/print_survey.php?survey_id=' . (int) $survey['id'])) ?>"
+                       class="btn btn-outline-secondary" target="_blank" rel="noopener">Printable form</a>
+                </div>
             </div>
         </div>
     </div>
