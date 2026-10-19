@@ -27,24 +27,34 @@ function requireRole(...$roles): void
             jsonResponse(['success' => false, 'message' => 'Forbidden'], 403);
         }
         setFlash('danger', 'You do not have permission to access this page.');
-        redirect(hasRole('enumerator') ? 'surveys/select_survey.php' : 'admin/dashboard.php');
+        redirect(hasRole('enumerator') && !canViewAdminDashboard()
+            ? 'surveys/select_survey.php'
+            : 'admin/dashboard.php');
     }
 }
 
 /**
- * Require admin
+ * Require super admin or leader (team management / survey upload)
  */
 function requireAdmin(): void
 {
-    requireRole('admin');
+    requireRole('super_admin', 'leader');
 }
 
 /**
- * Require admin or supervisor
+ * Require super admin, leader, or supervisor (dashboard / responses)
  */
 function requireAdminOrSupervisor(): void
 {
-    requireRole('admin', 'supervisor');
+    requireRole('super_admin', 'leader', 'supervisor');
+}
+
+/**
+ * Require platform super admin only
+ */
+function requireSuperAdmin(): void
+{
+    requireRole('super_admin');
 }
 
 /**

@@ -25,16 +25,17 @@ $user = currentUser();
         <div class="collapse navbar-collapse" id="navMain">
             <?php if ($user): ?>
             <ul class="navbar-nav me-auto">
-                <?php if (hasRole('admin', 'supervisor')): ?>
+                <?php if (canViewAdminDashboard()): ?>
                 <li class="nav-item"><a class="nav-link" href="<?= e(url('admin/dashboard.php')) ?>">Dashboard</a></li>
                 <li class="nav-item"><a class="nav-link" href="<?= e(url('admin/surveys.php')) ?>">Surveys</a></li>
                 <li class="nav-item"><a class="nav-link" href="<?= e(url('admin/responses.php')) ?>">Responses</a></li>
-                <?php if (hasRole('admin')): ?>
+                <?php if (canManageTeam()): ?>
                 <li class="nav-item"><a class="nav-link" href="<?= e(url('admin/users.php')) ?>">Users</a></li>
                 <li class="nav-item"><a class="nav-link" href="<?= e(url('admin/register_user.php')) ?>">Register User</a></li>
+                <li class="nav-item"><a class="nav-link" href="<?= e(url('admin/assign_surveys.php')) ?>">Assign Surveys</a></li>
                 <?php endif; ?>
                 <?php endif; ?>
-                <?php if (hasRole('enumerator', 'admin', 'supervisor')): ?>
+                <?php if (canTakeSurveys()): ?>
                 <li class="nav-item"><a class="nav-link" href="<?= e(url('surveys/select_survey.php')) ?>">Take Survey</a></li>
                 <?php endif; ?>
             </ul>

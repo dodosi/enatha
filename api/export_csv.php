@@ -18,6 +18,14 @@ $sql = "SELECT r.*, s.title AS survey_title, s.survey_code,
         WHERE r.status = 'completed'";
 $params = [];
 
+$teamScope = responseTeamScopeSql('r', 'u');
+$sql .= $teamScope['sql'];
+$params = array_merge($params, $teamScope['params']);
+
+$surveyScope = managedSurveysSql('s');
+$sql .= $surveyScope['sql'];
+$params = array_merge($params, $surveyScope['params']);
+
 if ($surveyId > 0) {
     $sql .= ' AND r.survey_id = ?';
     $params[] = $surveyId;

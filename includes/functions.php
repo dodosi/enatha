@@ -175,6 +175,119 @@ if (!function_exists('array_is_list')) {
 }
 
 /**
+ * Build map of question name => title from SurveyJS JSON definition.
+ *
+ * @return array<string, string>
+ */
+function surveyQuestionTitleMap(string $jsonDefinition): array
+{
+    $decoded = json_decode($jsonDefinition, true);
+    if (!is_array($decoded)) {
+        return [];
+    }
+    $map = [];
+    $walk = function ($elements) use (&$walk, &$map) {
+        if (!is_array($elements)) {
+            return;
+        }
+        foreach ($elements as $el) {
+            if (!is_array($el)) {
+                continue;
+            }
+            $name = isset($el['name']) ? (string) $el['name'] : '';
+            if ($name !== '') {
+                $title = $el['title'] ?? $name;
+                if (is_array($title)) {
+                    $title = $title['default'] ?? $title['en'] ?? reset($title) ?: $name;
+                }
+                $map[$name] = (string) $title;
+            }
+            if (!empty($el['elements'])) {
+                $walk($el['elements']);
+            }
+            if (!empty($el['templateElements'])) {
+                $walk($el['templateElements']);
+            }
+            if (!empty($el['columns']) && is_array($el['columns'])) {
+                foreach ($el['columns'] as $col) {
+                    if (is_array($col) && !empty($col['name'])) {
+                        $ct = $col['title'] ?? $col['name'];
+                        if (is_array($ct)) {
+                            $ct = $ct['default'] ?? $ct['en'] ?? reset($ct) ?: $col['name'];
+                        }
+                        $map[(string) $col['name']] = (string) $ct;
+                    }
+                }
+            }
+        }
+    };
+    if (!empty($decoded['pages']) && is_array($decoded['pages'])) {
+        foreach ($decoded['pages'] as $page) {
+            if (is_array($page) && !empty($page['elements'])) {
+                $walk($page['elements']);
+            }
+        }
+    }
+    if (!empty($decoded['elements'])) {
+        $walk($decoded['elements']);
+    }
+    return $map;
+}
+
+/**
+ * Human-readable label for a stored answer key (supports panel[0].field paths).
+ */
+function resolveQuestionLabel(string $questionName, array $titleMap): string
+{
+    if (isset($titleMap[$questionName])) {
+        return $titleMap[$questionName];
+    }
+    if (preg_match('/^(.+)\[(\d+)\]\.(.+)$/', $questionName, $m)) {
+        $panel = $m[1];
+        $idx = (int) $m[2] + 1;
+        $field = $m[3];
+        $panelTitle = $titleMap[$panel] ?? $panel;
+        $fieldTitle = $titleMap[$field] ?? $field;
+        return $panelTitle . ' #' . $idx . ' — ' . $fieldTitle;
+    }
+    if (strpos($questionName, '.') !== false) {
+        $parts = explode('.', $questionName);
+        $last = end($parts);
+        if (isset($titleMap[$last])) {
+            return $titleMap[$last] . ' (' . $questionName . ')';
+        }
+    }
+    return $questionName;
+}
+
+/**
+ * Format stored answer_value for display.
+ */
+function formatAnswerDisplay(string $value, string $type = 'text'): string
+{
+    $trim = trim($value);
+    if ($trim === '') {
+        return '—';
+    }
+    if ($type === 'boolean' || $trim === 'true' || $trim === 'false') {
+        if ($trim === 'true') {
+            return 'Yes';
+        }
+        if ($trim === 'false') {
+            return 'No';
+        }
+    }
+    $decoded = json_decode($trim, true);
+    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+        if (array_is_list($decoded) && (empty($decoded) || !is_array($decoded[0] ?? null))) {
+            return implode(', ', array_map('strval', $decoded));
+        }
+        return json_encode($decoded, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    }
+    return $trim;
+}
+
+/**
  * Get next version number for a survey
  */
 function getNextVersionNumber(PDO $db, int $surveyId): int

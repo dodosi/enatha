@@ -9,6 +9,9 @@ if ($surveyId <= 0) {
 }
 
 $db = getDb();
+if (!userCanAccessSurvey($db, $surveyId)) {
+    jsonResponse(['success' => false, 'message' => 'You are not assigned to this survey'], 403);
+}
 $version = getLatestActiveVersion($db, $surveyId);
 
 if (!$version) {

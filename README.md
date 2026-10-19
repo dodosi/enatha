@@ -137,11 +137,24 @@ index.php        login
 
 ## Roles
 
-| Role        | Capabilities                                      |
-|-------------|---------------------------------------------------|
-| admin       | Full access: users, upload, versions, export      |
-| supervisor  | Dashboard, surveys, responses, export, take survey|
-| enumerator  | Select survey, fill, submit, autosave             |
+| Role         | Capabilities                                                                 |
+|--------------|------------------------------------------------------------------------------|
+| super_admin  | Create leaders; full platform access; sees all surveys/responses             |
+| leader       | Create enumerators for their team; upload/manage own surveys; assign access  |
+| supervisor   | Legacy; dashboard, surveys, responses, export, take survey (scoped)          |
+| enumerator   | Select & fill assigned surveys (default: all of their leader’s forms)        |
+
+**Hierarchy:** `super_admin` → `leader` → `enumerator`. Each survey has an `owner_id` (the leader who uploaded it). Enumerators inherit all of their leader’s surveys unless **Restrict survey access** is enabled and specific surveys are assigned under **Assign surveys**.
+
+### Migration (existing databases)
+
+Run after upgrading:
+
+```bash
+mysql -u USER -p DATABASE < database/migrations/001_leader_hierarchy.sql
+```
+
+Or import `database/migrations/001_leader_hierarchy.sql` in phpMyAdmin. Then re-login so session roles refresh.
 
 ## Security Best Practices
 

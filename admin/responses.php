@@ -9,7 +9,12 @@ $versionId = (int) ($_GET['version_id'] ?? 0);
 $dateFrom = $_GET['date_from'] ?? '';
 $dateTo = $_GET['date_to'] ?? '';
 
-$surveys = $db->query('SELECT id, survey_code, title FROM surveys ORDER BY title')->fetchAll();
+$surveyScope = managedSurveysSql('s');
+$sStmt = $db->prepare(
+    'SELECT s.id, s.survey_code, s.title FROM surveys s WHERE 1=1' . $surveyScope['sql'] . ' ORDER BY s.title'
+);
+$sStmt->execute($surveyScope['params']);
+$surveys = $sStmt->fetchAll();
 
 $versions = [];
 if ($surveyId > 0) {
@@ -27,6 +32,10 @@ $sql = "SELECT r.id, r.submitted_at, r.survey_version_number, r.duration_seconds
         JOIN users u ON u.id = r.enumerator_id
         WHERE 1=1";
 $params = [];
+
+$teamScope = responseTeamScopeSql('r', 'u');
+$sql .= $teamScope['sql'];
+$params = array_merge($params, $teamScope['params']);
 
 if ($surveyId > 0) {
     $sql .= ' AND r.survey_id = ?';
@@ -122,21 +131,33 @@ $flash = getFlash();
                     <th>Submitted</th>
                     <th>Duration</th>
                     <th>Status</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($responses)): ?>
-                <tr><td colspan="7" class="text-center text-muted py-4">No responses match your filters.</td></tr>
+                <tr><td colspan="8" class="text-center text-muted py-4">No responses match your filters.</td></tr>
                 <?php else: ?>
                 <?php foreach ($responses as $r): ?>
                 <tr>
-                    <td><?= (int) $r['id'] ?></td>
-                    <td><?= e($r['survey_title']) ?></td>
+                    <td>
+                        <a href="<?= e(url('admin/view_response.php?id=' . (int) $r['id'])) ?>">
+                            <?= (int) $r['id'] ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="<?= e(url('admin/view_response.php?id=' . (int) $r['id'])) ?>" class="text-decoration-none text-body">
+                            <?= e($r['survey_title']) ?>
+                        </a>
+                    </td>
                     <td>v<?= (int) $r['survey_version_number'] ?></td>
                     <td><?= e($r['enumerator']) ?></td>
                     <td><?= e($r['submitted_at'] ?? '-') ?></td>
                     <td><?= $r['duration_seconds'] !== null ? (int) $r['duration_seconds'] . 's' : '-' ?></td>
                     <td><span class="badge bg-success"><?= e($r['status']) ?></span></td>
+                    <td class="small">
+                        <a href="<?= e(url('admin/view_response.php?id=' . (int) $r['id'])) ?>">View answers</a>
+                    </td>
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>

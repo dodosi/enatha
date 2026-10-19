@@ -2,16 +2,15 @@
 require_once dirname(__DIR__) . '/includes/bootstrap.php';
 requireAuth();
 
-if (!hasRole('enumerator', 'admin', 'supervisor')) {
+if (!canTakeSurveys()) {
     setFlash('danger', 'You do not have permission to take surveys.');
     redirect('index.php');
 }
 
 $db = getDb();
+$scope = surveyScopeSql('s');
 
-// Surveys that have at least one active version
-$stmt = $db->query(
-    "SELECT s.id, s.survey_code, s.title, s.description,
+$sql = "SELECT s.id, s.survey_code, s.title, s.description,
             sv.id AS version_id, sv.version_number
      FROM surveys s
      INNER JOIN survey_versions sv ON sv.survey_id = s.id AND sv.status = 'active'
@@ -20,8 +19,10 @@ $stmt = $db->query(
          FROM survey_versions WHERE status = 'active'
          GROUP BY survey_id
      ) latest ON latest.survey_id = s.id AND sv.version_number = latest.max_ver
-     ORDER BY s.title"
-);
+     WHERE 1=1" . $scope['sql'] . '
+     ORDER BY s.title';
+$stmt = $db->prepare($sql);
+$stmt->execute($scope['params']);
 $available = $stmt->fetchAll();
 
 $pageTitle = 'Select Survey';
@@ -36,7 +37,7 @@ $flash = getFlash();
 
 <?php if (empty($available)): ?>
 <div class="alert alert-warning">
-    No surveys with an active version are available. Contact your administrator.
+    No surveys are available for your account. Contact your leader or administrator.
 </div>
 <?php else: ?>
 <div class="row g-3">

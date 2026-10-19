@@ -9,12 +9,29 @@
 function attemptLogin(string $username, string $password): bool
 {
     $db = getDb();
-    $stmt = $db->prepare(
-        'SELECT id, full_name, username, password_hash, role, status
-         FROM users WHERE username = ? LIMIT 1'
-    );
-    $stmt->execute([trim($username)]);
-    $user = $stmt->fetch();
+    try {
+        $stmt = $db->prepare(
+            'SELECT id, full_name, username, password_hash, role, leader_id, restrict_surveys, status
+             FROM users WHERE username = ? LIMIT 1'
+        );
+        $stmt->execute([trim($username)]);
+        $user = $stmt->fetch();
+    } catch (Throwable $e) {
+        // Pre-migration databases without leader_id / new roles
+        $stmt = $db->prepare(
+            'SELECT id, full_name, username, password_hash, role, status
+             FROM users WHERE username = ? LIMIT 1'
+        );
+        $stmt->execute([trim($username)]);
+        $user = $stmt->fetch();
+        if ($user && ($user['role'] ?? '') === 'admin') {
+            $user['role'] = 'super_admin';
+        }
+        if ($user) {
+            $user['leader_id'] = null;
+            $user['restrict_surveys'] = 0;
+        }
+    }
 
     if (!$user || $user['status'] !== 'active') {
         return false;
@@ -24,13 +41,21 @@ function attemptLogin(string $username, string $password): bool
         return false;
     }
 
+    // Map legacy role if migration not fully applied
+    if (($user['role'] ?? '') === 'admin') {
+        $user['role'] = 'super_admin';
+    }
+
     session_regenerate_id(true);
     $_SESSION['user_id'] = (int) $user['id'];
     $_SESSION['user'] = [
-        'id'        => (int) $user['id'],
-        'full_name' => $user['full_name'],
-        'username'  => $user['username'],
-        'role'      => $user['role'],
+        'id'               => (int) $user['id'],
+        'full_name'        => $user['full_name'],
+        'username'         => $user['username'],
+        'role'             => $user['role'],
+        'leader_id'        => isset($user['leader_id']) && $user['leader_id'] !== null
+            ? (int) $user['leader_id'] : null,
+        'restrict_surveys' => (int) ($user['restrict_surveys'] ?? 0),
     ];
     $_SESSION['created'] = time();
 

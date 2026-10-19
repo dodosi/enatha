@@ -2,7 +2,7 @@
 require_once dirname(__DIR__) . '/includes/bootstrap.php';
 requireAuth();
 
-if (!hasRole('enumerator', 'admin', 'supervisor')) {
+if (!canTakeSurveys()) {
     setFlash('danger', 'You do not have permission to take surveys.');
     redirect('index.php');
 }
@@ -14,6 +14,10 @@ if ($surveyId <= 0) {
 }
 
 $db = getDb();
+if (!userCanAccessSurvey($db, $surveyId)) {
+    setFlash('danger', 'You are not assigned to this survey.');
+    redirect('surveys/select_survey.php');
+}
 $version = getLatestActiveVersion($db, $surveyId);
 if (!$version) {
     setFlash('danger', 'This survey has no active version.');

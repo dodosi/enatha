@@ -15,11 +15,15 @@ CREATE TABLE IF NOT EXISTS users (
     full_name VARCHAR(150) NOT NULL,
     username VARCHAR(80) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    role ENUM('admin', 'supervisor', 'enumerator') NOT NULL DEFAULT 'enumerator',
+    role ENUM('super_admin', 'leader', 'supervisor', 'enumerator') NOT NULL DEFAULT 'enumerator',
+    leader_id INT UNSIGNED NULL,
+    restrict_surveys TINYINT(1) NOT NULL DEFAULT 0,
     status ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_users_role (role),
-    INDEX idx_users_status (status)
+    INDEX idx_users_status (status),
+    INDEX idx_users_leader (leader_id),
+    CONSTRAINT fk_users_leader FOREIGN KEY (leader_id) REFERENCES users(id) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -30,8 +34,24 @@ CREATE TABLE IF NOT EXISTS surveys (
     survey_code VARCHAR(50) NOT NULL UNIQUE,
     title VARCHAR(255) NOT NULL,
     description TEXT NULL,
+    owner_id INT UNSIGNED NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_surveys_code (survey_code)
+    INDEX idx_surveys_code (survey_code),
+    INDEX idx_surveys_owner (owner_id),
+    CONSTRAINT fk_surveys_owner FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+-- user_survey_access (optional restrictions; empty + restrict_surveys=0 = all leader surveys)
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS user_survey_access (
+    user_id INT UNSIGNED NOT NULL,
+    survey_id INT UNSIGNED NOT NULL,
+    granted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, survey_id),
+    INDEX idx_usa_survey (survey_id),
+    CONSTRAINT fk_usa_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_usa_survey FOREIGN KEY (survey_id) REFERENCES surveys(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

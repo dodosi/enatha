@@ -3,7 +3,7 @@ require_once dirname(__DIR__) . '/includes/bootstrap.php';
 require_once dirname(__DIR__) . '/includes/survey_print.php';
 requireAuth();
 
-if (!hasRole('enumerator', 'admin', 'supervisor')) {
+if (!canTakeSurveys() && !canViewAdminDashboard()) {
     setFlash('danger', 'You do not have permission to view survey forms.');
     redirect('index.php');
 }
@@ -13,9 +13,9 @@ $versionId = (int) ($_GET['version_id'] ?? 0);
 $db = getDb();
 
 $version = null;
-if ($versionId > 0 && hasRole('admin', 'supervisor')) {
+if ($versionId > 0 && canViewAdminDashboard()) {
     $stmt = $db->prepare(
-        'SELECT sv.*, s.title, s.survey_code
+        'SELECT sv.*, s.title, s.survey_code, s.owner_id
          FROM survey_versions sv
          JOIN surveys s ON s.id = sv.survey_id
          WHERE sv.id = ?'
@@ -24,17 +24,32 @@ if ($versionId > 0 && hasRole('admin', 'supervisor')) {
     $version = $stmt->fetch() ?: null;
 } elseif ($surveyId > 0) {
     $version = getLatestActiveVersion($db, $surveyId);
+    if ($version && !isset($version['owner_id'])) {
+        $o = $db->prepare('SELECT owner_id FROM surveys WHERE id = ?');
+        $o->execute([(int) $version['survey_id']]);
+        $version['owner_id'] = $o->fetchColumn();
+    }
+}
+
+if ($version) {
+    $sid = (int) $version['survey_id'];
+    $allowed = isSuperAdmin()
+        || (isLeader() && (int) ($version['owner_id'] ?? 0) === currentUserId())
+        || userCanAccessSurvey($db, $sid);
+    if (!$allowed) {
+        $version = null;
+    }
 }
 
 if (!$version) {
     setFlash('danger', 'No printable version found for this survey.');
-    redirect(hasRole('admin', 'supervisor') ? 'admin/surveys.php' : 'surveys/select_survey.php');
+    redirect(canViewAdminDashboard() ? 'admin/surveys.php' : 'surveys/select_survey.php');
 }
 
 $definition = json_decode($version['json_definition'], true);
 if (!is_array($definition)) {
     setFlash('danger', 'The survey JSON for this version could not be read.');
-    redirect(hasRole('admin', 'supervisor') ? 'admin/surveys.php' : 'surveys/select_survey.php');
+    redirect(canViewAdminDashboard() ? 'admin/surveys.php' : 'surveys/select_survey.php');
 }
 
 $formTitle = trim((string) (is_array($definition['title'] ?? null)
@@ -50,7 +65,7 @@ $formHtml = $renderer->render();
 
 // @page margin boxes take literal CSS strings, not HTML
 $cssFooter = addcslashes(str_replace(['<', '>', "\n", "\r"], ' ', $versionLabel), "\"\\");
-$backUrl = hasRole('admin', 'supervisor') ? url('admin/surveys.php') : url('surveys/select_survey.php');
+$backUrl = canViewAdminDashboard() ? url('admin/surveys.php') : url('surveys/select_survey.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">

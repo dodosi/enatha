@@ -28,6 +28,10 @@ if ($surveyId <= 0 || $versionId <= 0 || $versionNumber <= 0 || !is_array($answe
 
 $db = getDb();
 
+if (!userCanAccessSurvey($db, $surveyId)) {
+    jsonResponse(['success' => false, 'message' => 'You are not assigned to this survey'], 403);
+}
+
 $stmt = $db->prepare(
     'SELECT id, version_number, status FROM survey_versions
      WHERE id = ? AND survey_id = ?'

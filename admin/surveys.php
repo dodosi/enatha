@@ -4,8 +4,8 @@ requireAdminOrSupervisor();
 
 $db = getDb();
 
-// Toggle version status (admin only)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && hasRole('admin')) {
+// Toggle version status (super admin or owning leader)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && canManageSurveyCatalog()) {
     if (!validateCsrf()) {
         setFlash('danger', 'Invalid security token.');
         redirect('admin/surveys.php');
@@ -14,10 +14,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && hasRole('admin')) {
     $versionId = (int) ($_POST['version_id'] ?? 0);
 
     if ($action === 'activate' && $versionId > 0) {
-        $stmt = $db->prepare('SELECT survey_id FROM survey_versions WHERE id = ?');
+        $stmt = $db->prepare(
+            'SELECT sv.survey_id, s.owner_id FROM survey_versions sv
+             JOIN surveys s ON s.id = sv.survey_id WHERE sv.id = ?'
+        );
         $stmt->execute([$versionId]);
         $ver = $stmt->fetch();
-        if ($ver) {
+        $ok = $ver && (isSuperAdmin() || (int) $ver['owner_id'] === currentUserId());
+        if ($ok) {
             $db->prepare('UPDATE survey_versions SET status = ? WHERE survey_id = ?')
                 ->execute(['inactive', $ver['survey_id']]);
             $db->prepare('UPDATE survey_versions SET status = ? WHERE id = ?')
@@ -25,19 +29,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && hasRole('admin')) {
             setFlash('success', 'Version activated. New submissions will use this version.');
         }
     } elseif ($action === 'deactivate' && $versionId > 0) {
-        $db->prepare('UPDATE survey_versions SET status = ? WHERE id = ?')
-            ->execute(['inactive', $versionId]);
-        setFlash('success', 'Version deactivated.');
+        $stmt = $db->prepare(
+            'SELECT sv.survey_id, s.owner_id FROM survey_versions sv
+             JOIN surveys s ON s.id = sv.survey_id WHERE sv.id = ?'
+        );
+        $stmt->execute([$versionId]);
+        $ver = $stmt->fetch();
+        $ok = $ver && (isSuperAdmin() || (int) $ver['owner_id'] === currentUserId());
+        if ($ok) {
+            $db->prepare('UPDATE survey_versions SET status = ? WHERE id = ?')
+                ->execute(['inactive', $versionId]);
+            setFlash('success', 'Version deactivated.');
+        }
     }
     redirect('admin/surveys.php');
 }
 
-$surveys = $db->query(
+$scope = managedSurveysSql('s');
+$surveyStmt = $db->prepare(
     'SELECT s.*,
             (SELECT COUNT(*) FROM survey_versions sv WHERE sv.survey_id = s.id) AS version_count,
             (SELECT MAX(sv.version_number) FROM survey_versions sv WHERE sv.survey_id = s.id) AS latest_version
-     FROM surveys s ORDER BY s.title'
-)->fetchAll();
+     FROM surveys s WHERE 1=1' . $scope['sql'] . ' ORDER BY s.title'
+);
+$surveyStmt->execute($scope['params']);
+$surveys = $surveyStmt->fetchAll();
 
 $versionsBySurvey = [];
 if (!empty($surveys)) {
@@ -66,7 +82,7 @@ $flash = getFlash();
 
 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
     <h1 class="h3 mb-0">Surveys</h1>
-    <?php if (hasRole('admin')): ?>
+    <?php if (canManageSurveyCatalog()): ?>
     <a href="<?= e(url('admin/upload_survey.php')) ?>" class="btn btn-primary btn-sm">Upload New Version</a>
     <?php endif; ?>
 </div>
@@ -97,7 +113,7 @@ $flash = getFlash();
                     <th>Created</th>
                     <th>By</th>
                     <th>Paper form</th>
-                    <?php if (hasRole('admin')): ?><th>Actions</th><?php endif; ?>
+                    <?php if (canManageSurveyCatalog()): ?><th>Actions</th><?php endif; ?>
                 </tr>
             </thead>
             <tbody>
@@ -123,7 +139,7 @@ $flash = getFlash();
                         <a href="<?= e(url('surveys/print_survey.php?version_id=' . (int) $v['id'])) ?>"
                            class="btn btn-link btn-sm p-0" target="_blank" rel="noopener">Printable / PDF</a>
                     </td>
-                    <?php if (hasRole('admin')): ?>
+                    <?php if (canManageSurveyCatalog()): ?>
                     <td>
                         <form method="post" class="d-inline">
                             <?= csrfField() ?>

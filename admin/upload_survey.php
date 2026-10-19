@@ -3,7 +3,11 @@ require_once dirname(__DIR__) . '/includes/bootstrap.php';
 requireAdmin();
 
 $db = getDb();
-$surveys = $db->query('SELECT id, survey_code, title FROM surveys ORDER BY title')->fetchAll();
+$scope = managedSurveysSql('s');
+$surveySql = 'SELECT s.id, s.survey_code, s.title FROM surveys s WHERE 1=1' . $scope['sql'] . ' ORDER BY s.title';
+$surveyStmt = $db->prepare($surveySql);
+$surveyStmt->execute($scope['params']);
+$surveys = $surveyStmt->fetchAll();
 
 $error = '';
 $success = '';
@@ -52,12 +56,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($check->fetch()) {
                         throw new RuntimeException('Survey code already exists.');
                     }
-                    $ins = $db->prepare('INSERT INTO surveys (survey_code, title, description) VALUES (?, ?, ?)');
-                    $ins->execute([$surveyCode, $title, $description ?: null]);
+                    // Leaders own their surveys; super admin owns surveys they create
+                    $ownerId = isLeader() ? currentUserId() : currentUserId();
+                    $ins = $db->prepare(
+                        'INSERT INTO surveys (survey_code, title, description, owner_id) VALUES (?, ?, ?, ?)'
+                    );
+                    $ins->execute([$surveyCode, $title, $description ?: null, $ownerId]);
                     $surveyId = (int) $db->lastInsertId();
                 } else {
                     if ($surveyId <= 0) {
                         throw new RuntimeException('Please select an existing survey.');
+                    }
+                    if (isLeader()) {
+                        $own = $db->prepare('SELECT owner_id FROM surveys WHERE id = ?');
+                        $own->execute([$surveyId]);
+                        $row = $own->fetch();
+                        if (!$row || (int) $row['owner_id'] !== currentUserId()) {
+                            throw new RuntimeException('You can only add versions to surveys you own.');
+                        }
                     }
                 }
 

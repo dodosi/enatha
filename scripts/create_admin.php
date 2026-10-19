@@ -1,6 +1,6 @@
 <?php
 /**
- * CLI script to create or reset admin password
+ * CLI script to create or reset super admin password
  * Usage: php scripts/create_admin.php
  * Optional: php scripts/create_admin.php admin "System Administrator" YourPassword123
  */
@@ -14,8 +14,8 @@ if (php_sapi_name() !== 'cli') {
 require_once dirname(__DIR__) . '/config/app.php';
 require_once dirname(__DIR__) . '/config/database.php';
 
-echo "Enatha - Create/Reset Admin Password\n";
-echo "------------------------------------\n";
+echo "Enatha - Create/Reset Super Admin Password\n";
+echo "------------------------------------------\n";
 
 // Non-interactive: php scripts/create_admin.php username "Full Name" password
 if ($argc >= 4) {
@@ -56,12 +56,30 @@ $stmt = $db->prepare('SELECT id FROM users WHERE username = ?');
 $stmt->execute([$username]);
 $existing = $stmt->fetch();
 
-if ($existing) {
-    $upd = $db->prepare('UPDATE users SET full_name = ?, password_hash = ?, role = ?, status = ? WHERE id = ?');
-    $upd->execute([$fullName, $hash, 'admin', 'active', $existing['id']]);
-    echo "Admin user updated successfully.\n";
-} else {
-    $ins = $db->prepare('INSERT INTO users (full_name, username, password_hash, role, status) VALUES (?, ?, ?, ?, ?)');
-    $ins->execute([$fullName, $username, $hash, 'admin', 'active']);
-    echo "Admin user created successfully.\n";
+$role = 'super_admin';
+try {
+    if ($existing) {
+        $upd = $db->prepare(
+            'UPDATE users SET full_name = ?, password_hash = ?, role = ?, leader_id = NULL, status = ? WHERE id = ?'
+        );
+        $upd->execute([$fullName, $hash, $role, 'active', $existing['id']]);
+        echo "Super admin user updated successfully.\n";
+    } else {
+        $ins = $db->prepare(
+            'INSERT INTO users (full_name, username, password_hash, role, leader_id, status) VALUES (?, ?, ?, ?, NULL, ?)'
+        );
+        $ins->execute([$fullName, $username, $hash, $role, 'active']);
+        echo "Super admin user created successfully.\n";
+    }
+} catch (Throwable $e) {
+    // Pre-migration fallback
+    if ($existing) {
+        $upd = $db->prepare('UPDATE users SET full_name = ?, password_hash = ?, role = ?, status = ? WHERE id = ?');
+        $upd->execute([$fullName, $hash, 'admin', 'active', $existing['id']]);
+        echo "Admin user updated (run database/migrations/001_leader_hierarchy.sql next).\n";
+    } else {
+        $ins = $db->prepare('INSERT INTO users (full_name, username, password_hash, role, status) VALUES (?, ?, ?, ?, ?)');
+        $ins->execute([$fullName, $username, $hash, 'admin', 'active']);
+        echo "Admin user created (run database/migrations/001_leader_hierarchy.sql next).\n";
+    }
 }

@@ -22,6 +22,9 @@ if ($surveyId <= 0 || $versionId <= 0 || !is_array($draftData)) {
 }
 
 $db = getDb();
+if (!userCanAccessSurvey($db, $surveyId)) {
+    jsonResponse(['success' => false, 'message' => 'You are not assigned to this survey'], 403);
+}
 
 // Verify version belongs to survey and is active
 $stmt = $db->prepare(
